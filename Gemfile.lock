@@ -1,0 +1,22 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    kramdown (2.3.2)
+      rexml
+    power_assert (2.0.1)
+    rexml (3.2.5)
+    syntax_tree (2.0.1)
+    test-unit (3.5.3)
+      power_assert
+
+PLATFORMS
+  x86_64-darwin-21
+  x86_64-linux
+
+DEPENDENCIES
+  kramdown
+  syntax_tree
+  test-unit
+
+BUNDLED WITH
+   2.3.6

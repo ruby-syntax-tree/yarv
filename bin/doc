@@ -1,0 +1,58 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "bundler/setup"
+require "erb"
+require "fileutils"
+require "kramdown"
+require "stringio"
+require "syntax_tree"
+
+markdown = StringIO.new
+markdown.puts(<<~MARKDOWN)
+  # YARV Instructions
+
+  Below is a list of the YARV instructions that this project has documented so far.
+
+MARKDOWN
+
+filepaths = Dir[File.expand_path("../lib/yarv/*.rb", __dir__)]
+filepaths.each do |filepath|
+  basename = File.basename(filepath, ".rb")
+  markdown.puts("- [#{basename}](##{basename.delete("_")})")
+end
+markdown.puts
+
+# For each YARV instruction file, we're going to yank out the comments.
+filepaths.each do |filepath|
+  # Parse the source using SyntaxTree and grab all of the comments.
+  ast = SyntaxTree.parse(SyntaxTree.read(filepath))
+  ast => { statements: { body: [*, SyntaxTree::ModuleDeclaration => mod] } }
+  mod => { constant: { constant: { value: "YARV" } }, bodystmt: { statements: { body: [SyntaxTree::VoidStmt, *comments, SyntaxTree::ClassDeclaration] } } }
+
+  # Write the comments out in their own section.
+  markdown.puts(<<~MARKDOWN)
+    ## #{File.basename(filepath, ".rb")}
+
+    #{comments.map { |comment| comment.value[2..-1] }.join("\n")}
+  MARKDOWN
+end
+
+html = Kramdown::Document.new(markdown.string).to_html
+rendered = ERB.new(DATA.read).result_with_hash(html: html)
+
+FileUtils.mkdir_p("doc")
+File.write("doc/index.html", rendered)
+
+__END__
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=5">
+    <title>YARV</title>
+  </head>
+  <body>
+    <%= html %>
+  </body>
+</html>
