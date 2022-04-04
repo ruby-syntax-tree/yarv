@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=5">
+    <title>YARV</title>
+  </head>
+  <body>
+    <h1 id="yarv-instructions">YARV Instructions</h1>
+
+<p>Below is a list of the YARV instructions that this project has documented so far.</p>
+
+<ul>
+  <li><a href="#leave">leave</a></li>
+  <li><a href="#optplus">opt_plus</a></li>
+  <li><a href="#optsendwithoutblock">opt_send_without_block</a></li>
+  <li><a href="#putobject">putobject</a></li>
+  <li><a href="#putself">putself</a></li>
+</ul>
+
+<h2 id="leave">leave</h2>
+
+<h3 id="summary">Summary</h3>
+
+<p><code>leave</code> exits the current frame.</p>
+
+<h3 id="tracepoint">TracePoint</h3>
+
+<p><code>leave</code> does not dispatch any events.</p>
+
+<h3 id="usage">Usage</h3>
+
+<pre><code class="language-ruby">;;
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,2)&gt; (catch: FALSE)
+# 0000 putnil
+# 0001 leave
+</code></pre>
+
+<h2 id="optplus">opt_plus</h2>
+
+<h3 id="summary-1">Summary</h3>
+
+<p><code>opt_plus</code> is a specialization of the <code>opt_send_without_block</code> instruction
+that occurs when the <code>+</code> operator is used. In CRuby, there are fast paths
+for if both operands are integers, floats, strings, or arrays.</p>
+
+<h3 id="tracepoint-1">TracePoint</h3>
+
+<p><code>opt_plus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
+
+<h3 id="usage-1">Usage</h3>
+
+<pre><code class="language-ruby">2 + 3
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,5)&gt; (catch: FALSE)
+# 0000 putobject                              2                         (   1)[Li]
+# 0002 putobject                              3
+# 0004 opt_plus                               &lt;calldata!mid:+, argc:1, ARGS_SIMPLE&gt;[CcCr]
+# 0006 leave
+</code></pre>
+
+<h2 id="optsendwithoutblock">opt_send_without_block</h2>
+
+<h3 id="summary-2">Summary</h3>
+
+<p><code>opt_send_without_block</code> is a specialization of the send instruction that
+occurs when a method is being called without a block.</p>
+
+<h3 id="tracepoint-2">TracePoint</h3>
+
+<p><code>opt_send_without_block</code> does not dispatch any events.</p>
+
+<h3 id="usage-2">Usage</h3>
+
+<pre><code class="language-ruby">puts "Hello, world!"
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,20)&gt; (catch: FALSE)
+# 0000 putself                                                          (   1)[Li]
+# 0001 putstring                              "Hello, world!"
+# 0003 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;
+# 0005 leave
+</code></pre>
+
+<h2 id="putobject">putobject</h2>
+
+<h3 id="summary-3">Summary</h3>
+
+<p><code>putobject</code> pushes a known value onto the stack.</p>
+
+<h3 id="tracepoint-3">TracePoint</h3>
+
+<p><code>putobject</code> can dispatch the line event.</p>
+
+<h3 id="usage-3">Usage</h3>
+
+<pre><code class="language-ruby">5
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,1)&gt; (catch: FALSE)
+# 0000 putobject                              5                         (   1)[Li]
+# 0002 leave
+</code></pre>
+
+<h2 id="putself">putself</h2>
+
+<h3 id="summary-4">Summary</h3>
+
+<p><code>putself</code> pushes the current value of self onto the stack.</p>
+
+<h3 id="tracepoint-4">TracePoint</h3>
+
+<p><code>putself</code> can dispatch the line event.</p>
+
+<h3 id="usage-4">Usage</h3>
+
+<pre><code class="language-ruby">puts "Hello, world!"
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,20)&gt; (catch: FALSE)
+# 0000 putself                                                          (   1)[Li]
+# 0001 putstring                              "Hello, world!"
+# 0003 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;
+# 0005 leave
+</code></pre>
+
+
+  </body>
+</html>
