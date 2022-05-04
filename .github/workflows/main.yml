@@ -1,0 +1,20 @@
+name: Main
+on:
+- push
+- pull_request_target
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@master
+
+      - name: Set up Ruby 💎
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+          ruby-version: '3.1'
+
+      - name: Test
+        run: bundle exec ruby test/yarv_test.rb
