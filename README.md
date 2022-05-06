@@ -13,7 +13,7 @@ As a part of the documentation effort, this project also aims to provide an emul
 To learn more about this kind of content, there are a number of articles and blog posts you can read. Most of them are in Japanese, so a translation tool may be necessary. Some of them are also quite old since a lot of them were written around the time YARV was created. They are listed below:
 
 * http://www.atdot.net/yarv/yarvarch.ja.html - (Mar 2004) YARV design document
-* https://i.loveruby.net/ja/rhg/book/ - (Jul 2004) Ruby sourece code complete explanation
+* https://i.loveruby.net/ja/rhg/book/ - (Jul 2004) Ruby source code complete explanation
 * https://magazine.rubyist.net/articles/0006/0006-YarvManiacs.html - (May 2005) YARV maniacs
 * http://graysoftinc.com/the-ruby-vm-interview/the-ruby-vm-serial-interview - (Feb 2007) The Ruby VM Serial Interview
 * http://www.atdot.net/~ko1/diary/201212.html#d1 - (Dec 2012) ko1's 2012 Ruby VM advent calendar
