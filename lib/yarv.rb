@@ -3,6 +3,7 @@
 require_relative "yarv/leave"
 require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
+require_relative "yarv/opt_str_uminus"
 require_relative "yarv/putobject"
 require_relative "yarv/putself"
 
@@ -25,6 +26,8 @@ module YARV
             OptPlus.new
           in [:opt_send_without_block, { mid:, flag:, orig_argc: }]
             OptSendWithoutBlock.new(mid, orig_argc)
+          in [:opt_str_uminus, value, { mid: :-@, flag:, orig_argc: 0 }]
+            OptStrUMinus.new(value)
           in [:putobject, object]
             PutObject.new(object)
           in [:putself]

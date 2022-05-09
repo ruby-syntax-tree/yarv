@@ -12,6 +12,11 @@ class YARVTest < Test::Unit::TestCase
     assert_stdout("5\n", "p 2 + 3")
   end
 
+  def test_opt_str_uminus
+    assert_insns([YARV::OptStrUMinus, YARV::Leave], "-\"string\"")
+    assert_stdout("\"string\"\n", "p -'string'")
+  end
+
   private
 
   def assert_insns(expected, code)
