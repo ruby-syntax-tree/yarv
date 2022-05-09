@@ -20,7 +20,7 @@ module YARV
   # ~~~
   #
   class Leave
-    def execute(stack)
+    def execute(context)
       # skip for now
     end
 

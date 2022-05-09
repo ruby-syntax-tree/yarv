@@ -30,9 +30,9 @@ module YARV
       @argc = argc
     end
 
-    def execute(stack)
-      receiver, *arguments = stack.pop(argc + 1)
-      stack.push(receiver.send(mid, *arguments))
+    def execute(context)
+      receiver, *arguments = context.stack.pop(argc + 1)
+      context.stack.push(receiver.send(mid, *arguments))
     end
 
     def pretty_print(q)
