@@ -22,6 +22,7 @@
   <li><a href="#optdiv">opt_div</a></li>
   <li><a href="#optemptyp">opt_empty_p</a></li>
   <li><a href="#optgetinlinecache">opt_getinlinecache</a></li>
+  <li><a href="#optlength">opt_length</a></li>
   <li><a href="#optminus">opt_minus</a></li>
   <li><a href="#optnilp">opt_nil_p</a></li>
   <li><a href="#optor">opt_or</a></li>
@@ -293,19 +294,41 @@ set.</p>
 # 0009 leave
 </code></pre>
 
-<h2 id="optminus">opt_minus</h2>
+<h2 id="optlength">opt_length</h2>
 
 <h3 id="summary-11">Summary</h3>
+
+<p><code>opt_length</code> is a specialization of <code>opt_send_without_block</code>, when the
+<code>length</code> method is called on a Ruby type with a known size. In CRuby there
+are fast paths when the receiver is either a String, Hash or Array.</p>
+
+<h3 id="tracepoint-11">TracePoint</h3>
+
+<p><code>opt_length</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
+
+<h3 id="usage-11">Usage</h3>
+
+<pre><code class="language-ruby">"".length
+
+#== disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)
+#0000 putstring                              ""                        (   1)[Li]
+#0002 opt_length                             &lt;calldata!mid:length, argc:0, ARGS_SIMPLE&gt;[CcCr]
+#0004 leave
+</code></pre>
+
+<h2 id="optminus">opt_minus</h2>
+
+<h3 id="summary-12">Summary</h3>
 
 <p><code>opt_minus</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>-</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers or both operands are floats.</p>
 
-<h3 id="tracepoint-11">TracePoint</h3>
+<h3 id="tracepoint-12">TracePoint</h3>
 
 <p><code>opt_minus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-11">Usage</h3>
+<h3 id="usage-12">Usage</h3>
 
 <pre><code class="language-ruby">3 - 2
 
@@ -318,17 +341,17 @@ for if both operands are integers or both operands are floats.</p>
 
 <h2 id="optnilp">opt_nil_p</h2>
 
-<h3 id="summary-12">Summary</h3>
+<h3 id="summary-13">Summary</h3>
 
 <p><code>opt_nil_p</code> is an optimisation applied when the method <code>nil?</code> is called. It 
 returns true immediately when the receiver is <code>nil</code> and defers to the <code>nil?</code>
 method in other cases</p>
 
-<h3 id="tracepoint-12">TracePoint</h3>
+<h3 id="tracepoint-13">TracePoint</h3>
 
 <p><code>opt_nil_p</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-12">Usage</h3>
+<h3 id="usage-13">Usage</h3>
 
 <pre><code class="language-ruby">"".nil?
 
@@ -340,17 +363,17 @@ method in other cases</p>
 
 <h2 id="optor">opt_or</h2>
 
-<h3 id="summary-13">Summary</h3>
+<h3 id="summary-14">Summary</h3>
 
 <p><code>opt_or</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>|</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers.</p>
 
-<h3 id="tracepoint-13">TracePoint</h3>
+<h3 id="tracepoint-14">TracePoint</h3>
 
 <p><code>opt_or</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-13">Usage</h3>
+<h3 id="usage-14">Usage</h3>
 
 <pre><code class="language-ruby">2 | 3
 
@@ -364,17 +387,17 @@ for if both operands are integers.</p>
 
 <h2 id="optplus">opt_plus</h2>
 
-<h3 id="summary-14">Summary</h3>
+<h3 id="summary-15">Summary</h3>
 
 <p><code>opt_plus</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>+</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers, floats, strings, or arrays.</p>
 
-<h3 id="tracepoint-14">TracePoint</h3>
+<h3 id="tracepoint-15">TracePoint</h3>
 
 <p><code>opt_plus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-14">Usage</h3>
+<h3 id="usage-15">Usage</h3>
 
 <pre><code class="language-ruby">2 + 3
 
@@ -387,16 +410,16 @@ for if both operands are integers, floats, strings, or arrays.</p>
 
 <h2 id="optsendwithoutblock">opt_send_without_block</h2>
 
-<h3 id="summary-15">Summary</h3>
+<h3 id="summary-16">Summary</h3>
 
 <p><code>opt_send_without_block</code> is a specialization of the send instruction that
 occurs when a method is being called without a block.</p>
 
-<h3 id="tracepoint-15">TracePoint</h3>
+<h3 id="tracepoint-16">TracePoint</h3>
 
 <p><code>opt_send_without_block</code> does not dispatch any events.</p>
 
-<h3 id="usage-15">Usage</h3>
+<h3 id="usage-16">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -409,17 +432,17 @@ occurs when a method is being called without a block.</p>
 
 <h2 id="optsetinlinecache">opt_setinlinecache</h2>
 
-<h3 id="summary-16">Summary</h3>
+<h3 id="summary-17">Summary</h3>
 
 <p><code>opt_setinlinecache</code> is the final instruction after a series of
 <code>getconstant</code> instructions that populates the inline cache associated with
 an <code>opt_getinlinecache</code> instruction.</p>
 
-<h3 id="tracepoint-16">TracePoint</h3>
+<h3 id="tracepoint-17">TracePoint</h3>
 
 <p><code>opt_setinlinecache</code> does not dispatch any events.</p>
 
-<h3 id="usage-16">Usage</h3>
+<h3 id="usage-17">Usage</h3>
 
 <pre><code class="language-ruby">Constant
 
@@ -433,16 +456,16 @@ an <code>opt_getinlinecache</code> instruction.</p>
 
 <h2 id="optstruminus">opt_str_uminus</h2>
 
-<h3 id="summary-17">Summary</h3>
+<h3 id="summary-18">Summary</h3>
 
 <p><code>opt_str_uminus</code> pushes a frozen known string value with no interpolation
 onto the stack.</p>
 
-<h3 id="tracepoint-17">TracePoint</h3>
+<h3 id="tracepoint-18">TracePoint</h3>
 
 <p><code>opt_str_uminus</code> does not dispatch any events.</p>
 
-<h3 id="usage-17">Usage</h3>
+<h3 id="usage-18">Usage</h3>
 
 <pre><code class="language-ruby">-"string"
 
@@ -453,15 +476,15 @@ onto the stack.</p>
 
 <h2 id="pop">pop</h2>
 
-<h3 id="summary-18">Summary</h3>
+<h3 id="summary-19">Summary</h3>
 
 <p><code>pop</code> pops the top value off the stack.</p>
 
-<h3 id="tracepoint-18">TracePoint</h3>
+<h3 id="tracepoint-19">TracePoint</h3>
 
 <p><code>pop</code> does not dispatch any events.</p>
 
-<h3 id="usage-18">Usage</h3>
+<h3 id="usage-19">Usage</h3>
 
 <pre><code class="language-ruby">a ||= 2
 
@@ -480,15 +503,15 @@ onto the stack.</p>
 
 <h2 id="putobject">putobject</h2>
 
-<h3 id="summary-19">Summary</h3>
+<h3 id="summary-20">Summary</h3>
 
 <p><code>putobject</code> pushes a known value onto the stack.</p>
 
-<h3 id="tracepoint-19">TracePoint</h3>
+<h3 id="tracepoint-20">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-19">Usage</h3>
+<h3 id="usage-20">Usage</h3>
 
 <pre><code class="language-ruby">5
 
@@ -499,17 +522,17 @@ onto the stack.</p>
 
 <h2 id="putobjectint2fix0">putobject_int2fix_0</h2>
 
-<h3 id="summary-20">Summary</h3>
+<h3 id="summary-21">Summary</h3>
 
 <p><code>putobject_INT2FIX_0_</code> pushes 0 on the stack.
 It is a specialized instruction resulting from the operand
 unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
-<h3 id="tracepoint-20">TracePoint</h3>
+<h3 id="tracepoint-21">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-20">Usage</h3>
+<h3 id="usage-21">Usage</h3>
 
 <pre><code class="language-ruby">0
 
@@ -520,15 +543,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-21">Summary</h3>
+<h3 id="summary-22">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-21">TracePoint</h3>
+<h3 id="tracepoint-22">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-21">Usage</h3>
+<h3 id="usage-22">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -541,15 +564,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-22">Summary</h3>
+<h3 id="summary-23">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-22">TracePoint</h3>
+<h3 id="tracepoint-23">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-22">Usage</h3>
+<h3 id="usage-23">Usage</h3>
 
 <pre><code class="language-ruby">"foo"
 
@@ -560,15 +583,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-23">Summary</h3>
+<h3 id="summary-24">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-23">TracePoint</h3>
+<h3 id="tracepoint-24">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-23">Usage</h3>
+<h3 id="usage-24">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
