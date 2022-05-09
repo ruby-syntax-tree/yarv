@@ -5,6 +5,7 @@ require_relative "yarv/definemethod"
 require_relative "yarv/dup"
 require_relative "yarv/getconstant"
 require_relative "yarv/getglobal"
+require_relative "yarv/getlocal_wc_0"
 require_relative "yarv/leave"
 require_relative "yarv/opt_and"
 require_relative "yarv/opt_aref"
@@ -26,6 +27,7 @@ require_relative "yarv/putobject_int2fix_0"
 require_relative "yarv/putself"
 require_relative "yarv/putstring"
 require_relative "yarv/setglobal"
+require_relative "yarv/setlocal_wc_0"
 
 module YARV
   # This is the self object at the top of the script.
@@ -40,10 +42,27 @@ module YARV
   class ExecutionContext
     # This represents an execution frame.
     class Frame
-      attr_reader :iseq
+      UNDEFINED = Object.new
+
+      attr_reader :iseq, :locals
 
       def initialize(iseq)
         @iseq = iseq
+        @locals = Array.new(iseq.locals.length, UNDEFINED)
+      end
+
+      def get_local(index)
+        local = locals[index - 3]
+        if local == UNDEFINED
+          raise NameError,
+                "undefined local variable or method `#{local}' for #{iseq.selfo}"
+        end
+
+        local
+      end
+
+      def set_local(index, value)
+        @locals[index - 3] = value
       end
     end
 
@@ -87,11 +106,16 @@ module YARV
       end
     end
 
+    # This returns the current execution frame.
+    def current_frame
+      frames.last
+    end
+
     # This returns the instruction sequence object that is currently being
     # executed. In other words, the instruction sequence that is at the top of
     # the frame stack.
     def current_iseq
-      frames.last.iseq
+      current_frame.iseq
     end
 
     # Defines a method on the given object's class keyed by the given name. The
@@ -120,10 +144,15 @@ module YARV
   class InstructionSequence
     attr_reader :selfo, :insns, :labels
 
+    # These are the names of the locals in the instruction sequence.
+    attr_reader :locals
+
     def initialize(selfo, iseq)
       @selfo = selfo
       @insns = []
       @labels = {}
+
+      @locals = iseq[10]
 
       iseq.last.each do |insn|
         case insn
@@ -141,6 +170,8 @@ module YARV
           @insns << GetConstant.new(name)
         in :getglobal, value
           @insns << GetGlobal.new(value)
+        in :getlocal_WC_0, index
+          @insns << GetLocalWC0.new(locals[index - 3], index)
         in [:leave]
           @insns << Leave.new
         in :opt_and, { mid: :&, orig_argc: 1 }
@@ -169,7 +200,7 @@ module YARV
           @insns << OptSetInlineCache.new(cache)
         in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
           @insns << OptStrUMinus.new(value)
-        in :opt_succ, { mid: :succ, flag:, orig_argc: 0 }
+        in :opt_succ, { mid: :succ, orig_argc: 0 }
           @insns << OptSucc.new
         in [:pop]
           @insns << Pop.new
@@ -185,6 +216,8 @@ module YARV
           @insns << PutString.new(string)
         in :setglobal, name
           @insns << SetGlobal.new(name)
+        in :setlocal_WC_0, index
+          @insns << SetLocalWC0.new(locals[index - 3], index)
         end
       end
     end
