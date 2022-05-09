@@ -8,6 +8,7 @@ require_relative "yarv/putself"
 
 module YARV
   Main = Object.new
+  ExecutionContext = Struct.new(:stack)
 
   class InstructionSequence
     attr_reader :selfo, :insns
@@ -35,7 +36,8 @@ module YARV
 
     def emulate
       stack = []
-      insns.each { |insn| insn.execute(stack) }
+      context = ExecutionContext.new(stack)
+      insns.each { |insn| insn.execute(context) }
     end
   end
 

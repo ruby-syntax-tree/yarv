@@ -24,9 +24,9 @@ module YARV
   # ~~~
   #
   class OptPlus
-    def execute(stack)
-      left, right = stack.pop(2)
-      stack.push(left + right)
+    def execute(context)
+      left, right = context.stack.pop(2)
+      context.stack.push(left + right)
     end
 
     def pretty_print(q)

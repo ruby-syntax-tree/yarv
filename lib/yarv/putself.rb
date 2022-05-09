@@ -28,10 +28,10 @@ module YARV
       @object = object
     end
 
-    def execute(stack)
-      stack.push(object)
+    def execute(context)
+      context.stack.push(object)
     end
-  
+
     def pretty_print(q)
       q.text("putself")
     end
