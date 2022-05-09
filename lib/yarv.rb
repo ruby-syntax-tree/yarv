@@ -19,6 +19,7 @@ require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
 require_relative "yarv/opt_setinlinecache"
 require_relative "yarv/opt_str_uminus"
+require_relative "yarv/opt_succ"
 require_relative "yarv/pop"
 require_relative "yarv/putobject"
 require_relative "yarv/putobject_int2fix_0"
@@ -168,6 +169,8 @@ module YARV
           @insns << OptSetInlineCache.new(cache)
         in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
           @insns << OptStrUMinus.new(value)
+        in [:opt_succ, {mid: :succ, flag:, orig_argc: 0}]
+          @insns << OptSucc.new
         in [:pop]
           @insns << Pop.new
         in [:putnil]
