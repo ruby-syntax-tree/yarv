@@ -31,7 +31,7 @@ module YARV
     end
 
     def pretty_print(q)
-      q.text("putstring #{object.inspect}")
+      q.text("putstring #{string.inspect}")
     end
   end
 end
