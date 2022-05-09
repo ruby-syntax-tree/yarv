@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "yarv/getglobal"
 require_relative "yarv/leave"
 require_relative "yarv/opt_minus"
 require_relative "yarv/opt_plus"
@@ -10,7 +11,16 @@ require_relative "yarv/putself"
 
 module YARV
   Main = Object.new
-  ExecutionContext = Struct.new(:stack)
+
+  class ExecutionContext
+    attr_reader :stack
+    attr_reader :globals
+
+    def initialize
+      @stack = []
+      @globals = {}
+    end
+  end
 
   class InstructionSequence
     attr_reader :selfo, :insns
@@ -22,6 +32,8 @@ module YARV
           case insn
           in Integer | :RUBY_EVENT_LINE
             # skip for now
+          in [:getglobal, value]
+            GetGlobal.new(value)
           in [:leave]
             Leave.new
           in [:opt_minus, { mid: :-, orig_argc: 1 }]
@@ -41,8 +53,7 @@ module YARV
     end
 
     def emulate
-      stack = []
-      context = ExecutionContext.new(stack)
+      context = ExecutionContext.new
       insns.each { |insn| insn.execute(context) }
     end
   end
