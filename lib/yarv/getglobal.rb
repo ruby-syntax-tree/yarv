@@ -15,8 +15,8 @@ module YARV
   # $$
   #
   # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,2)> (catch: FALSE)
-  # # 0000 getglobal                              :$$                       (   1)[Li]    
-  # # 0002 leave  
+  # # 0000 getglobal                              :$$                       (   1)[Li]
+  # # 0002 leave
   # ~~~
   #
   class GetGlobal

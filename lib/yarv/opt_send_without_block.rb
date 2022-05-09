@@ -36,7 +36,9 @@ module YARV
     end
 
     def pretty_print(q)
-      q.text("opt_send_without_block <calldata!mid:#{mid}, argc:#{argc}, FCALL|ARGS_SIMPLE>")
+      q.text(
+        "opt_send_without_block <calldata!mid:#{mid}, argc:#{argc}, FCALL|ARGS_SIMPLE>"
+      )
     end
   end
 end

@@ -131,59 +131,59 @@ module YARV
           # skip for now
         in Symbol
           @labels[insn] = @insns.length
-        in [:branchunless, value]
+        in :branchunless, value
           @insns << BranchUnless.new(value)
-        in [:definemethod, name, iseq]
+        in :definemethod, name, iseq
           @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
           @insns << Dup.new
-        in [:getconstant, name]
+        in :getconstant, name
           @insns << GetConstant.new(name)
-        in [:getglobal, value]
+        in :getglobal, value
           @insns << GetGlobal.new(value)
         in [:leave]
           @insns << Leave.new
-        in [:opt_and, { mid: :&, orig_argc: 1 }]
+        in :opt_and, { mid: :&, orig_argc: 1 }
           @insns << OptAnd.new
-        in [:opt_aref, { mid: :[], orig_argc: 1 }]
+        in :opt_aref, { mid: :[], orig_argc: 1 }
           @insns << OptAref.new
-        in [:opt_div, { mid: :/, orig_argc: 1 }]
+        in :opt_div, { mid: :/, orig_argc: 1 }
           @insns << OptDiv.new
-        in [:opt_empty_p, { mid: :empty?, orig_argc: 0 }]
+        in :opt_empty_p, { mid: :empty?, orig_argc: 0 }
           @insns << OptEmptyP.new
-        in [:opt_nil_p, { mid: :nil?, flag:, orig_argc: 0 }]
+        in :opt_nil_p, { mid: :nil?, orig_argc: 0 }
           @insns << OptNilP.new
-        in [:opt_getinlinecache, label, cache]
+        in :opt_getinlinecache, label, cache
           @insns << OptGetInlineCache.new(label, cache)
-        in [:opt_length, { mid: :length, flag:, orig_argc: 0 }]
+        in :opt_length, { mid: :length, orig_argc: 0 }
           @insns << OptLength.new
-        in [:opt_minus, { mid: :-, orig_argc: 1 }]
+        in :opt_minus, { mid: :-, orig_argc: 1 }
           @insns << OptMinus.new
-        in [:opt_or, { mid: :|, orig_argc: 1 }]
+        in :opt_or, { mid: :|, orig_argc: 1 }
           @insns << OptOr.new
-        in [:opt_plus, { mid: :+,  orig_argc: 1 }]
+        in :opt_plus, { mid: :+, orig_argc: 1 }
           @insns << OptPlus.new
-        in [:opt_send_without_block, { mid:, orig_argc: }]
+        in :opt_send_without_block, { mid:, orig_argc: }
           @insns << OptSendWithoutBlock.new(mid, orig_argc)
-        in [:opt_setinlinecache, cache]
+        in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
-        in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
+        in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
           @insns << OptStrUMinus.new(value)
-        in [:opt_succ, {mid: :succ, flag:, orig_argc: 0}]
+        in :opt_succ, { mid: :succ, flag:, orig_argc: 0 }
           @insns << OptSucc.new
         in [:pop]
           @insns << Pop.new
         in [:putnil]
           # skip for now
-        in [:putobject, object]
+        in :putobject, object
           @insns << PutObject.new(object)
         in [:putobject_INT2FIX_0_]
           @insns << PutObjectInt2Fix0.new
         in [:putself]
           @insns << PutSelf.new(selfo)
-        in [:putstring, string]
+        in :putstring, string
           @insns << PutString.new(string)
-        in [:setglobal, name]
+        in :setglobal, name
           @insns << SetGlobal.new(name)
         end
       end

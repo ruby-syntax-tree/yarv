@@ -10,7 +10,17 @@ module YARV
         puts value
       SOURCE
 
-      assert_insns([DefineMethod, PutSelf, PutSelf, OptSendWithoutBlock, OptSendWithoutBlock, Leave], source)
+      assert_insns(
+        [
+          DefineMethod,
+          PutSelf,
+          PutSelf,
+          OptSendWithoutBlock,
+          OptSendWithoutBlock,
+          Leave
+        ],
+        source
+      )
       assert_stdout("value\n", source)
     end
   end
