@@ -155,8 +155,8 @@ constant onto the stack.</p>
 <pre><code class="language-ruby">$$
 
 # == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,2)&gt; (catch: FALSE)
-# 0000 getglobal                              :$$                       (   1)[Li]    
-# 0002 leave  
+# 0000 getglobal                              :$$                       (   1)[Li]
+# 0002 leave
 </code></pre>
 
 <h2 id="leave">leave</h2>
@@ -266,9 +266,9 @@ knows how to calculate the length of these objects using internal C macros.</p>
 <pre><code class="language-ruby">"".empty?
 
 #== disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)
-#0000 putstring                              ""                        (   1)[Li]                                  
-#0002 opt_empty_p                            &lt;calldata!mid:empty?, argc:0, ARGS_SIMPLE&gt;[CcCr]                      
-#0004 leave   
+#0000 putstring                              ""                        (   1)[Li]
+#0002 opt_empty_p                            &lt;calldata!mid:empty?, argc:0, ARGS_SIMPLE&gt;[CcCr]
+#0004 leave
 </code></pre>
 
 <h2 id="optgetinlinecache">opt_getinlinecache</h2>
@@ -344,7 +344,7 @@ for if both operands are integers or both operands are floats.</p>
 
 <h3 id="summary-13">Summary</h3>
 
-<p><code>opt_nil_p</code> is an optimisation applied when the method <code>nil?</code> is called. It 
+<p><code>opt_nil_p</code> is an optimisation applied when the method <code>nil?</code> is called. It
 returns true immediately when the receiver is <code>nil</code> and defers to the <code>nil?</code>
 method in other cases</p>
 
@@ -357,9 +357,9 @@ method in other cases</p>
 <pre><code class="language-ruby">"".nil?
 
 #== disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)
-#0000 putstring                              ""                        (   1)[Li]                                  
-#0002 opt_nil_p                              &lt;calldata!mid:nil?, argc:0, ARGS_SIMPLE&gt;[CcCr]                      
-#0004 leave   
+#0000 putstring                              ""                        (   1)[Li]
+#0002 opt_nil_p                              &lt;calldata!mid:nil?, argc:0, ARGS_SIMPLE&gt;[CcCr]
+#0004 leave
 </code></pre>
 
 <h2 id="optor">opt_or</h2>
@@ -494,7 +494,7 @@ the receiver is either a String or a Fixnum.</p>
 #== disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)
 #0000 putstring                              "a"                       (   1)[Li]
 #0002 opt_succ                               &lt;calldata!mid:succ, argc:0, ARGS_SIMPLE&gt;[CcCr]
-#0004 leave  
+#0004 leave
 </code></pre>
 
 <h2 id="pop">pop</h2>
@@ -600,8 +600,8 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 <pre><code class="language-ruby">"foo"
 
 = disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
-000 putstring                              "foo"                     (   1)[Li]                                  
-002 leave 
+000 putstring                              "foo"                     (   1)[Li]
+002 leave
 </code></pre>
 
 <h2 id="setglobal">setglobal</h2>
