@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require_relative "yarv/dup"
+require_relative "yarv/getconstant"
 require_relative "yarv/getglobal"
 require_relative "yarv/leave"
 require_relative "yarv/opt_and"
+require_relative "yarv/opt_getinlinecache"
 require_relative "yarv/opt_minus"
 require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
+require_relative "yarv/opt_setinlinecache"
 require_relative "yarv/opt_str_uminus"
 require_relative "yarv/putobject"
 require_relative "yarv/putself"
@@ -42,20 +45,28 @@ module YARV
           case insn
           in Integer | :RUBY_EVENT_LINE
             # skip for now
+          in Symbol
+            # skip for now, these are labels
           in [:dup]
             Dup.new
+          in [:getconstant, name]
+            GetConstant.new(name)
           in [:getglobal, value]
             GetGlobal.new(value)
           in [:leave]
             Leave.new
           in [:opt_and, { mid: :&, orig_argc: 1 }]
             OptAnd.new
+          in [:opt_getinlinecache, label, cache]
+            OptGetInlineCache.new(label, cache)
           in [:opt_minus, { mid: :-, orig_argc: 1 }]
             OptMinus.new
           in [:opt_plus, { mid: :+,  orig_argc: 1 }]
             OptPlus.new
           in [:opt_send_without_block, { mid:, orig_argc: }]
             OptSendWithoutBlock.new(mid, orig_argc)
+          in [:opt_setinlinecache, cache]
+            OptSetInlineCache.new(cache)
           in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
             OptStrUMinus.new(value)
           in [:putobject, object]
