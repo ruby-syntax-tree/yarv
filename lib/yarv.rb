@@ -22,10 +22,12 @@ module YARV
   class ExecutionContext
     attr_reader :stack
     attr_reader :globals
+    attr_accessor :program_counter
 
     def initialize
       @stack = []
       @globals = {}
+      @program_counter = 0
     end
   end
 
@@ -67,7 +69,10 @@ module YARV
 
     def emulate
       context = ExecutionContext.new
-      insns.each { |insn| insn.execute(context) }
+      insns.each do |insn|
+        insn.execute(context)
+        context.program_counter += 1
+      end
     end
   end
 
