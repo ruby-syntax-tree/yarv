@@ -11,6 +11,7 @@
 <p>Below is a list of the YARV instructions that this project has documented so far.</p>
 
 <ul>
+  <li><a href="#dup">dup</a></li>
   <li><a href="#getglobal">getglobal</a></li>
   <li><a href="#leave">leave</a></li>
   <li><a href="#optminus">opt_minus</a></li>
@@ -19,19 +20,41 @@
   <li><a href="#optstruminus">opt_str_uminus</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putself">putself</a></li>
+  <li><a href="#setglobal">setglobal</a></li>
 </ul>
 
-<h2 id="getglobal">getglobal</h2>
+<h2 id="dup">dup</h2>
 
 <h3 id="summary">Summary</h3>
 
-<p><code>getglobal</code> pushes the value of a global variables onto the stack.</p>
+<p><code>dup</code> copies the top value of the stack and pushes it onto the stack.</p>
 
 <h3 id="tracepoint">TracePoint</h3>
 
-<p><code>getglobal</code> does not dispatch any events.</p>
+<p><code>dup</code> does not dispatch any events.</p>
 
 <h3 id="usage">Usage</h3>
+
+<pre><code class="language-ruby">$global = 5
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,11)&gt; (catch: FALSE)
+# 0000 putobject                              5                         (   1)[Li]
+# 0002 dup
+# 0003 setglobal                              :$global
+# 0005 leave
+</code></pre>
+
+<h2 id="getglobal">getglobal</h2>
+
+<h3 id="summary-1">Summary</h3>
+
+<p><code>getglobal</code> pushes the value of a global variables onto the stack.</p>
+
+<h3 id="tracepoint-1">TracePoint</h3>
+
+<p><code>getglobal</code> does not dispatch any events.</p>
+
+<h3 id="usage-1">Usage</h3>
 
 <pre><code class="language-ruby">$$
 
@@ -42,15 +65,15 @@
 
 <h2 id="leave">leave</h2>
 
-<h3 id="summary-1">Summary</h3>
+<h3 id="summary-2">Summary</h3>
 
 <p><code>leave</code> exits the current frame.</p>
 
-<h3 id="tracepoint-1">TracePoint</h3>
+<h3 id="tracepoint-2">TracePoint</h3>
 
 <p><code>leave</code> does not dispatch any events.</p>
 
-<h3 id="usage-1">Usage</h3>
+<h3 id="usage-2">Usage</h3>
 
 <pre><code class="language-ruby">;;
 
@@ -61,17 +84,17 @@
 
 <h2 id="optminus">opt_minus</h2>
 
-<h3 id="summary-2">Summary</h3>
+<h3 id="summary-3">Summary</h3>
 
 <p><code>opt_minus</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>-</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers or both operands are floats.</p>
 
-<h3 id="tracepoint-2">TracePoint</h3>
+<h3 id="tracepoint-3">TracePoint</h3>
 
 <p><code>opt_minus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-2">Usage</h3>
+<h3 id="usage-3">Usage</h3>
 
 <pre><code class="language-ruby">3 - 2
 
@@ -84,17 +107,17 @@ for if both operands are integers or both operands are floats.</p>
 
 <h2 id="optplus">opt_plus</h2>
 
-<h3 id="summary-3">Summary</h3>
+<h3 id="summary-4">Summary</h3>
 
 <p><code>opt_plus</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>+</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers, floats, strings, or arrays.</p>
 
-<h3 id="tracepoint-3">TracePoint</h3>
+<h3 id="tracepoint-4">TracePoint</h3>
 
 <p><code>opt_plus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-3">Usage</h3>
+<h3 id="usage-4">Usage</h3>
 
 <pre><code class="language-ruby">2 + 3
 
@@ -107,16 +130,16 @@ for if both operands are integers, floats, strings, or arrays.</p>
 
 <h2 id="optsendwithoutblock">opt_send_without_block</h2>
 
-<h3 id="summary-4">Summary</h3>
+<h3 id="summary-5">Summary</h3>
 
 <p><code>opt_send_without_block</code> is a specialization of the send instruction that
 occurs when a method is being called without a block.</p>
 
-<h3 id="tracepoint-4">TracePoint</h3>
+<h3 id="tracepoint-5">TracePoint</h3>
 
 <p><code>opt_send_without_block</code> does not dispatch any events.</p>
 
-<h3 id="usage-4">Usage</h3>
+<h3 id="usage-5">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -129,16 +152,16 @@ occurs when a method is being called without a block.</p>
 
 <h2 id="optstruminus">opt_str_uminus</h2>
 
-<h3 id="summary-5">Summary</h3>
+<h3 id="summary-6">Summary</h3>
 
 <p><code>opt_str_uminus</code> pushes a frozen known string value with no interpolation
 onto the stack.</p>
 
-<h3 id="tracepoint-5">TracePoint</h3>
+<h3 id="tracepoint-6">TracePoint</h3>
 
 <p><code>opt_str_uminus</code> does not dispatch any events.</p>
 
-<h3 id="usage-5">Usage</h3>
+<h3 id="usage-6">Usage</h3>
 
 <pre><code class="language-ruby">-"string"
 
@@ -149,15 +172,15 @@ onto the stack.</p>
 
 <h2 id="putobject">putobject</h2>
 
-<h3 id="summary-6">Summary</h3>
+<h3 id="summary-7">Summary</h3>
 
 <p><code>putobject</code> pushes a known value onto the stack.</p>
 
-<h3 id="tracepoint-6">TracePoint</h3>
+<h3 id="tracepoint-7">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-6">Usage</h3>
+<h3 id="usage-7">Usage</h3>
 
 <pre><code class="language-ruby">5
 
@@ -168,15 +191,15 @@ onto the stack.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-7">Summary</h3>
+<h3 id="summary-8">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-7">TracePoint</h3>
+<h3 id="tracepoint-8">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-7">Usage</h3>
+<h3 id="usage-8">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -184,6 +207,27 @@ onto the stack.</p>
 # 0000 putself                                                          (   1)[Li]
 # 0001 putstring                              "Hello, world!"
 # 0003 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;
+# 0005 leave
+</code></pre>
+
+<h2 id="setglobal">setglobal</h2>
+
+<h3 id="summary-9">Summary</h3>
+
+<p><code>setglobal</code> sets the value of a global variable.</p>
+
+<h3 id="tracepoint-9">TracePoint</h3>
+
+<p><code>setglobal</code> does not dispatch any events.</p>
+
+<h3 id="usage-9">Usage</h3>
+
+<pre><code class="language-ruby">$global = 5
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,11)&gt; (catch: FALSE)
+# 0000 putobject                              5                         (   1)[Li]
+# 0002 dup
+# 0003 setglobal                              :$global
 # 0005 leave
 </code></pre>
 
