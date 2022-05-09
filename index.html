@@ -22,6 +22,7 @@
   <li><a href="#optsendwithoutblock">opt_send_without_block</a></li>
   <li><a href="#optsetinlinecache">opt_setinlinecache</a></li>
   <li><a href="#optstruminus">opt_str_uminus</a></li>
+  <li><a href="#pop">pop</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putself">putself</a></li>
   <li><a href="#putstring">putstring</a></li>
@@ -270,17 +271,44 @@ onto the stack.</p>
 # 0003 leave
 </code></pre>
 
-<h2 id="putobject">putobject</h2>
+<h2 id="pop">pop</h2>
 
 <h3 id="summary-11">Summary</h3>
 
-<p><code>putobject</code> pushes a known value onto the stack.</p>
+<p><code>pop</code> pops the top value off the stack.</p>
 
 <h3 id="tracepoint-11">TracePoint</h3>
 
-<p><code>putobject</code> can dispatch the line event.</p>
+<p><code>pop</code> does not dispatch any events.</p>
 
 <h3 id="usage-11">Usage</h3>
+
+<pre><code class="language-ruby">a ||= 2
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,7)&gt; (catch: FALSE)
+# local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+# [ 1] a@0
+# 0000 getlocal_WC_0                          a@0                       (   1)[Li]
+# 0002 dup
+# 0003 branchif                               11
+# 0005 pop
+# 0006 putobject                              2
+# 0008 dup
+# 0009 setlocal_WC_0                          a@0
+# 0011 leave
+</code></pre>
+
+<h2 id="putobject">putobject</h2>
+
+<h3 id="summary-12">Summary</h3>
+
+<p><code>putobject</code> pushes a known value onto the stack.</p>
+
+<h3 id="tracepoint-12">TracePoint</h3>
+
+<p><code>putobject</code> can dispatch the line event.</p>
+
+<h3 id="usage-12">Usage</h3>
 
 <pre><code class="language-ruby">5
 
@@ -291,15 +319,15 @@ onto the stack.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-12">Summary</h3>
+<h3 id="summary-13">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-12">TracePoint</h3>
+<h3 id="tracepoint-13">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-12">Usage</h3>
+<h3 id="usage-13">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -312,15 +340,15 @@ onto the stack.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-13">Summary</h3>
+<h3 id="summary-14">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-13">TracePoint</h3>
+<h3 id="tracepoint-14">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-13">Usage</h3>
+<h3 id="usage-14">Usage</h3>
 
 <pre><code class="language-ruby">"foo"
 
@@ -331,15 +359,15 @@ onto the stack.</p>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-14">Summary</h3>
+<h3 id="summary-15">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-14">TracePoint</h3>
+<h3 id="tracepoint-15">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-14">Usage</h3>
+<h3 id="usage-15">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
