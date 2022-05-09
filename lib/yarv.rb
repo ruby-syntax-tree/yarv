@@ -8,6 +8,7 @@ require_relative "yarv/opt_and"
 require_relative "yarv/opt_getinlinecache"
 require_relative "yarv/opt_empty_p"
 require_relative "yarv/opt_minus"
+require_relative "yarv/opt_or"
 require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
 require_relative "yarv/opt_setinlinecache"
@@ -65,6 +66,8 @@ module YARV
             OptEmptyP.new
           in [:opt_minus, { mid: :-, orig_argc: 1 }]
             OptMinus.new
+          in [:opt_or, { mid: :|, orig_argc: 1 }]
+            OptOr.new
           in [:opt_plus, { mid: :+,  orig_argc: 1 }]
             OptPlus.new
           in [:opt_send_without_block, { mid:, orig_argc: }]
