@@ -5,6 +5,7 @@ require_relative "yarv/getconstant"
 require_relative "yarv/getglobal"
 require_relative "yarv/leave"
 require_relative "yarv/opt_and"
+require_relative "yarv/opt_aref"
 require_relative "yarv/opt_div"
 require_relative "yarv/opt_empty_p"
 require_relative "yarv/opt_getinlinecache"
@@ -61,6 +62,8 @@ module YARV
             Leave.new
           in [:opt_and, { mid: :&, orig_argc: 1 }]
             OptAnd.new
+          in [:opt_aref, { mid: :[], orig_argc: 1 }]
+            OptAref.new
           in [:opt_div, { mid: :/, orig_argc: 1 }]
             OptDiv.new
           in [:opt_empty_p, {mid: :empty?, flag:, orig_argc: 0}]
