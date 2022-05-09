@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "yarv/branchunless"
 require_relative "yarv/dup"
 require_relative "yarv/getconstant"
 require_relative "yarv/getglobal"
@@ -31,76 +32,86 @@ module YARV
   class ExecutionContext
     attr_reader :stack
     attr_reader :globals
-    attr_accessor :program_counter
+    attr_accessor :program_counter, :iseq
 
     def initialize
       @stack = []
       @globals = {}
       @program_counter = 0
+      @iseq = nil
     end
   end
 
   class InstructionSequence
-    attr_reader :selfo, :insns
+    attr_reader :selfo, :insns, :labels
 
     def initialize(selfo, insns)
       @selfo = selfo
-      @insns =
-        insns.filter_map do |insn|
-          case insn
-          in Integer | :RUBY_EVENT_LINE
-            # skip for now
-          in Symbol
-            # skip for now, these are labels
-          in [:dup]
-            Dup.new
-          in [:getconstant, name]
-            GetConstant.new(name)
-          in [:getglobal, value]
-            GetGlobal.new(value)
-          in [:leave]
-            Leave.new
-          in [:opt_and, { mid: :&, orig_argc: 1 }]
-            OptAnd.new
-          in [:opt_aref, { mid: :[], orig_argc: 1 }]
-            OptAref.new
-          in [:opt_div, { mid: :/, orig_argc: 1 }]
-            OptDiv.new
-          in [:opt_empty_p, {mid: :empty?, flag:, orig_argc: 0}]
-            OptEmptyP.new
-          in [:opt_getinlinecache, label, cache]
-            OptGetInlineCache.new(label, cache)
-          in [:opt_minus, { mid: :-, orig_argc: 1 }]
-            OptMinus.new
-          in [:opt_or, { mid: :|, orig_argc: 1 }]
-            OptOr.new
-          in [:opt_plus, { mid: :+,  orig_argc: 1 }]
-            OptPlus.new
-          in [:opt_send_without_block, { mid:, orig_argc: }]
-            OptSendWithoutBlock.new(mid, orig_argc)
-          in [:opt_setinlinecache, cache]
-            OptSetInlineCache.new(cache)
-          in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
-            OptStrUMinus.new(value)
-          in [:pop]
-            Pop.new
-          in [:putobject, object]
-            PutObject.new(object)
-          in [:putself]
-            PutSelf.new(selfo)
-          in [:putstring, string]
-            PutString.new(string)
-          in [:setglobal, name]
-            SetGlobal.new(name)
-          end
+      @insns = []
+      @labels = {}
+      insns.each do |insn|
+        case insn
+        in Integer | :RUBY_EVENT_LINE
+          # skip for now
+        in Symbol
+          @labels[insn] = @insns.length
+        in [:branchunless, value]
+          @insns << BranchUnless.new(value)
+        in [:dup]
+          @insns << Dup.new
+        in [:getconstant, name]
+          @insns << GetConstant.new(name)
+        in [:getglobal, value]
+          @insns << GetGlobal.new(value)
+        in [:leave]
+          @insns << Leave.new
+        in [:opt_and, { mid: :&, orig_argc: 1 }]
+          @insns << OptAnd.new
+        in [:opt_aref, { mid: :[], orig_argc: 1 }]
+          @insns << OptAref.new
+        in [:opt_div, { mid: :/, orig_argc: 1 }]
+          @insns << OptDiv.new
+        in [:opt_empty_p, {mid: :empty?, flag:, orig_argc: 0}]
+          @insns << OptEmptyP.new
+        in [:opt_getinlinecache, label, cache]
+          @insns << OptGetInlineCache.new(label, cache)
+        in [:opt_minus, { mid: :-, orig_argc: 1 }]
+          @insns << OptMinus.new
+        in [:opt_or, { mid: :|, orig_argc: 1 }]
+          @insns << OptOr.new
+        in [:opt_plus, { mid: :+,  orig_argc: 1 }]
+          @insns << OptPlus.new
+        in [:opt_send_without_block, { mid:, orig_argc: }]
+          @insns << OptSendWithoutBlock.new(mid, orig_argc)
+        in [:opt_setinlinecache, cache]
+          @insns << OptSetInlineCache.new(cache)
+        in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
+          @insns << OptStrUMinus.new(value)
+        in [:pop]
+          @insns << Pop.new
+        in [:putobject, object]
+          @insns << PutObject.new(object)
+        in [:putself]
+          @insns << PutSelf.new(selfo)
+        in [:putstring, string]
+          @insns << PutString.new(string)
+        in [:setglobal, name]
+          @insns << SetGlobal.new(name)
+        in [:putnil]
+          # skip for now
         end
+      end
     end
 
     def emulate
       context = ExecutionContext.new
-      insns.each do |insn|
-        insn.execute(context)
+      context.iseq = self
+      while true
+        insn = insns[context.program_counter]
         context.program_counter += 1
+        insn.execute(context)
+
+        break if insn in Leave
       end
     end
   end
