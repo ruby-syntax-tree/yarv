@@ -16,5 +16,8 @@ jobs:
           bundler-cache: true
           ruby-version: '3.1'
 
+      - name: Check format
+        run: bundle exec rake syntax_tree:check
+
       - name: Test
         run: bundle exec rake test
