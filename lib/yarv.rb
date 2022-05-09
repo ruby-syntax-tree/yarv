@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative "yarv/dup"
 require_relative "yarv/getglobal"
 require_relative "yarv/leave"
 require_relative "yarv/opt_minus"
@@ -8,6 +9,7 @@ require_relative "yarv/opt_send_without_block"
 require_relative "yarv/opt_str_uminus"
 require_relative "yarv/putobject"
 require_relative "yarv/putself"
+require_relative "yarv/setglobal"
 
 module YARV
   Main = Object.new
@@ -32,6 +34,8 @@ module YARV
           case insn
           in Integer | :RUBY_EVENT_LINE
             # skip for now
+          in [:dup]
+            Dup.new
           in [:getglobal, value]
             GetGlobal.new(value)
           in [:leave]
@@ -48,6 +52,8 @@ module YARV
             PutObject.new(object)
           in [:putself]
             PutSelf.new(selfo)
+          in [:setglobal, name]
+            SetGlobal.new(name)
           end
         end
     end
