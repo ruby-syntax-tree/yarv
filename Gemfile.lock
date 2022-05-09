@@ -17,7 +17,7 @@ PLATFORMS
 
 DEPENDENCIES
   kramdown
-  rake (~> 13.0)
+  rake
   syntax_tree
   test-unit
 
