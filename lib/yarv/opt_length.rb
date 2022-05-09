@@ -20,13 +20,14 @@ module YARV
   # #0000 putstring                              ""                        (   1)[Li]
   # #0002 opt_length                             <calldata!mid:length, argc:0, ARGS_SIMPLE>[CcCr]
   # #0004 leave
-
   # ~~~
   #
   class OptLength
     def call(context)
-      obj = context.stack.pop
-      context.stack.push(obj.length)
+      value = context.stack.pop
+
+      result = context.call_method(value, :length, [])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

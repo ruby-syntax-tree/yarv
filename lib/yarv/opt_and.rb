@@ -21,13 +21,14 @@ module YARV
   # # 0002 putobject                              3                                                              │~
   # # 0004 opt_and                                <calldata!mid:&, argc:1, ARGS_SIMPLE>[CcCr]                    │~
   # # 0006 leave
-  #
   # ~~~
   #
   class OptAnd
     def call(context)
       left, right = context.stack.pop(2)
-      context.stack.push(left & right)
+
+      result = context.call_method(left, :&, [right])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

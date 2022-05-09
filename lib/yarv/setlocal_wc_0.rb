@@ -23,6 +23,7 @@ module YARV
   # # 0002 dup
   # # 0003 setlocal_WC_0                          value@0
   # # 0005 leave
+  # ~~~
   #
   class SetLocalWC0
     attr_reader :name, :index

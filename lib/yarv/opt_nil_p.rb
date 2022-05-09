@@ -3,7 +3,7 @@
 module YARV
   # ### Summary
   #
-  # `opt_nil_p` is an optimisation applied when the method `nil?` is called. It
+  # `opt_nil_p` is an optimization applied when the method `nil?` is called. It
   # returns true immediately when the receiver is `nil` and defers to the `nil?`
   # method in other cases
   #
@@ -24,8 +24,10 @@ module YARV
   #
   class OptNilP
     def call(context)
-      obj = context.stack.pop
-      context.stack.push(obj.nil?)
+      value = context.stack.pop
+
+      result = context.call_method(value, :nil?, [])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

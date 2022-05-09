@@ -26,7 +26,9 @@ module YARV
   class OptPlus
     def call(context)
       left, right = context.stack.pop(2)
-      context.stack.push(left + right)
+
+      result = context.call_method(left, :+, [right])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

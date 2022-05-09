@@ -14,9 +14,9 @@ module YARV
   # ~~~ruby
   # "foo"
   #
-  #== disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,5)> (catch: FALSE)
-  #0000 putstring                              "foo"                     (   1)[Li]
-  #0002 leave
+  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,5)> (catch: FALSE)
+  # # 0000 putstring                              "foo"                     (   1)[Li]
+  # # 0002 leave
   # ~~~
   #
   class PutString

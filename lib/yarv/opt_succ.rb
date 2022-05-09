@@ -24,8 +24,10 @@ module YARV
   #
   class OptSucc
     def call(context)
-      obj = context.stack.pop
-      context.stack.push(obj.succ)
+      value = context.stack.pop
+
+      result = context.call_method(value, :succ, [])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

@@ -17,7 +17,7 @@ module YARV
       original = $stdout
       $stdout = StringIO.new
 
-      YARV.emulate(code)
+      YARV.compile(code).eval
       assert_equal(expected, $stdout.string)
     ensure
       $stdout = original
