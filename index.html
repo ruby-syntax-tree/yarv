@@ -100,10 +100,10 @@ for if both operands are integers or both operands are floats.</p>
 <pre><code class="language-ruby">3 - 2
 
 # == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
-# 0000 putobject                              3                         (   1)[Li]                                  
-# 0002 putobject                              2                                                                     
-# 0004 opt_minus                              &lt;calldata!mid:-, argc:1, ARGS_SIMPLE&gt;[CcCr]                           
-# 0006 leave  
+# 0000 putobject                              3                         (   1)[Li]
+# 0002 putobject                              2
+# 0004 opt_minus                              &lt;calldata!mid:-, argc:1, ARGS_SIMPLE&gt;[CcCr]
+# 0006 leave
 </code></pre>
 
 <h2 id="optplus">opt_plus</h2>
@@ -168,7 +168,7 @@ onto the stack.</p>
 
 # == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)
 # 0000 opt_str_uminus                         "string", &lt;calldata!mid:-@, argc:0, ARGS_SIMPLE&gt;(   1)[Li]
-# 0003 leave 
+# 0003 leave
 </code></pre>
 
 <h2 id="putobject">putobject</h2>
