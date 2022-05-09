@@ -1,0 +1,16 @@
+name: Spec
+on:
+- push
+- pull_request_target
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@master
+        with:
+          submodules: recursive
+
+      - name: Spec
+        run: ./spec/mspec/bin/mspec -t ./exe/yarv

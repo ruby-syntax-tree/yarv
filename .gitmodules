@@ -1,0 +1,6 @@
+[submodule "spec/ruby"]
+	path = spec/ruby
+	url = https://github.com/ruby/spec
+[submodule "spec/mspec"]
+	path = spec/mspec
+	url = https://github.com/ruby/mspec
