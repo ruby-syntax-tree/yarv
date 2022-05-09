@@ -30,7 +30,7 @@ module YARV
       @name = name
     end
 
-    def execute(context)
+    def call(context)
       klass, allow_nil = context.stack.pop(2)
 
       if klass.nil? && !allow_nil

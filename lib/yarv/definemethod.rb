@@ -34,7 +34,7 @@ module YARV
       @iseq = iseq
     end
 
-    def execute(context)
+    def call(context)
       context.define_method(context.current_iseq.selfo, name, iseq)
     end
 

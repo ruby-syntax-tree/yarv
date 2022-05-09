@@ -28,7 +28,7 @@ module YARV
       @object = object
     end
 
-    def execute(context)
+    def call(context)
       context.stack.push(object)
     end
 

@@ -25,7 +25,7 @@ module YARV
   # ~~~
   #
   class OptAref
-    def execute(context)
+    def call(context)
       left, right = context.stack.pop(2)
       context.stack.push(left[right])
     end

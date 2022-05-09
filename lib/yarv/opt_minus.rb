@@ -24,7 +24,7 @@ module YARV
   # ~~~
   #
   class OptMinus
-    def execute(context)
+    def call(context)
       left, right = context.stack.pop(2)
       context.stack.push(left - right)
     end

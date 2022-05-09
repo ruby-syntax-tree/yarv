@@ -28,7 +28,7 @@ module YARV
       @name = name
     end
 
-    def execute(context)
+    def call(context)
       # If we're not currently tracking the global variable, then we're going to
       # steal the definition of it from the parent process by eval-ing it.
       if !context.globals.key?(name) && global_variables.include?(name)

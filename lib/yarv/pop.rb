@@ -28,7 +28,7 @@ module YARV
   # ~~~
   #
   class Pop
-    def execute(context)
+    def call(context)
       context.stack.pop
     end
 

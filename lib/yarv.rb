@@ -187,7 +187,7 @@ module YARV
           insn = insns[context.program_counter]
           context.program_counter += 1
 
-          insn.execute(context)
+          insn.call(context)
           break if insn in Leave
         end
       end
