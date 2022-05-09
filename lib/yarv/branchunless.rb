@@ -41,7 +41,7 @@ module YARV
     def execute(context)
       condition = context.stack.pop
       unless condition
-        jump_index = context.iseq.labels[label]
+        jump_index = context.current_iseq.labels[label]
         context.program_counter = jump_index
       end
     end

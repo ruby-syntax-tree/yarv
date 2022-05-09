@@ -32,7 +32,7 @@ module YARV
 
     def execute(context)
       receiver, *arguments = context.stack.pop(argc + 1)
-      context.stack.push(receiver.send(mid, *arguments))
+      context.stack.push(context.call_method(receiver, mid, arguments))
     end
 
     def pretty_print(q)
