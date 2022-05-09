@@ -27,8 +27,8 @@ module YARV
       @value = value
     end
 
-    def execute(stack)
-      stack.push(-value)
+    def execute(context)
+      context.stack.push(-value)
     end
 
     def pretty_print(q)
