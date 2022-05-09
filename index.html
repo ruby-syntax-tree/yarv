@@ -31,6 +31,7 @@
   <li><a href="#optstruminus">opt_str_uminus</a></li>
   <li><a href="#pop">pop</a></li>
   <li><a href="#putobject">putobject</a></li>
+  <li><a href="#putobjectint2fix0">putobject_int2fix_0</a></li>
   <li><a href="#putself">putself</a></li>
   <li><a href="#putstring">putstring</a></li>
   <li><a href="#setglobal">setglobal</a></li>
@@ -496,17 +497,38 @@ onto the stack.</p>
 # 0002 leave
 </code></pre>
 
-<h2 id="putself">putself</h2>
+<h2 id="putobjectint2fix0">putobject_int2fix_0</h2>
 
 <h3 id="summary-20">Summary</h3>
 
-<p><code>putself</code> pushes the current value of self onto the stack.</p>
+<p><code>putobject_INT2FIX_0_</code> pushes 0 on the stack.
+It is a specialized instruction resulting from the operand
+unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h3 id="tracepoint-20">TracePoint</h3>
 
-<p><code>putself</code> can dispatch the line event.</p>
+<p><code>putobject</code> can dispatch the line event.</p>
 
 <h3 id="usage-20">Usage</h3>
+
+<pre><code class="language-ruby">0
+
+# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,1)&gt; (catch: FALSE)
+# 0000 putobject_INT2FIX_0_                                             (   1)[Li]
+# 0001 leave
+</code></pre>
+
+<h2 id="putself">putself</h2>
+
+<h3 id="summary-21">Summary</h3>
+
+<p><code>putself</code> pushes the current value of self onto the stack.</p>
+
+<h3 id="tracepoint-21">TracePoint</h3>
+
+<p><code>putself</code> can dispatch the line event.</p>
+
+<h3 id="usage-21">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -519,15 +541,15 @@ onto the stack.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-21">Summary</h3>
+<h3 id="summary-22">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-21">TracePoint</h3>
+<h3 id="tracepoint-22">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-21">Usage</h3>
+<h3 id="usage-22">Usage</h3>
 
 <pre><code class="language-ruby">"foo"
 
@@ -538,15 +560,15 @@ onto the stack.</p>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-22">Summary</h3>
+<h3 id="summary-23">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-22">TracePoint</h3>
+<h3 id="tracepoint-23">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-22">Usage</h3>
+<h3 id="usage-23">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
