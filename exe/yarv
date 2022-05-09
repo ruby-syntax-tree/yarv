@@ -4,4 +4,4 @@
 $:.unshift(File.expand_path("../lib", __dir__))
 require "yarv"
 
-YARV.emulate(ARGF.read)
+YARV.compile(ARGF.read, filename: ARGF.filename).emulate

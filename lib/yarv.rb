@@ -200,10 +200,11 @@ module YARV
     end
   end
 
-  def self.compile(source)
+  def self.compile(source, filename: nil)
     iseq =
       RubyVM::InstructionSequence.compile(
         source,
+        filename,
         inline_const_cache: true,
         peephole_optimization: true,
         specialized_instruction: true,
