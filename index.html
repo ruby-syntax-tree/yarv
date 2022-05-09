@@ -16,6 +16,7 @@
   <li><a href="#dup">dup</a></li>
   <li><a href="#getconstant">getconstant</a></li>
   <li><a href="#getglobal">getglobal</a></li>
+  <li><a href="#getlocalwc0">getlocal_wc_0</a></li>
   <li><a href="#leave">leave</a></li>
   <li><a href="#optand">opt_and</a></li>
   <li><a href="#optaref">opt_aref</a></li>
@@ -37,6 +38,7 @@
   <li><a href="#putself">putself</a></li>
   <li><a href="#putstring">putstring</a></li>
   <li><a href="#setglobal">setglobal</a></li>
+  <li><a href="#setlocalwc0">setlocal_wc_0</a></li>
 </ul>
 
 <h2 id="branchunless">branchunless</h2>
@@ -159,19 +161,44 @@ constant onto the stack.</p>
 # 0002 leave
 </code></pre>
 
-<h2 id="leave">leave</h2>
+<h2 id="getlocalwc0">getlocal_wc_0</h2>
 
 <h3 id="summary-5">Summary</h3>
 
-<p><code>leave</code> exits the current frame.</p>
+<p><code>getlocal_WC_0</code> is a specialized version of the <code>getlocal</code> instruction. It
+fetches the value of a local variable from the current frame determined by
+the index given as its only argument.</p>
 
 <h3 id="tracepoint-5">TracePoint</h3>
 
-<p><code>leave</code> does not dispatch any events.</p>
+<p><code>getlocal_WC_0</code> does not dispatch any events.</p>
 
 <h3 id="usage-5">Usage</h3>
 
-<pre><code class="language-ruby">;;
+<pre><code class="language-ruby">value = 5; value
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,16)&gt; (catch: FALSE)
+# local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+# [ 1] value@0
+# 0000 putobject                              5                         (   1)[Li]
+# 0002 setlocal_WC_0                          value@0
+# 0004 getlocal_WC_0                          value@0
+# 0006 leave
+
+## leave
+
+### Summary
+
+`leave` exits the current frame.
+
+### TracePoint
+
+`leave` does not dispatch any events.
+
+### Usage
+
+~~~ruby
+;;
 
 # == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,2)&gt; (catch: FALSE)
 # 0000 putnil
@@ -624,6 +651,31 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 # 0003 setglobal                              :$global
 # 0005 leave
 </code></pre>
+
+<h2 id="setlocalwc0">setlocal_wc_0</h2>
+
+<h3 id="summary-26">Summary</h3>
+
+<p><code>setlocal_WC_0</code> is a specialized version of the <code>setlocal</code> instruction. It
+sets the value of a local variable on the current frame to the value at the
+top of the stack as determined by the index given as its only argument.</p>
+
+<h3 id="tracepoint-26">TracePoint</h3>
+
+<p><code>setlocal_WC_0</code> does not dispatch any events.</p>
+
+<h3 id="usage-26">Usage</h3>
+
+<p>~~~ruby
+value = 5</p>
+
+<h1 id="disasm-iseqmain-e1-10-19-catch-false">== disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,9)&gt; (catch: FALSE)</h1>
+<p># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+# [ 1] value@0
+# 0000 putobject                              5                         (   1)[Li]
+# 0002 dup
+# 0003 setlocal_WC_0                          value@0
+# 0005 leave</p>
 
 
   </body>
