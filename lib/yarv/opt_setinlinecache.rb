@@ -31,7 +31,7 @@ module YARV
       @cache = cache
     end
 
-    def execute(context)
+    def call(context)
       # Since we're not actually populating inline caches in YARV, we don't need
       # to do anything in this instruction.
     end

@@ -26,7 +26,7 @@ module YARV
       @string = string
     end
 
-    def execute(context)
+    def call(context)
       context.stack.push(string)
     end
 

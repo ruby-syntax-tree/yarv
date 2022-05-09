@@ -32,7 +32,7 @@ module YARV
       @cache = cache
     end
 
-    def execute(context)
+    def call(context)
       # In CRuby, this is going to check if the cache is populated and then
       # potentially jump forward to the label. We're not going to track inline
       # caches in YARV, so we'll just always push nil onto the stack as if the

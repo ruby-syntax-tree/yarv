@@ -30,7 +30,7 @@ module YARV
       @argc = argc
     end
 
-    def execute(context)
+    def call(context)
       receiver, *arguments = context.stack.pop(argc + 1)
       context.stack.push(context.call_method(receiver, mid, arguments))
     end

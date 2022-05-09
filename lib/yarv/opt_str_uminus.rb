@@ -27,7 +27,7 @@ module YARV
       @value = value
     end
 
-    def execute(context)
+    def call(context)
       context.stack.push(-value)
     end
 

@@ -23,7 +23,7 @@ module YARV
   # ~~~
   #
   class OptEmptyP
-    def execute(context)
+    def call(context)
       obj = context.stack.pop
       context.stack.push(obj.empty?)
     end

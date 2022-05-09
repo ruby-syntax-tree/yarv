@@ -22,7 +22,7 @@ module YARV
   # ~~~
   #
   class Dup
-    def execute(context)
+    def call(context)
       value = context.stack.pop
       context.stack.push(value)
       context.stack.push(value)

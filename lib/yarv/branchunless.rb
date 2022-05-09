@@ -38,7 +38,7 @@ module YARV
 
     attr_reader :label
 
-    def execute(context)
+    def call(context)
       condition = context.stack.pop
       unless condition
         jump_index = context.current_iseq.labels[label]
