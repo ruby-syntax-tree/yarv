@@ -14,6 +14,7 @@
   <li><a href="#leave">leave</a></li>
   <li><a href="#optplus">opt_plus</a></li>
   <li><a href="#optsendwithoutblock">opt_send_without_block</a></li>
+  <li><a href="#optstruminus">opt_str_uminus</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putself">putself</a></li>
 </ul>
@@ -82,17 +83,37 @@ occurs when a method is being called without a block.</p>
 # 0005 leave
 </code></pre>
 
-<h2 id="putobject">putobject</h2>
+<h2 id="optstruminus">opt_str_uminus</h2>
 
 <h3 id="summary-3">Summary</h3>
 
-<p><code>putobject</code> pushes a known value onto the stack.</p>
+<p><code>opt_str_uminus</code> pushes a frozen known string value with no interpolation
+onto the stack.</p>
 
 <h3 id="tracepoint-3">TracePoint</h3>
 
-<p><code>putobject</code> can dispatch the line event.</p>
+<p><code>opt_str_uminus</code> does not dispatch any events.</p>
 
 <h3 id="usage-3">Usage</h3>
+
+<pre><code class="language-ruby">-"string"
+
+# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)
+# 0000 opt_str_uminus                         "string", &lt;calldata!mid:-@, argc:0, ARGS_SIMPLE&gt;(   1)[Li]
+# 0003 leave 
+</code></pre>
+
+<h2 id="putobject">putobject</h2>
+
+<h3 id="summary-4">Summary</h3>
+
+<p><code>putobject</code> pushes a known value onto the stack.</p>
+
+<h3 id="tracepoint-4">TracePoint</h3>
+
+<p><code>putobject</code> can dispatch the line event.</p>
+
+<h3 id="usage-4">Usage</h3>
 
 <pre><code class="language-ruby">5
 
@@ -103,15 +124,15 @@ occurs when a method is being called without a block.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-4">Summary</h3>
+<h3 id="summary-5">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-4">TracePoint</h3>
+<h3 id="tracepoint-5">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-4">Usage</h3>
+<h3 id="usage-5">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
