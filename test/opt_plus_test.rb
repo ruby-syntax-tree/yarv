@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
-$:.unshift(File.expand_path("../lib", __dir__))
-require "yarv/opt_plus"
+require_relative "./test_case"
 
-require_relative "./yarv_test"
-
-class OptPlusTest < YARVTest
-  def test_opt_plus
-    assert_insns([YARV::PutObject, YARV::PutObject, YARV::OptPlus, YARV::Leave], "2 + 3")
-    assert_stdout("5\n", "p 2 + 3")
+module YARV
+  class OptPlusTest < TestCase
+    def test_execute
+      assert_insns([PutObject, PutObject, OptPlus, Leave], "2 + 3")
+      assert_stdout("5\n", "p 2 + 3")
+    end
   end
 end

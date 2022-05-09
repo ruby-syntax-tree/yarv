@@ -24,13 +24,13 @@ module YARV
             # skip for now
           in [:leave]
             Leave.new
-          in [:opt_minus, { mid: :-, flag:, orig_argc: 1 }]
+          in [:opt_minus, { mid: :-, orig_argc: 1 }]
             OptMinus.new
-          in [:opt_plus, { mid: :+, flag:, orig_argc: 1 }]
+          in [:opt_plus, { mid: :+,  orig_argc: 1 }]
             OptPlus.new
-          in [:opt_send_without_block, { mid:, flag:, orig_argc: }]
+          in [:opt_send_without_block, { mid:, orig_argc: }]
             OptSendWithoutBlock.new(mid, orig_argc)
-          in [:opt_str_uminus, value, { mid: :-@, flag:, orig_argc: 0 }]
+          in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
             OptStrUMinus.new(value)
           in [:putobject, object]
             PutObject.new(object)
