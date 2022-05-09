@@ -10,6 +10,7 @@ require_relative "yarv/opt_and"
 require_relative "yarv/opt_aref"
 require_relative "yarv/opt_div"
 require_relative "yarv/opt_empty_p"
+require_relative "yarv/opt_length"
 require_relative "yarv/opt_nil_p"
 require_relative "yarv/opt_getinlinecache"
 require_relative "yarv/opt_minus"
@@ -153,6 +154,8 @@ module YARV
           @insns << OptNilP.new
         in [:opt_getinlinecache, label, cache]
           @insns << OptGetInlineCache.new(label, cache)
+        in [:opt_length, { mid: :length, flag:, orig_argc: 0 }]
+          @insns << OptLength.new
         in [:opt_minus, { mid: :-, orig_argc: 1 }]
           @insns << OptMinus.new
         in [:opt_or, { mid: :|, orig_argc: 1 }]
