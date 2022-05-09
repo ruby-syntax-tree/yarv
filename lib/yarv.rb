@@ -2,6 +2,7 @@
 
 require_relative "yarv/getglobal"
 require_relative "yarv/leave"
+require_relative "yarv/opt_and"
 require_relative "yarv/opt_minus"
 require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
@@ -36,6 +37,8 @@ module YARV
             GetGlobal.new(value)
           in [:leave]
             Leave.new
+          in [:opt_and, { mid: :&, orig_argc: 1 }]
+            OptAnd.new
           in [:opt_minus, { mid: :-, orig_argc: 1 }]
             OptMinus.new
           in [:opt_plus, { mid: :+,  orig_argc: 1 }]
