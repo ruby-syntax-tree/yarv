@@ -17,4 +17,4 @@ jobs:
           ruby-version: '3.1'
 
       - name: Test
-        run: bundle exec ruby test/yarv_test.rb
+        run: bundle exec rake test
