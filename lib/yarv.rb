@@ -13,7 +13,11 @@ require_relative "yarv/putstring"
 require_relative "yarv/setglobal"
 
 module YARV
-  Main = Object.new
+  class Main
+    def inspect
+      "main"
+    end
+  end
 
   class ExecutionContext
     attr_reader :stack
@@ -69,7 +73,7 @@ module YARV
 
   def self.compile(source)
     iseq = RubyVM::InstructionSequence.compile(source, specialized_instruction: true)
-    InstructionSequence.new(Main, iseq.to_a.last)
+    InstructionSequence.new(Main.new, iseq.to_a.last)
   end
 
   def self.emulate(source)

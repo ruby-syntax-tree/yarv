@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require_relative "./test_case"
+require_relative "test_case"
 
 module YARV
   class OptPlusTest < TestCase
     def test_execute
-      assert_insns([PutObject, PutObject, OptPlus, Leave], "2 + 3")
-      assert_stdout("5\n", "p 2 + 3")
+      assert_insns([PutSelf, Leave], "self")
+      assert_stdout("main\n", "p self")
     end
   end
 end

@@ -3,7 +3,7 @@
 require_relative "test_case"
 
 module YARV
-  class PutStringTest < TestCase
+  class PutSelfTest < TestCase
     def test_execute
       assert_insns([PutString, Leave], "'foo'")
       assert_stdout("foo\n", "puts 'foo'")
