@@ -30,6 +30,7 @@
   <li><a href="#optsendwithoutblock">opt_send_without_block</a></li>
   <li><a href="#optsetinlinecache">opt_setinlinecache</a></li>
   <li><a href="#optstruminus">opt_str_uminus</a></li>
+  <li><a href="#optsucc">opt_succ</a></li>
   <li><a href="#pop">pop</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putobjectint2fix0">putobject_int2fix_0</a></li>
@@ -474,17 +475,39 @@ onto the stack.</p>
 # 0003 leave
 </code></pre>
 
-<h2 id="pop">pop</h2>
+<h2 id="optsucc">opt_succ</h2>
 
 <h3 id="summary-19">Summary</h3>
 
-<p><code>pop</code> pops the top value off the stack.</p>
+<p><code>opt_succ</code> is a specialization of the <code>opt_send_without_block</code> instruction
+when the method being called is <code>succ</code>. Fast paths exist within CRuby when
+the receiver is either a String or a Fixnum.</p>
 
 <h3 id="tracepoint-19">TracePoint</h3>
 
-<p><code>pop</code> does not dispatch any events.</p>
+<p><code>opt_succ</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
 
 <h3 id="usage-19">Usage</h3>
+
+<pre><code class="language-ruby">"".succ
+
+#== disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)
+#0000 putstring                              "a"                       (   1)[Li]
+#0002 opt_succ                               &lt;calldata!mid:succ, argc:0, ARGS_SIMPLE&gt;[CcCr]
+#0004 leave  
+</code></pre>
+
+<h2 id="pop">pop</h2>
+
+<h3 id="summary-20">Summary</h3>
+
+<p><code>pop</code> pops the top value off the stack.</p>
+
+<h3 id="tracepoint-20">TracePoint</h3>
+
+<p><code>pop</code> does not dispatch any events.</p>
+
+<h3 id="usage-20">Usage</h3>
 
 <pre><code class="language-ruby">a ||= 2
 
@@ -503,15 +526,15 @@ onto the stack.</p>
 
 <h2 id="putobject">putobject</h2>
 
-<h3 id="summary-20">Summary</h3>
+<h3 id="summary-21">Summary</h3>
 
 <p><code>putobject</code> pushes a known value onto the stack.</p>
 
-<h3 id="tracepoint-20">TracePoint</h3>
+<h3 id="tracepoint-21">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-20">Usage</h3>
+<h3 id="usage-21">Usage</h3>
 
 <pre><code class="language-ruby">5
 
@@ -522,17 +545,17 @@ onto the stack.</p>
 
 <h2 id="putobjectint2fix0">putobject_int2fix_0</h2>
 
-<h3 id="summary-21">Summary</h3>
+<h3 id="summary-22">Summary</h3>
 
 <p><code>putobject_INT2FIX_0_</code> pushes 0 on the stack.
 It is a specialized instruction resulting from the operand
 unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
-<h3 id="tracepoint-21">TracePoint</h3>
+<h3 id="tracepoint-22">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-21">Usage</h3>
+<h3 id="usage-22">Usage</h3>
 
 <pre><code class="language-ruby">0
 
@@ -543,15 +566,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-22">Summary</h3>
+<h3 id="summary-23">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-22">TracePoint</h3>
+<h3 id="tracepoint-23">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-22">Usage</h3>
+<h3 id="usage-23">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -564,15 +587,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-23">Summary</h3>
+<h3 id="summary-24">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-23">TracePoint</h3>
+<h3 id="tracepoint-24">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-23">Usage</h3>
+<h3 id="usage-24">Usage</h3>
 
 <pre><code class="language-ruby">"foo"
 
@@ -583,15 +606,15 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-24">Summary</h3>
+<h3 id="summary-25">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-24">TracePoint</h3>
+<h3 id="tracepoint-25">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-24">Usage</h3>
+<h3 id="usage-25">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
