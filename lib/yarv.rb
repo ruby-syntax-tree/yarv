@@ -6,6 +6,7 @@ require_relative "yarv/getglobal"
 require_relative "yarv/leave"
 require_relative "yarv/opt_and"
 require_relative "yarv/opt_getinlinecache"
+require_relative "yarv/opt_empty_p"
 require_relative "yarv/opt_minus"
 require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
@@ -60,6 +61,8 @@ module YARV
             OptAnd.new
           in [:opt_getinlinecache, label, cache]
             OptGetInlineCache.new(label, cache)
+          in [:opt_empty_p, {mid: :empty?, flag:, orig_argc: 0}]
+            OptEmptyP.new
           in [:opt_minus, { mid: :-, orig_argc: 1 }]
             OptMinus.new
           in [:opt_plus, { mid: :+,  orig_argc: 1 }]
