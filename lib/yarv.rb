@@ -9,6 +9,7 @@ require_relative "yarv/opt_send_without_block"
 require_relative "yarv/opt_str_uminus"
 require_relative "yarv/putobject"
 require_relative "yarv/putself"
+require_relative "yarv/putstring"
 require_relative "yarv/setglobal"
 
 module YARV
@@ -52,6 +53,8 @@ module YARV
             PutObject.new(object)
           in [:putself]
             PutSelf.new(selfo)
+          in [:putstring, string]
+            PutString.new(string)
           in [:setglobal, name]
             SetGlobal.new(name)
           end
