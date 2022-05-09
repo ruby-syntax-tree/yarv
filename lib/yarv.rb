@@ -20,6 +20,7 @@ require_relative "yarv/opt_setinlinecache"
 require_relative "yarv/opt_str_uminus"
 require_relative "yarv/pop"
 require_relative "yarv/putobject"
+require_relative "yarv/putobject_int2fix_0"
 require_relative "yarv/putself"
 require_relative "yarv/putstring"
 require_relative "yarv/setglobal"
@@ -170,6 +171,8 @@ module YARV
           # skip for now
         in [:putobject, object]
           @insns << PutObject.new(object)
+        in [:putobject_INT2FIX_0_]
+          @insns << PutObjectInt2Fix0.new
         in [:putself]
           @insns << PutSelf.new(selfo)
         in [:putstring, string]
