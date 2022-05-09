@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "yarv/branchunless"
+require_relative "yarv/definemethod"
 require_relative "yarv/dup"
 require_relative "yarv/getconstant"
 require_relative "yarv/getglobal"
@@ -23,33 +24,104 @@ require_relative "yarv/putstring"
 require_relative "yarv/setglobal"
 
 module YARV
+  # This is the self object at the top of the script.
   class Main
     def inspect
       "main"
     end
   end
 
+  # This is the object that gets passed around all of the instructions as they
+  # are being executed.
   class ExecutionContext
+    # This represents an execution frame.
+    class Frame
+      attr_reader :iseq
+
+      def initialize(iseq)
+        @iseq = iseq
+      end
+    end
+
+    # The system stack that tracks values through the execution of the program.
     attr_reader :stack
+
+    # The global variables accessible to the program. These mirror the runtime
+    # global variables if they have not been overridden.
     attr_reader :globals
-    attr_accessor :program_counter, :iseq
+
+    # The set of methods defined at runtime.
+    attr_reader :methods
+
+    # This is a stack of frames as they are being executed.
+    attr_accessor :frames
+
+    # The program counter used to determine which instruction to execute next.
+    # This is an attr_accessor because it can be modified by instructions being
+    # executed.
+    attr_accessor :program_counter
 
     def initialize
       @stack = []
       @globals = {}
+      @methods = {}
+      @frames = []
       @program_counter = 0
-      @iseq = nil
+    end
+
+    # Calls a method on the given receiver. This is our method dispatch logic.
+    # First, it looks to see if there is a method defined on the receiver's
+    # class that we defined explicitly in our runtime. If there is, then it's
+    # going to save the necessary information and invoke it. Otherwise, it's
+    # going to call into the parent runtime and let it handle the method call.
+    def call_method(receiver, name, arguments)
+      if methods.key?([receiver.class, name])
+        methods[[receiver.class, name]].emulate(self)
+        stack.last
+      else
+        receiver.send(name, *arguments)
+      end
+    end
+
+    # This returns the instruction sequence object that is currently being
+    # executed. In other words, the instruction sequence that is at the top of
+    # the frame stack.
+    def current_iseq
+      frames.last.iseq
+    end
+
+    # Defines a method on the given object's class keyed by the given name. The
+    # iseq is an instance of the InstructionSequence class.
+    def define_method(object, name, iseq)
+      methods[[object.class, name]] = iseq
+    end
+
+    # This executes the given instruction sequence within a new execution frame.
+    def with_frame(iseq)
+      current_program_counter = program_counter
+      current_stack_length = stack.length
+      frames.push(Frame.new(iseq))
+
+      begin
+        yield
+      ensure
+        frames.pop
+        @program_counter = current_program_counter
+        @stack = @stack[0..current_stack_length]
+      end
     end
   end
 
+  # This object represents a set of instructions that will be executed.
   class InstructionSequence
     attr_reader :selfo, :insns, :labels
 
-    def initialize(selfo, insns)
+    def initialize(selfo, iseq)
       @selfo = selfo
       @insns = []
       @labels = {}
-      insns.each do |insn|
+
+      iseq.last.each do |insn|
         case insn
         in Integer | :RUBY_EVENT_LINE
           # skip for now
@@ -57,6 +129,8 @@ module YARV
           @labels[insn] = @insns.length
         in [:branchunless, value]
           @insns << BranchUnless.new(value)
+        in [:definemethod, name, iseq]
+          @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
           @insns << Dup.new
         in [:getconstant, name]
@@ -71,7 +145,7 @@ module YARV
           @insns << OptAref.new
         in [:opt_div, { mid: :/, orig_argc: 1 }]
           @insns << OptDiv.new
-        in [:opt_empty_p, {mid: :empty?, flag:, orig_argc: 0}]
+        in [:opt_empty_p, { mid: :empty?, orig_argc: 0 }]
           @insns << OptEmptyP.new
         in [:opt_getinlinecache, label, cache]
           @insns << OptGetInlineCache.new(label, cache)
@@ -89,6 +163,8 @@ module YARV
           @insns << OptStrUMinus.new(value)
         in [:pop]
           @insns << Pop.new
+        in [:putnil]
+          # skip for now
         in [:putobject, object]
           @insns << PutObject.new(object)
         in [:putself]
@@ -97,31 +173,43 @@ module YARV
           @insns << PutString.new(string)
         in [:setglobal, name]
           @insns << SetGlobal.new(name)
-        in [:putnil]
-          # skip for now
         end
       end
     end
 
-    def emulate
-      context = ExecutionContext.new
-      context.iseq = self
-      while true
-        insn = insns[context.program_counter]
-        context.program_counter += 1
-        insn.execute(context)
+    # Pushes a new frame onto the stack, executes the instructions contained
+    # within this instruction sequence, then pops the frame off the stack.
+    def emulate(context = ExecutionContext.new)
+      context.with_frame(self) do
+        context.program_counter = 0
 
-        break if insn in Leave
+        loop do
+          insn = insns[context.program_counter]
+          context.program_counter += 1
+
+          insn.execute(context)
+          break if insn in Leave
+        end
       end
     end
   end
 
   def self.compile(source)
-    iseq = RubyVM::InstructionSequence.compile(source, specialized_instruction: true)
-    InstructionSequence.new(Main.new, iseq.to_a.last)
+    iseq =
+      RubyVM::InstructionSequence.compile(
+        source,
+        inline_const_cache: true,
+        peephole_optimization: true,
+        specialized_instruction: true,
+        tailcall_optimization: false,
+        trace_instruction: false
+      )
+
+    InstructionSequence.new(Main.new, iseq.to_a)
   end
 
   def self.emulate(source)
-    compile(source).emulate
+    context = ExecutionContext.new
+    compile(source).emulate(context)
   end
 end
