@@ -24,6 +24,8 @@ To learn more about this kind of content, there are a number of articles and blo
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/kddnewton/yarv. In this project's current form there are lots of opportunities to contribute. To get started, please check the issues on the project board.
 
+CRuby contains tests that help with generating specific instructions, these are a good starting point when writing tests for our reimplemented instructions: [https://github.com/ruby/ruby/blob/master/bootstraptest/test_insns.rb](https://github.com/ruby/ruby/blob/master/bootstraptest/test_insns.rb).
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
