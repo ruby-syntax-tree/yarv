@@ -20,6 +20,7 @@
   <li><a href="#optstruminus">opt_str_uminus</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putself">putself</a></li>
+  <li><a href="#putstring">putstring</a></li>
   <li><a href="#setglobal">setglobal</a></li>
 </ul>
 
@@ -210,17 +211,36 @@ onto the stack.</p>
 # 0005 leave
 </code></pre>
 
-<h2 id="setglobal">setglobal</h2>
+<h2 id="putstring">putstring</h2>
 
 <h3 id="summary-9">Summary</h3>
 
-<p><code>setglobal</code> sets the value of a global variable.</p>
+<p><code>putstring</code> pushes a string literal onto the stack.</p>
 
 <h3 id="tracepoint-9">TracePoint</h3>
 
-<p><code>setglobal</code> does not dispatch any events.</p>
+<p><code>putstring</code> can dispatch the line event.</p>
 
 <h3 id="usage-9">Usage</h3>
+
+<pre><code class="language-ruby">"foo"
+
+= disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
+000 putstring                              "foo"                     (   1)[Li]                                  
+002 leave 
+</code></pre>
+
+<h2 id="setglobal">setglobal</h2>
+
+<h3 id="summary-10">Summary</h3>
+
+<p><code>setglobal</code> sets the value of a global variable.</p>
+
+<h3 id="tracepoint-10">TracePoint</h3>
+
+<p><code>setglobal</code> does not dispatch any events.</p>
+
+<h3 id="usage-10">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
