@@ -11,6 +11,7 @@ require_relative "yarv/opt_plus"
 require_relative "yarv/opt_send_without_block"
 require_relative "yarv/opt_setinlinecache"
 require_relative "yarv/opt_str_uminus"
+require_relative "yarv/pop"
 require_relative "yarv/putobject"
 require_relative "yarv/putself"
 require_relative "yarv/putstring"
@@ -69,6 +70,8 @@ module YARV
             OptSetInlineCache.new(cache)
           in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0 }]
             OptStrUMinus.new(value)
+          in [:pop]
+            Pop.new
           in [:putobject, object]
             PutObject.new(object)
           in [:putself]
