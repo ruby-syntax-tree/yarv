@@ -17,16 +17,16 @@ module YARV
   # 3 - 2
   #
   # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,5)> (catch: FALSE)
-  # # 0000 putobject                              3                         (   1)[Li]                                  
-  # # 0002 putobject                              2                                                                     
-  # # 0004 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr]                           
-  # # 0006 leave  
+  # # 0000 putobject                              3                         (   1)[Li]
+  # # 0002 putobject                              2
+  # # 0004 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr]
+  # # 0006 leave
   # ~~~
   #
   class OptMinus
-    def execute(stack)
-      left, right = stack.pop(2)
-      stack.push(left - right)
+    def execute(context)
+      left, right = context.stack.pop(2)
+      context.stack.push(left - right)
     end
 
     def pretty_print(q)
