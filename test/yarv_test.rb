@@ -7,11 +7,6 @@ require "stringio"
 require "test/unit"
 
 class YARVTest < Test::Unit::TestCase
-  def test_opt_plus
-    assert_insns([YARV::PutObject, YARV::PutObject, YARV::OptPlus, YARV::Leave], "2 + 3")
-    assert_stdout("5\n", "p 2 + 3")
-  end
-
   def test_opt_str_uminus
     assert_insns([YARV::OptStrUMinus, YARV::Leave], "-\"string\"")
     assert_stdout("\"string\"\n", "p -'string'")
