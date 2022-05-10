@@ -3,7 +3,7 @@
 module YARV
   # ### Summary
   #
-  # `opt_aset` is a TODO
+  # `opt_aset` is an instruction for `recv[obj] = set` format # TODO expand me
   #
   # ### TracePoint
   #
