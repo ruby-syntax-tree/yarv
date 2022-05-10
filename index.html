@@ -46,6 +46,7 @@
 <a href="#putstring">putstring</a>
 <a href="#setglobal">setglobal</a>
 <a href="#setlocalwc0">setlocal_wc_0</a>
+<a href="#swap">swap</a>
 
 
         </nav>
@@ -927,6 +928,40 @@ top of the stack as determined by the index given as its only argument.</p>
 # 0002 dup
 # 0003 setlocal_WC_0                          value@0
 # 0005 leave
+</code></pre>
+
+<hr />
+
+<h2 id="swap">swap</h2>
+
+<h3 id="summary-36">Summary</h3>
+
+<p><code>swap</code> swaps the top two elements in the stack.</p>
+
+<h3 id="tracepoint-36">TracePoint</h3>
+
+<p><code>swap</code> does not dispatch any events.</p>
+
+<h3 id="usage-36">Usage</h3>
+
+<pre><code class="language-ruby">!!defined?([[]])
+
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,16)&gt; (catch: TRUE)
+# == catch table
+# | catch type: rescue st: 0001 ed: 0003 sp: 0000 cont: 0005
+# | == disasm: #&lt;ISeq:defined guard in &lt;main&gt;@-e:0 (0,0)-(-1,-1)&gt; (catch: FALSE)
+# | local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+# | [ 1] "\#$!"@0
+# | 0000 putnil
+# | 0001 leave
+# |------------------------------------------------------------------------
+# 0000 putnil                                                           (   1)[Li]
+# 0001 putobject                    "expression"
+# 0003 swap
+# 0004 pop
+# 0005 opt_not                      &lt;callinfo!mid:!, argc:0, ARGS_SIMPLE&gt;, &lt;callcache&gt;
+# 0008 opt_not                      &lt;callinfo!mid:!, argc:0, ARGS_SIMPLE&gt;, &lt;callcache&gt;
+# 0011 leave
 </code></pre>
 
 
