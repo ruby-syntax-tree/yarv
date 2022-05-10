@@ -1,0 +1,36 @@
+html, body {
+  margin: 0;
+}
+
+main {
+  display: flex;
+}
+
+aside {
+  background-color: #f6f6f6;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 0.5em;
+  position: sticky;
+  top: 0;
+}
+
+nav a {
+  border-radius: 5px;
+  color: #0000ee;
+  padding: 0.3em 1em;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: #eee;
+}
+
+article {
+  padding: 0 1em;
+}

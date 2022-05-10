@@ -8,6 +8,8 @@ require "kramdown"
 require "stringio"
 require "syntax_tree"
 
+filepaths = Dir[File.expand_path("../lib/yarv/*.rb", __dir__)]
+
 markdown = StringIO.new
 markdown.puts(<<~MARKDOWN)
   # YARV Instructions
@@ -15,13 +17,6 @@ markdown.puts(<<~MARKDOWN)
   Below is a list of the YARV instructions that this project has documented so far.
 
 MARKDOWN
-
-filepaths = Dir[File.expand_path("../lib/yarv/*.rb", __dir__)]
-filepaths.each do |filepath|
-  basename = File.basename(filepath, ".rb")
-  markdown.puts("- [#{basename}](##{basename.delete("_")})")
-end
-markdown.puts
 
 # For each YARV instruction file, we're going to yank out the comments.
 filepaths.each do |filepath|
@@ -31,6 +26,7 @@ filepaths.each do |filepath|
   mod => { constant: { constant: { value: "YARV" } }, bodystmt: { statements: { body: [SyntaxTree::VoidStmt, *comments, SyntaxTree::ClassDeclaration] } } }
 
   # Write the comments out in their own section.
+  markdown.puts("---\n\n")
   markdown.puts(<<~MARKDOWN)
     ## #{File.basename(filepath, ".rb")}
 
@@ -38,8 +34,15 @@ filepaths.each do |filepath|
   MARKDOWN
 end
 
-html = Kramdown::Document.new(markdown.string).to_html
-rendered = ERB.new(DATA.read).result_with_hash(html: html)
+navigation = StringIO.new
+filepaths.each do |filepath|
+  basename = File.basename(filepath, ".rb")
+  navigation.puts("<a href=\"##{basename.delete("_")}\">#{basename}</a>")
+end
+navigation.puts
+
+body = Kramdown::Document.new(markdown.string).to_html
+rendered = ERB.new(DATA.read).result_with_hash(body: body, nav: navigation.string)
 
 FileUtils.mkdir_p("doc")
 File.write("doc/index.html", rendered)
@@ -51,8 +54,18 @@ __END__
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=5">
     <title>YARV</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <%= html %>
+    <main>
+      <aside>
+        <nav>
+          <%= nav %>
+        </nav>
+      </aside>
+      <article>
+        <%= body %>
+      </article>
+    </main>
   </body>
 </html>
