@@ -77,12 +77,12 @@ module YARV
     # class that we defined explicitly in our runtime. If there is, then it's
     # going to save the necessary information and invoke it. Otherwise, it's
     # going to call into the parent runtime and let it handle the method call.
-    def call_method(receiver, name, arguments)
+    def call_method(receiver, name, arguments, &block)
       if methods.key?([receiver.class, name])
         methods[[receiver.class, name]].eval(self)
         stack.last
       else
-        receiver.send(name, *arguments)
+        receiver.send(name, *arguments, &block)
       end
     end
 
