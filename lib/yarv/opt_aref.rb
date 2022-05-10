@@ -16,10 +16,10 @@ module YARV
   # ~~~ruby
   # 7[2]
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,5)> (catch: FALSE)                                      │~
-  # # 0000 putobject                              7                         (   1)[Li]                           │~
-  # # 0002 putobject                              2                                                              │~
-  # # 0004 opt_aref                               <calldata!mid:[], argc:1, ARGS_SIMPLE>[CcCr]                    │~
+  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,5)> (catch: FALSE)
+  # # 0000 putobject                              7                         (   1)[Li]
+  # # 0002 putobject                              2
+  # # 0004 opt_aref                               <calldata!mid:[], argc:1, ARGS_SIMPLE>[CcCr]
   # # 0006 leave
   # ~~~
   #
