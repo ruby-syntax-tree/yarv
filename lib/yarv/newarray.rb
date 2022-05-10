@@ -19,7 +19,7 @@ module YARV
   # # 0002 newarray                               1
   # # 0004 leave
   # ~~~
-  class Newarray
+  class NewArray
     def initialize(size)
       @size = size
     end

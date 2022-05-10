@@ -157,7 +157,7 @@ module YARV
         in [:leave]
           @insns << Leave.new
         in :newarray, size
-          @insns << Newarray.new(size)
+          @insns << NewArray.new(size)
         in :opt_and, { mid: :&, orig_argc: 1 }
           @insns << OptAnd.new
         in :opt_aref, { mid: :[], orig_argc: 1 }
