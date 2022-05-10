@@ -35,6 +35,7 @@
   <li><a href="#pop">pop</a></li>
   <li><a href="#putobject">putobject</a></li>
   <li><a href="#putobjectint2fix0">putobject_int2fix_0</a></li>
+  <li><a href="#putobjectint2fix1">putobject_int2fix_1</a></li>
   <li><a href="#putself">putself</a></li>
   <li><a href="#putstring">putstring</a></li>
   <li><a href="#setglobal">setglobal</a></li>
@@ -53,7 +54,7 @@ and pops one value off the stack, the jump condition.</p>
 
 <h3 id="tracepoint">TracePoint</h3>
 
-<p>There is no trace point for <code>branchunless</code>.</p>
+<p><code>branchunless</code> does not dispatch any events.</p>
 
 <h3 id="usage">Usage</h3>
 
@@ -226,7 +227,6 @@ for if both operands are integers.</p>
 # 0002 putobject                              3                                                              │~
 # 0004 opt_and                                &lt;calldata!mid:&amp;, argc:1, ARGS_SIMPLE&gt;[CcCr]                    │~
 # 0006 leave
-
 </code></pre>
 
 <h2 id="optaref">opt_aref</h2>
@@ -250,7 +250,6 @@ if the receiver is an integer, array, or hash.</p>
 # 0002 putobject                              2                                                              │~
 # 0004 opt_aref                               &lt;calldata!mid:[], argc:1, ARGS_SIMPLE&gt;[CcCr]                    │~
 # 0006 leave
-
 </code></pre>
 
 <h2 id="optdiv">opt_div</h2>
@@ -280,8 +279,8 @@ for if both operands are integers, or if both operands are floats.</p>
 
 <h3 id="summary-9">Summary</h3>
 
-<p><code>opt_empty_p</code> is an optimisation applied when the method <code>empty?</code> is called
-on a String, Array or a Hash. This optimisation can be applied because Ruby
+<p><code>opt_empty_p</code> is an optimization applied when the method <code>empty?</code> is called
+on a String, Array or a Hash. This optimization can be applied because Ruby
 knows how to calculate the length of these objects using internal C macros.</p>
 
 <h3 id="tracepoint-9">TracePoint</h3>
@@ -371,7 +370,7 @@ for if both operands are integers or both operands are floats.</p>
 
 <h3 id="summary-13">Summary</h3>
 
-<p><code>opt_nil_p</code> is an optimisation applied when the method <code>nil?</code> is called. It
+<p><code>opt_nil_p</code> is an optimization applied when the method <code>nil?</code> is called. It
 returns true immediately when the receiver is <code>nil</code> and defers to the <code>nil?</code>
 method in other cases</p>
 
@@ -405,12 +404,11 @@ for if both operands are integers.</p>
 
 <pre><code class="language-ruby">2 | 3
 
-# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)                                      │~
-# 0000 putobject                              2                         (   1)[Li]                           │~
-# 0002 putobject                              3                                                              │~
-# 0004 opt_or                                 &lt;calldata!mid:|, argc:1, ARGS_SIMPLE&gt;[CcCr]                    │~
+# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
+# 0000 putobject                              2                         (   1)[Li]
+# 0002 putobject                              3
+# 0004 opt_or                                 &lt;calldata!mid:|, argc:1, ARGS_SIMPLE&gt;[CcCr]
 # 0006 leave
-
 </code></pre>
 
 <h2 id="optplus">opt_plus</h2>
@@ -591,17 +589,38 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 # 0001 leave
 </code></pre>
 
-<h2 id="putself">putself</h2>
+<h2 id="putobjectint2fix1">putobject_int2fix_1</h2>
 
 <h3 id="summary-23">Summary</h3>
 
-<p><code>putself</code> pushes the current value of self onto the stack.</p>
+<p><code>putobject_INT2FIX_1_</code> pushes 1 on the stack.
+It is a specialized instruction resulting from the operand
+unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h3 id="tracepoint-23">TracePoint</h3>
 
-<p><code>putself</code> can dispatch the line event.</p>
+<p><code>putobject</code> can dispatch the line event.</p>
 
 <h3 id="usage-23">Usage</h3>
+
+<pre><code class="language-ruby">1
+
+# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,1)&gt; (catch: FALSE)
+# 0000 putobject_INT2FIX_1_                                             (   1)[Li]
+# 0001 leave
+</code></pre>
+
+<h2 id="putself">putself</h2>
+
+<h3 id="summary-24">Summary</h3>
+
+<p><code>putself</code> pushes the current value of self onto the stack.</p>
+
+<h3 id="tracepoint-24">TracePoint</h3>
+
+<p><code>putself</code> can dispatch the line event.</p>
+
+<h3 id="usage-24">Usage</h3>
 
 <pre><code class="language-ruby">puts "Hello, world!"
 
@@ -614,34 +633,34 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-24">Summary</h3>
+<h3 id="summary-25">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-24">TracePoint</h3>
+<h3 id="tracepoint-25">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-24">Usage</h3>
+<h3 id="usage-25">Usage</h3>
 
 <pre><code class="language-ruby">"foo"
 
-= disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
-000 putstring                              "foo"                     (   1)[Li]
-002 leave
+# == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)
+# 0000 putstring                              "foo"                     (   1)[Li]
+# 0002 leave
 </code></pre>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-25">Summary</h3>
+<h3 id="summary-26">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-25">TracePoint</h3>
+<h3 id="tracepoint-26">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-25">Usage</h3>
+<h3 id="usage-26">Usage</h3>
 
 <pre><code class="language-ruby">$global = 5
 
@@ -654,28 +673,28 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="setlocalwc0">setlocal_wc_0</h2>
 
-<h3 id="summary-26">Summary</h3>
+<h3 id="summary-27">Summary</h3>
 
 <p><code>setlocal_WC_0</code> is a specialized version of the <code>setlocal</code> instruction. It
 sets the value of a local variable on the current frame to the value at the
 top of the stack as determined by the index given as its only argument.</p>
 
-<h3 id="tracepoint-26">TracePoint</h3>
+<h3 id="tracepoint-27">TracePoint</h3>
 
 <p><code>setlocal_WC_0</code> does not dispatch any events.</p>
 
-<h3 id="usage-26">Usage</h3>
+<h3 id="usage-27">Usage</h3>
 
-<p>~~~ruby
-value = 5</p>
+<pre><code class="language-ruby">value = 5
 
-<h1 id="disasm-iseqmain-e1-10-19-catch-false">== disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,9)&gt; (catch: FALSE)</h1>
-<p># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+# == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,9)&gt; (catch: FALSE)
+# local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
 # [ 1] value@0
 # 0000 putobject                              5                         (   1)[Li]
 # 0002 dup
 # 0003 setlocal_WC_0                          value@0
-# 0005 leave</p>
+# 0005 leave
+</code></pre>
 
 
   </body>
