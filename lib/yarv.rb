@@ -275,6 +275,8 @@ module YARV
           @insns << PutString.new(string)
         in :setglobal, name
           @insns << SetGlobal.new(name)
+        in :setn, index
+           #
         in :setlocal_WC_0, index
           @insns << SetLocalWC0.new(index)
         in [:swap]
