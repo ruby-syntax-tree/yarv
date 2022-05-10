@@ -22,6 +22,10 @@ module YARV
       @mid = mid
       @argc = argc
     end
+
+    def to_s
+      "<calldata!mid:#{mid}, argc:#{argc}>"
+    end
   end
 
   # This is the object that gets passed around all of the instructions as they
@@ -254,7 +258,7 @@ module YARV
         in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
         in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0 }
-          @insns << OptStrFreeze.new(value)
+          @insns << OptStrFreeze.new(value, CallData.new(:freeze, 0))
         in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
           @insns << OptStrUMinus.new(value, CallData.new(:-@, 0))
         in :opt_succ, { mid: :succ, orig_argc: 0 }
@@ -281,6 +285,11 @@ module YARV
           @insns << Swap.new
         end
       end
+    end
+
+    # This is the name assigned to this instruction sequence.
+    def name
+      iseq[5]
     end
 
     # These are the names of the locals in the instruction sequence.

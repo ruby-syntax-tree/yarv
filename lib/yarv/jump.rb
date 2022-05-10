@@ -37,6 +37,8 @@ module YARV
   # ~~~
   #
   class Jump
+    attr_reader :label
+
     def initialize(label)
       @label = label
     end
@@ -46,12 +48,8 @@ module YARV
       context.program_counter = jump_index
     end
 
-    def pretty_print(q)
-      q.text("jump #{label.inspect}")
+    def to_s
+      "%-38s %s" % ["jump", label["label_".length..]]
     end
-
-    private
-
-    attr_reader :label
   end
 end

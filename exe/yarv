@@ -20,10 +20,10 @@ if ARGV.first == "--dump=insns"
 
   queue = [compiled]
   while iseq = queue.shift
-    puts "== disasm"
+    puts "== disasm #<ISeq:#{iseq.name}>"
 
     iseq.insns.each do |insn|
-      pp insn
+      puts "0000 #{insn}"
       queue << insn.iseq if insn in YARV::DefineMethod
     end
 

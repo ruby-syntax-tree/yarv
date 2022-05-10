@@ -20,18 +20,18 @@ module YARV
   # ~~~
   #
   class DupHash
-    attr_reader :hash_object
+    attr_reader :value
 
-    def initialize(hash_object)
-      @hash_object = hash_object
+    def initialize(value)
+      @value = value
     end
 
     def call(context)
-      context.stack.push(hash_object.dup)
+      context.stack.push(value.dup)
     end
 
-    def pretty_print(q)
-      q.text("dup_hash #{hash_object.inspect}")
+    def to_s
+      "%-38s %s" % ["duphash", value.inspect]
     end
   end
 end

@@ -37,8 +37,8 @@ module YARV
       context.stack.push(value)
     end
 
-    def pretty_print(q)
-      q.text("getlocal_WC_0 level=0 index=#{index}")
+    def to_s
+      "%-38s level=0 index=%d" % ["getlocal_WC_0", index]
     end
   end
 end

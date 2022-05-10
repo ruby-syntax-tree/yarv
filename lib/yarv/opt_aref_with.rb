@@ -9,7 +9,7 @@ module YARV
   #
   # ### TracePoint
   #
-  # `opt_aref` does not dispatch any events.
+  # `opt_aref_with` does not dispatch any events.
   #
   # ### Usage
   #
@@ -38,8 +38,8 @@ module YARV
       context.stack.push(result)
     end
 
-    def pretty_print(q)
-      q.text("opt_aref_with #{key}, <calldata!mid:[], argc:1, ARGS_SIMPLE>")
+    def to_s
+      "%-38s %s, %s" % ["opt_aref_with", key, call_data]
     end
   end
 end

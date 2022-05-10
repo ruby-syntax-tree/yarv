@@ -21,21 +21,20 @@ module YARV
   # ~~~
   #
   class OptStrFreeze
-    attr_reader :value
+    attr_reader :value, :call_data
 
-    def initialize(value)
+    def initialize(value, call_data)
       @value = value
+      @call_data = call_data
     end
 
     def call(context)
-      result = context.call_method(value, :freeze, [])
+      result = context.call_method(call_data, value, [])
       context.stack.push(result)
     end
 
-    def pretty_print(q)
-      q.text(
-        "opt_str_freeze #{value.inspect} <calldata!mid:freeze, argc:0, ARGS_SIMPLE>"
-      )
+    def to_s
+      "%-38s %s, %s" % ["opt_str_freeze", value.inspect, call_data]
     end
   end
 end

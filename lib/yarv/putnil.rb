@@ -24,8 +24,8 @@ module YARV
       context.stack.push(nil)
     end
 
-    def pretty_print(q)
-      q.text("putnil")
+    def to_s
+      "putnil"
     end
   end
 end

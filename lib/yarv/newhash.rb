@@ -27,17 +27,19 @@ module YARV
   # ~~~
   #
   class NewHash
+    attr_reader :size
+  
     def initialize(size)
       @size = size
     end
 
     def call(context)
-      key_values = context.stack.pop(@size)
+      key_values = context.stack.pop(size)
       context.stack.push(Hash[*key_values])
     end
 
-    def pretty_print(q)
-      q.text("newhash #{@size}")
+    def to_s
+      "%-38s %s" % ["newhash", size]
     end
   end
 end
