@@ -185,7 +185,7 @@ module YARV
         in [:pop]
           @insns << Pop.new
         in [:putnil]
-          # skip for now
+          @insns << PutNil.new
         in :putobject, object
           @insns << PutObject.new(object)
         in [:putobject_INT2FIX_0_]
