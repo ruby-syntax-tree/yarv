@@ -24,15 +24,18 @@ module YARV
   # ~~~
   #
   class OptArefWith
-    attr_reader :key
+    attr_reader :key, :call_data
 
-    def initialize(key)
+    def initialize(key, call_data)
       @key = key
+      @call_data = call_data
     end
 
     def call(context)
       receiver = context.stack.pop
-      context.stack.push(receiver[key])
+      result = context.call_method(call_data, receiver, [key])
+
+      context.stack.push(result)
     end
 
     def pretty_print(q)

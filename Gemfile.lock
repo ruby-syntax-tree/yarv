@@ -6,7 +6,7 @@ GEM
     power_assert (2.0.1)
     rake (13.0.6)
     rexml (3.2.5)
-    syntax_tree (2.0.1)
+    syntax_tree (2.4.1)
     test-unit (3.5.3)
       power_assert
 

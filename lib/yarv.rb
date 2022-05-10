@@ -14,6 +14,16 @@ module YARV
     end
   end
 
+  # This class represents information about a specific call-site in the code.
+  class CallData
+    attr_reader :mid, :argc
+
+    def initialize(mid, argc)
+      @mid = mid
+      @argc = argc
+    end
+  end
+
   # This is the object that gets passed around all of the instructions as they
   # are being executed.
   class ExecutionContext
@@ -25,16 +35,18 @@ module YARV
 
       def initialize(iseq)
         @iseq = iseq
-        @locals = Array.new(iseq.locals.length, UNDEFINED)
+        @locals = Array.new(iseq.locals.length) { UNDEFINED }
       end
 
       # Fetches the value of a local variable from the frame. If the value has
       # not yet been initialized, it will raise an error.
       def get_local(index)
-        local = locals[index - 3]
+        local_index = index_for(index)
+        local = locals[local_index]
+
         if local == UNDEFINED
           raise NameError,
-                "undefined local variable or method `#{local}' for #{iseq.selfo}"
+                "undefined local variable or method `#{iseq.locals[local_index]}' for #{iseq.selfo}"
         end
 
         local
@@ -42,7 +54,13 @@ module YARV
 
       # Sets the value of the local variable on the frame.
       def set_local(index, value)
-        @locals[index - 3] = value
+        @locals[index_for(index)] = value
+      end
+
+      private
+
+      def index_for(index)
+        (iseq.locals.length - (index - 3)) - 1
       end
     end
 
@@ -77,12 +95,35 @@ module YARV
     # class that we defined explicitly in our runtime. If there is, then it's
     # going to save the necessary information and invoke it. Otherwise, it's
     # going to call into the parent runtime and let it handle the method call.
-    def call_method(receiver, name, arguments)
-      if methods.key?([receiver.class, name])
-        methods[[receiver.class, name]].eval(self)
+    #
+    # Note that the array of arguments coming in here is necessarily the same
+    # values that align with the parameters to the method being called. They are
+    # simply the popped values off the top of the stack. It is the
+    # responsibility of this method to ensure that they get copied into the
+    # locals table in the correct order.
+    def call_method(call_data, receiver, arguments)
+      if (method = methods[[receiver.class, call_data.mid]])
+        # We only support a subset of the valid argument permutations. This
+        # validates each kind to make sure we don't accidentally try to handle a
+        # method that we currently don't support.
+        case method.args
+        in {}
+          # No arguments, we're good
+        in { lead_num: ^(arguments.length), **nil }
+          # Only leading arguments and we line up with the expected number
+        end
+
+        method.eval(self) do
+          # Inside this block, we have already pushed the frame. So now we need
+          # to establish the correct local variables.
+          arguments.each_with_index do |argument, index|
+            current_frame.locals[index] = argument
+          end
+        end
+
         stack.last
       else
-        receiver.send(name, *arguments)
+        receiver.send(call_data.mid, *arguments)
       end
     end
 
@@ -108,7 +149,9 @@ module YARV
     def with_frame(iseq)
       current_program_counter = program_counter
       current_stack_length = stack.length
+
       frames.push(Frame.new(iseq))
+      @program_counter = 0
 
       begin
         yield
@@ -124,15 +167,15 @@ module YARV
   class InstructionSequence
     attr_reader :selfo, :insns, :labels
 
-    # These are the names of the locals in the instruction sequence.
-    attr_reader :locals
+    # This is the native instruction sequence that we are wrapping.
+    attr_reader :iseq
 
     def initialize(selfo, iseq)
       @selfo = selfo
+      @iseq = iseq
+
       @insns = []
       @labels = {}
-
-      @locals = iseq[10]
 
       iseq.last.each do |insn|
         case insn
@@ -159,7 +202,7 @@ module YARV
         in :getglobal, value
           @insns << GetGlobal.new(value)
         in :getlocal_WC_0, index
-          @insns << GetLocalWC0.new(locals[index - 3], index)
+          @insns << GetLocalWC0.new(index)
         in :jump, value
           @insns << Jump.new(value)
         in [:leave]
@@ -169,51 +212,51 @@ module YARV
         in :newhash, size
           @insns << NewHash.new(size)
         in :opt_and, { mid: :&, orig_argc: 1 }
-          @insns << OptAnd.new
+          @insns << OptAnd.new(CallData.new(:&, 1))
         in :opt_aref, { mid: :[], orig_argc: 1 }
-          @insns << OptAref.new
+          @insns << OptAref.new(CallData.new(:[], 1))
         in :opt_aref_with, key, { mid: :[], orig_argc: 1 }
-          @insns << OptArefWith.new(key)
+          @insns << OptArefWith.new(key, CallData.new(:[], 1))
         in :opt_div, { mid: :/, orig_argc: 1 }
-          @insns << OptDiv.new
+          @insns << OptDiv.new(CallData.new(:/, 1))
         in :opt_empty_p, { mid: :empty?, orig_argc: 0 }
-          @insns << OptEmptyP.new
+          @insns << OptEmptyP.new(CallData.new(:empty?, 0))
         in :opt_eq, { mid: :==, orig_argc: 1 }
-          @insns << OptEq.new
+          @insns << OptEq.new(CallData.new(:==, 1))
         in :opt_ge, { mid: :>=, orig_argc: 1 }
-          @insns << OptGe.new
+          @insns << OptGe.new(CallData.new(:>=, 1))
         in :opt_gt, { mid: :>, orig_argc: 1 }
-          @insns << OptGt.new
+          @insns << OptGt.new(CallData.new(:>, 1))
         in :opt_le, { mid: :<=, orig_argc: 1 }
-          @insns << OptLe.new
+          @insns << OptLe.new(CallData.new(:<=, 1))
         in :opt_lt, { mid: :<, orig_argc: 1 }
-          @insns << OptLt.new
+          @insns << OptLt.new(CallData.new(:<, 1))
         in :opt_nil_p, { mid: :nil?, orig_argc: 0 }
-          @insns << OptNilP.new
+          @insns << OptNilP.new(CallData.new(:nil?, 0))
         in :opt_getinlinecache, label, cache
           @insns << OptGetInlineCache.new(label, cache)
         in :opt_length, { mid: :length, orig_argc: 0 }
-          @insns << OptLength.new
+          @insns << OptLength.new(CallData.new(:length, 0))
         in :opt_minus, { mid: :-, orig_argc: 1 }
-          @insns << OptMinus.new
+          @insns << OptMinus.new(CallData.new(:-, 1))
         in :opt_mod, { mid: :%, orig_argc: 1 }
-          @insns << OptMod.new
+          @insns << OptMod.new(CallData.new(:%, 1))
         in :opt_not, { mid: :!, orig_argc: 0 }
-          @insns << OptNot.new
+          @insns << OptNot.new(CallData.new(:!, 0))
         in :opt_or, { mid: :|, orig_argc: 1 }
-          @insns << OptOr.new
+          @insns << OptOr.new(CallData.new(:|, 1))
         in :opt_plus, { mid: :+, orig_argc: 1 }
-          @insns << OptPlus.new
+          @insns << OptPlus.new(CallData.new(:+, 1))
         in :opt_send_without_block, { mid:, orig_argc: }
-          @insns << OptSendWithoutBlock.new(mid, orig_argc)
+          @insns << OptSendWithoutBlock.new(CallData.new(mid, orig_argc))
         in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
         in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0 }
           @insns << OptStrFreeze.new(value)
         in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
-          @insns << OptStrUMinus.new(value)
+          @insns << OptStrUMinus.new(value, CallData.new(:-@, 0))
         in :opt_succ, { mid: :succ, orig_argc: 0 }
-          @insns << OptSucc.new
+          @insns << OptSucc.new(CallData.new(:succ, 0))
         in [:pop]
           @insns << Pop.new
         in [:putnil]
@@ -231,18 +274,29 @@ module YARV
         in :setglobal, name
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, index
-          @insns << SetLocalWC0.new(locals[index - 3], index)
+          @insns << SetLocalWC0.new(index)
         in [:swap]
           @insns << Swap.new
         end
       end
     end
 
+    # These are the names of the locals in the instruction sequence.
+    def locals
+      iseq[10]
+    end
+
+    # This is the information about the arguments that should be passed into
+    # this instruction sequence.
+    def args
+      iseq[11]
+    end
+
     # Pushes a new frame onto the stack, executes the instructions contained
     # within this instruction sequence, then pops the frame off the stack.
     def eval(context = ExecutionContext.new)
       context.with_frame(self) do
-        context.program_counter = 0
+        yield if block_given?
 
         loop do
           insn = insns[context.program_counter]
@@ -276,6 +330,7 @@ module YARV
         lineno,
         **default_compile_options.merge!(options)
       )
+
     InstructionSequence.new(Main.new, iseq.to_a)
   end
 
