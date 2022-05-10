@@ -146,6 +146,8 @@ module YARV
           @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
           @insns << Dup.new
+        in :duparray, array
+          @insns << DupArray.new(array)
         in :getconstant, name
           @insns << GetConstant.new(name)
         in :getglobal, value
