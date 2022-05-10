@@ -202,8 +202,8 @@ module YARV
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, index
           @insns << SetLocalWC0.new(locals[index - 3], index)
-        in :send, { mid:, orig_argc: }, block
-          # skip for now
+        in :send, { mid:, orig_argc: }, block_iseq
+          @insns << Send.new(mid, orig_argc, InstructionSequence.new(selfo, block_iseq))
         end
       end
     end
