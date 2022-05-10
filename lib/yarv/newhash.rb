@@ -35,5 +35,9 @@ module YARV
       key_values = context.stack.pop(@size)
       context.stack.push(Hash[*key_values])
     end
+
+    def pretty_print(q)
+      q.text("newhash #{@size}")
+    end
   end
 end

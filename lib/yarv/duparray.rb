@@ -27,5 +27,9 @@ module YARV
     def call(context)
       context.stack.push(@array.dup)
     end
+
+    def pretty_print(q)
+      q.text("duparray #{@array}")
+    end
   end
 end
