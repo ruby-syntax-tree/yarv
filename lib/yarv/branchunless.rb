@@ -6,7 +6,7 @@ module YARV
   # `branchunless` has one argument, the jump index
   # and pops one value off the stack, the jump condition.
   #
-  # If the value popped off the stack is false,
+  # If the value popped off the stack is false or nil,
   # `branchunless` jumps to the jump index and continues executing there.
   #
   # ### TracePoint
