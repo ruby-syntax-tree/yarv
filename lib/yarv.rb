@@ -140,6 +140,8 @@ module YARV
           # skip for now
         in Symbol
           @labels[insn] = @insns.length
+        in :branchnil, value
+          @insns << BranchNil.new(value)
         in :branchunless, value
           @insns << BranchUnless.new(value)
         in [:concatarray]
