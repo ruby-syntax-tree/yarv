@@ -344,6 +344,8 @@ module YARV
           @insns << OptOr.new(CallData.new(:|, 1, flag))
         in :opt_plus, { mid: :+, orig_argc: 1, flag: }
           @insns << OptPlus.new(CallData.new(:+, 1, flag))
+        in :opt_regexpmatch2, { mid: :=~, orig_argc: 1 }
+          @insns << OptRegexpmatch2.new
         in :opt_send_without_block, { mid:, orig_argc:, flag: }
           @insns << OptSendWithoutBlock.new(CallData.new(mid, orig_argc, flag))
         in :opt_setinlinecache, cache
