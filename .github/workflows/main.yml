@@ -1,7 +1,8 @@
 name: Main
 on:
-- push
-- pull_request_target
+  push:
+    branches: main
+  pull_request:
 
 jobs:
   test:
