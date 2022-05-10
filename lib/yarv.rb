@@ -192,6 +192,8 @@ module YARV
           @insns << OptSendWithoutBlock.new(mid, orig_argc)
         in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
+        in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0 }
+          @insns << OptStrFreeze.new(value)
         in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
           @insns << OptStrUMinus.new(value)
         in :opt_succ, { mid: :succ, orig_argc: 0 }
