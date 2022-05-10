@@ -158,6 +158,8 @@ module YARV
           @insns << Leave.new
         in :newarray, size
           @insns << NewArray.new(size)
+        in :newhash, size
+          @insns << NewHash.new(size)
         in :opt_and, { mid: :&, orig_argc: 1 }
           @insns << OptAnd.new
         in :opt_aref, { mid: :[], orig_argc: 1 }
