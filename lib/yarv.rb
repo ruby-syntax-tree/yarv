@@ -152,6 +152,8 @@ module YARV
           @insns << GetGlobal.new(value)
         in :getlocal_WC_0, index
           @insns << GetLocalWC0.new(locals[index - 3], index)
+        in :invokeblock, { mid:, orig_argc: 1 }
+          @insns << InvokeBlock.new(mid, orig_argc)
         in [:leave]
           @insns << Leave.new
         in :opt_and, { mid: :&, orig_argc: 1 }
