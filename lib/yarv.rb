@@ -364,6 +364,8 @@ module YARV
           @insns << PutSelf.new(selfo)
         in :putstring, string
           @insns << PutString.new(string)
+        in :putspecialobject, type
+          @insns << PutSpecialObject.new(type)
         in :setglobal, name
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, offset
@@ -371,6 +373,8 @@ module YARV
           @insns << SetLocalWC0.new(locals[index], index)
         in [:swap]
           @insns << Swap.new
+        in [:defineclass, name, stuff, num]
+          @insns << -> (arg) {}
         end
       end
     end
