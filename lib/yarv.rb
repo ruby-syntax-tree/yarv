@@ -158,6 +158,8 @@ module YARV
           @insns << GetGlobal.new(value)
         in :getlocal_WC_0, index
           @insns << GetLocalWC0.new(locals[index - 3], index)
+        in :jump, value
+          @insns << Jump.new(value)
         in [:leave]
           @insns << Leave.new
         in :newarray, size
