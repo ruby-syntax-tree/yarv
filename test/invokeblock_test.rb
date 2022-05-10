@@ -7,19 +7,22 @@ module YARV
     def test_execute
       code = <<-CODE
         def x
-          return yield self
+          yield self
+        end
+
+        x do
+          true
         end
       CODE
       assert_insns(
-        [DefineMethod, PutObject, Leave],
+        [DefineMethod, PutSelf, Leave],
         code
       )
-
-      iseq = YARV.compile(code)
-      assert_equal(
-        [PutSelf, InvokeBlock, Leave],
-        iseq.insns.first.iseq.insns
-      )
+      # iseq = YARV.compile(code)
+      # assert_insns(
+      #   [PutSelf, InvokeBlock, Leave],
+      #   iseq.insns.first.iseq.insns
+      # )
       # assert_stdout("")
     end
   end

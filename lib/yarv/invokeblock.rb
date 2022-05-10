@@ -26,22 +26,19 @@ module YARV
   # ~~~
   #
   class InvokeBlock
-    attr_reader :mid, :argc
+    attr_reader :argc
 
-    def initialize(mid, argc)
-      @mid = mid
+    def initialize(argc)
       @argc = argc
     end
 
     def call(context)
-      # receiver, *arguments = context.stack.pop(argc + 1)
-      # context.stack.push(context.call_method(receiver, mid, arguments))
+      args = argc.times.map { pop }.reverse
+      context.stack.push(context.current_frame.iseq.call(*args))
     end
 
     def pretty_print(q)
-      # q.text(
-      #   "just checking"
-      # )
+      q.text("invokeblock")
     end
   end
 end

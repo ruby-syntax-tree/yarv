@@ -152,8 +152,8 @@ module YARV
           @insns << GetGlobal.new(value)
         in :getlocal_WC_0, index
           @insns << GetLocalWC0.new(locals[index - 3], index)
-        in :invokeblock, { mid:, orig_argc: 1 }
-          @insns << InvokeBlock.new(mid, orig_argc)
+        in :invokeblock, { mid:, orig_argc: }
+          @insns << InvokeBlock.new(orig_argc)
         in [:leave]
           @insns << Leave.new
         in :opt_and, { mid: :&, orig_argc: 1 }
@@ -202,6 +202,8 @@ module YARV
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, index
           @insns << SetLocalWC0.new(locals[index - 3], index)
+        in :send, { mid:, orig_argc: }, block
+          # skip for now
         end
       end
     end
