@@ -183,6 +183,8 @@ module YARV
           # skip for now
         in Symbol
           @labels[insn] = @insns.length
+        in :branchif, value
+          @insns << BranchIf.new(value)
         in :branchnil, value
           @insns << BranchNil.new(value)
         in :branchunless, value
