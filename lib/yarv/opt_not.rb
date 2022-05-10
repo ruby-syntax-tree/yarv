@@ -21,9 +21,17 @@ module YARV
   # ~~~
   #
   class OptNot
+    attr_reader :call_data
+
+    def initialize(call_data)
+      @call_data = call_data
+    end
+
     def call(context)
-      obj = context.stack.pop
-      context.stack.push(!obj)
+      receiver, *arguments = context.stack.pop(call_data.argc + 1)
+      result = context.call_method(call_data, receiver, arguments)
+
+      context.stack.push(result)
     end
 
     def pretty_print(q)

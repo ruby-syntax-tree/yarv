@@ -21,14 +21,17 @@ module YARV
   # ~~~
   #
   class OptStrUMinus
-    attr_reader :value
+    attr_reader :value, :call_data
 
-    def initialize(value)
+    def initialize(value, call_data)
       @value = value
+      @call_data = call_data
     end
 
     def call(context)
-      result = context.call_method(value, :-@, [])
+      arguments = context.stack.pop(call_data.argc)
+      result = context.call_method(call_data, value, arguments)
+
       context.stack.push(result)
     end
 
