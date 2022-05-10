@@ -146,6 +146,8 @@ module YARV
           @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
           @insns << Dup.new
+        in :duparray, array
+          @insns << DupArray.new(array)
         in :getconstant, name
           @insns << GetConstant.new(name)
         in :getglobal, value
@@ -154,6 +156,8 @@ module YARV
           @insns << GetLocalWC0.new(locals[index - 3], index)
         in [:leave]
           @insns << Leave.new
+        in :newarray, size
+          @insns << Newarray.new(size)
         in :opt_and, { mid: :&, orig_argc: 1 }
           @insns << OptAnd.new
         in :opt_aref, { mid: :[], orig_argc: 1 }
@@ -162,6 +166,8 @@ module YARV
           @insns << OptDiv.new
         in :opt_empty_p, { mid: :empty?, orig_argc: 0 }
           @insns << OptEmptyP.new
+        in :opt_eq, { mid: :==, orig_argc: 1 }
+          @insns << OptEq.new
         in :opt_nil_p, { mid: :nil?, orig_argc: 0 }
           @insns << OptNilP.new
         in :opt_getinlinecache, label, cache
@@ -170,6 +176,8 @@ module YARV
           @insns << OptLength.new
         in :opt_minus, { mid: :-, orig_argc: 1 }
           @insns << OptMinus.new
+        in :opt_mod, { mid: :%, orig_argc: 1 }
+          @insns << OptMod.new
         in :opt_not, { mid: :!, orig_argc: 0 }
           @insns << OptNot.new
         in :opt_or, { mid: :|, orig_argc: 1 }
@@ -187,7 +195,7 @@ module YARV
         in [:pop]
           @insns << Pop.new
         in [:putnil]
-          # skip for now
+          @insns << PutNil.new
         in :putobject, object
           @insns << PutObject.new(object)
         in [:putobject_INT2FIX_0_]

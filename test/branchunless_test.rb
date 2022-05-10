@@ -16,6 +16,7 @@ module YARV
           PutString,
           OptSendWithoutBlock,
           Leave,
+          PutNil,
           Leave
         ],
         source_code
@@ -34,6 +35,7 @@ module YARV
           PutString,
           OptSendWithoutBlock,
           Leave,
+          PutNil,
           Leave
         ],
         source_code
