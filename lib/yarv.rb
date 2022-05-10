@@ -170,6 +170,8 @@ module YARV
           @insns << OptAnd.new
         in :opt_aref, { mid: :[], orig_argc: 1 }
           @insns << OptAref.new
+        in :opt_aref_with, key, { mid: :[], orig_argc: 1 }
+          @insns << OptArefWith.new(key)
         in :opt_div, { mid: :/, orig_argc: 1 }
           @insns << OptDiv.new
         in :opt_empty_p, { mid: :empty?, orig_argc: 0 }
