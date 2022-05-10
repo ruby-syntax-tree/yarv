@@ -3,8 +3,8 @@
 module YARV
   # ### Summary
   #
-  # `opt_empty_p` is an optimisation applied when the method `empty?` is called
-  # on a String, Array or a Hash. This optimisation can be applied because Ruby
+  # `opt_empty_p` is an optimization applied when the method `empty?` is called
+  # on a String, Array or a Hash. This optimization can be applied because Ruby
   # knows how to calculate the length of these objects using internal C macros.
   #
   # ### TracePoint
@@ -24,8 +24,10 @@ module YARV
   #
   class OptEmptyP
     def call(context)
-      obj = context.stack.pop
-      context.stack.push(obj.empty?)
+      value = context.stack.pop
+
+      result = context.call_method(value, :empty?, [])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

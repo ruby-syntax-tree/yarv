@@ -11,7 +11,7 @@ module YARV
   #
   # ### TracePoint
   #
-  # There is no trace point for `branchunless`.
+  # `branchunless` does not dispatch any events.
   #
   # ### Usage
   #
@@ -32,14 +32,15 @@ module YARV
   # ~~~
   #
   class BranchUnless
+    attr_reader :label
+
     def initialize(label)
       @label = label
     end
 
-    attr_reader :label
-
     def call(context)
       condition = context.stack.pop
+
       unless condition
         jump_index = context.current_iseq.labels[label]
         context.program_counter = jump_index

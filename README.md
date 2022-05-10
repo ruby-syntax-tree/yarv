@@ -8,6 +8,12 @@ There isn't really a canonical source for documentation for these instructions b
 
 As a part of the documentation effort, this project also aims to provide an emulator of YARV behavior. This will ensure the documentation doesn't get out of date as it will need to reflect actual Ruby semantics. To run the emulator, after cloning the repository, run `exe/yarv <path_to_file>` from the command line.
 
+## Getting started
+
+To use this project as a CLI, you can execute the `exe/yarv` executable. That functions similarly to the `ruby` executable. You pass it the path to a Ruby file, and it will execute that file.
+
+To use this project as a library, you start with the `YARV.compile` method. This method is similar to the `RubyVM::InstructionSequence.compile` method, in that it accepts a string that represents Ruby source code and compiles it into instruction sequences. Once the source is compiled, you can call `eval` on the result to get it to evaluate your code.
+
 ## Related content
 
 To learn more about this kind of content, there are a number of articles and blog posts you can read. Most of them are in Japanese, so a translation tool may be necessary. Some of them are also quite old since a lot of them were written around the time YARV was created. They are listed below:

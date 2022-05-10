@@ -28,7 +28,8 @@ module YARV
     end
 
     def call(context)
-      context.stack.push(-value)
+      result = context.call_method(value, :-@, [])
+      context.stack.push(result)
     end
 
     def pretty_print(q)

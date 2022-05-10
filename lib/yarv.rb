@@ -1,34 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "yarv/branchunless"
-require_relative "yarv/definemethod"
-require_relative "yarv/dup"
-require_relative "yarv/getconstant"
-require_relative "yarv/getglobal"
-require_relative "yarv/getlocal_wc_0"
-require_relative "yarv/leave"
-require_relative "yarv/opt_and"
-require_relative "yarv/opt_aref"
-require_relative "yarv/opt_div"
-require_relative "yarv/opt_empty_p"
-require_relative "yarv/opt_length"
-require_relative "yarv/opt_nil_p"
-require_relative "yarv/opt_getinlinecache"
-require_relative "yarv/opt_minus"
-require_relative "yarv/opt_or"
-require_relative "yarv/opt_plus"
-require_relative "yarv/opt_send_without_block"
-require_relative "yarv/opt_setinlinecache"
-require_relative "yarv/opt_str_uminus"
-require_relative "yarv/opt_succ"
-require_relative "yarv/pop"
-require_relative "yarv/putobject"
-require_relative "yarv/putobject_int2fix_0"
-require_relative "yarv/putself"
-require_relative "yarv/putstring"
-require_relative "yarv/setglobal"
-require_relative "yarv/setlocal_wc_0"
+# Require all of the files nested under the lib/yarv directory.
+Dir[File.expand_path("yarv/*.rb", __dir__)].each do |filepath|
+  require_relative "yarv/#{File.basename(filepath, ".rb")}"
+end
 
+# The YARV module is a Ruby runtime that evlauates YARV instructions.
 module YARV
   # This is the self object at the top of the script.
   class Main
@@ -51,6 +28,8 @@ module YARV
         @locals = Array.new(iseq.locals.length, UNDEFINED)
       end
 
+      # Fetches the value of a local variable from the frame. If the value has
+      # not yet been initialized, it will raise an error.
       def get_local(index)
         local = locals[index - 3]
         if local == UNDEFINED
@@ -61,6 +40,7 @@ module YARV
         local
       end
 
+      # Sets the value of the local variable on the frame.
       def set_local(index, value)
         @locals[index - 3] = value
       end
@@ -99,7 +79,7 @@ module YARV
     # going to call into the parent runtime and let it handle the method call.
     def call_method(receiver, name, arguments)
       if methods.key?([receiver.class, name])
-        methods[[receiver.class, name]].emulate(self)
+        methods[[receiver.class, name]].eval(self)
         stack.last
       else
         receiver.send(name, *arguments)
@@ -210,6 +190,8 @@ module YARV
           @insns << PutObject.new(object)
         in [:putobject_INT2FIX_0_]
           @insns << PutObjectInt2Fix0.new
+        in [:putobject_INT2FIX_1_]
+          @insns << PutObjectInt2Fix1.new
         in [:putself]
           @insns << PutSelf.new(selfo)
         in :putstring, string
@@ -224,7 +206,7 @@ module YARV
 
     # Pushes a new frame onto the stack, executes the instructions contained
     # within this instruction sequence, then pops the frame off the stack.
-    def emulate(context = ExecutionContext.new)
+    def eval(context = ExecutionContext.new)
       context.with_frame(self) do
         context.program_counter = 0
 
@@ -239,23 +221,36 @@ module YARV
     end
   end
 
-  def self.compile(source, filename: nil)
+  # This is the main entry into the project. It accepts a Ruby string that
+  # represents source code. You can optionally also pass all of the same
+  # arguments as you would to RubyVM::InstructionSequence.compile.
+  #
+  # It compiles the source into an InstructionSequence object. You can then
+  # execute it
+  def self.compile(
+    source,
+    file = "<compiled>",
+    path = "<compiled>",
+    lineno = 1,
+    inline_const_cache: true,
+    peephole_optimization: true,
+    specialized_instruction: true,
+    tailcall_optimization: false,
+    trace_instruction: false
+  )
     iseq =
       RubyVM::InstructionSequence.compile(
         source,
-        filename,
-        inline_const_cache: true,
-        peephole_optimization: true,
-        specialized_instruction: true,
-        tailcall_optimization: false,
-        trace_instruction: false
+        file,
+        path,
+        lineno,
+        inline_const_cache: inline_const_cache,
+        peephole_optimization: peephole_optimization,
+        specialized_instruction: specialized_instruction,
+        tailcall_optimization: tailcall_optimization,
+        trace_instruction: trace_instruction
       )
 
     InstructionSequence.new(Main.new, iseq.to_a)
-  end
-
-  def self.emulate(source)
-    context = ExecutionContext.new
-    compile(source).emulate(context)
   end
 end
