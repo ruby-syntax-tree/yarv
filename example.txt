@@ -1,0 +1,226 @@
+# Some useful examples Kevin showed us
+
+➜  yarv git:(add-invoke-block) ✗ ruby --dump=insns -e 'true.tap { 1 }'
+== disasm: #<ISeq:<main>@-e:1 (1,0)-(1,14)> (catch: FALSE)
+0000 putobject                              true                      (   1)[Li]
+0002 send                                   <calldata!mid:tap, argc:0>, block in <main>
+0005 leave
+
+== disasm: #<ISeq:block in <main>@-e:1 (1,9)-(1,14)> (catch: FALSE)
+0000 putobject_INT2FIX_1_                                             (   1)[LiBc]
+0001 leave                                  [Br]
+➜  yarv git:(add-invoke-block) ✗ ruby --dump=insns -e 'true.tap { |i| i }'
+== disasm: #<ISeq:<main>@-e:1 (1,0)-(1,18)> (catch: FALSE)
+0000 putobject                              true                      (   1)[Li]
+0002 send                                   <calldata!mid:tap, argc:0>, block in <main>
+0005 leave
+
+== disasm: #<ISeq:block in <main>@-e:1 (1,9)-(1,18)> (catch: FALSE)
+local table (size: 1, argc: 1 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+[ 1] i@0<Arg>
+0000 getlocal_WC_0                          i@0                       (   1)[LiBc]
+0002 leave                                  [Br]
+➜  yarv git:(add-invoke-block) ✗ ruby --dump=insns -e 'def foo(x); x; end; p foo(1)'
+== disasm: #<ISeq:<main>@-e:1 (1,0)-(1,28)> (catch: FALSE)
+0000 definemethod                           :foo, foo                 (   1)[Li]
+0003 putself
+0004 putself
+0005 putobject_INT2FIX_1_
+0006 opt_send_without_block                 <calldata!mid:foo, argc:1, FCALL|ARGS_SIMPLE>
+0008 opt_send_without_block                 <calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE>
+0010 leave
+
+== disasm: #<ISeq:foo@-e:1 (1,0)-(1,18)> (catch: FALSE)
+local table (size: 1, argc: 1 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
+[ 1] x@0<Arg>
+0000 getlocal_WC_0                          x@0                       (   1)[LiCa]
+0002 leave                                  [Re]
+➜  yarv git:(add-invoke-block) ✗ exe/yarv 'def foo(x); x; end; p foo(1)'
+exe/yarv:7:in `read': No such file or directory @ rb_sysopen - def foo(x); x; end; p foo(1) (Errno::ENOENT)
+	from exe/yarv:7:in `<main>'
+➜  yarv git:(add-invoke-block) ✗ echo 'def foo(x); x; end; p foo(1)' | exe/yarv
+/Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:36:in `get_local': undefined local variable or method `#<Object:0x000000010263f008>' for #<YARV::Main:0x000000010263c970> (NameError)
+
+          raise NameError,
+          ^^^^^
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv/getlocal_wc_0.rb:37:in `call'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:221:in `block (2 levels) in eval'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:217:in `loop'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:217:in `block in eval'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:114:in `with_frame'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:214:in `eval'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:82:in `call_method'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv/opt_send_without_block.rb:35:in `call'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:221:in `block (2 levels) in eval'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:217:in `loop'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:217:in `block in eval'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:114:in `with_frame'
+	from /Users/nkwl/src/github.com/kddnewton/yarv/lib/yarv.rb:214:in `eval'
+	from exe/yarv:7:in `<main>'
+➜  yarv git:(add-invoke-block) ✗ echo 'def foo(x); x; end; p foo(1)' | exe/yarv
+1
+➜  yarv git:(add-invoke-block) ✗ bin/console
+irb(main):001:0> YARV.compile("a = 1; a")
+=>
+#<YARV::InstructionSequence:0x000000010132c5b0
+ @insns=[putobject_INT2FIX_1_, setlocal_WC_0 a@0, getlocal_WC_0 a@0, leave],
+ @labels={},
+ @locals=[:a],
+ @selfo=main>
+irb(main):002:0> YARV.compile("def x(y) = y")
+=>
+#<YARV::InstructionSequence:0x00000001011b5600
+ @insns=[definemethod :x, putobject :x, leave],
+ @labels={},
+ @locals=[],
+ @selfo=main>
+irb(main):003:0> YARV.compile("def x(y) = y").insns[0].iseq
+=>
+#<YARV::InstructionSequence:0x0000000104e64510
+ @insns=[getlocal_WC_0 y@0, leave],
+ @labels={:RUBY_EVENT_CALL=>0, :RUBY_EVENT_RETURN=>1},
+ @locals=[:y],
+ @selfo=main>
+irb(main):004:0> RubyVM::InstructionSequence.compile("def x(y) = y")
+=> <RubyVM::InstructionSequence:<compiled>@<compiled>:1>
+irb(main):005:0> RubyVM::InstructionSequence.compile("def x(y) = y").to_a
+=>
+["YARVInstructionSequence/SimpleDataFormat",
+ 3,
+ 1,
+ 1,
+ {:arg_size=>0, :local_size=>0, :stack_max=>1, :node_id=>6, :code_location=>[1, 0, 1, 12], :node_ids=>[1, 1, -1]},
+ "<compiled>",
+ "<compiled>",
+ "<compiled>",
+ 1,
+ :top,
+ [],
+ {},
+ [],
+ [1,
+  :RUBY_EVENT_LINE,
+  [:definemethod,
+   :x,
+   ["YARVInstructionSequence/SimpleDataFormat",
+    3,
+    1,
+    1,
+    {:arg_size=>1, :local_size=>1, :stack_max=>1, :node_id=>5, :code_location=>[1, 0, 1, 12], :node_ids=>[4, -1]},
+    "x",
+    "<compiled>",
+    "<compiled>",
+    1,
+    :method,
+    [:y],
+    {:lead_num=>1},
+    [],
+    [1, :RUBY_EVENT_CALL, [:getlocal_WC_0, 3], :RUBY_EVENT_RETURN, [:leave]]]],
+  [:putobject, :x],
+  [:leave]]]
+irb(main):006:0> RubyVM::InstructionSequence.compile("def x(y); z = 1; z + y; end").to_a
+=>
+["YARVInstructionSequence/SimpleDataFormat",
+ 3,
+ 1,
+ 1,
+ {:arg_size=>0, :local_size=>0, :stack_max=>1, :node_id=>15, :code_location=>[1, 0, 1, 27], :node_ids=>[1, 1, -1]},
+ "<compiled>",
+ "<compiled>",
+ "<compiled>",
+ 1,
+ :top,
+ [],
+ {},
+ [],
+ [1,
+  :RUBY_EVENT_LINE,
+  [:definemethod,
+   :x,
+   ["YARVInstructionSequence/SimpleDataFormat",
+    3,
+    1,
+    1,
+    {:arg_size=>1,
+     :local_size=>2,
+     :stack_max=>2,
+     :node_id=>14,
+     :code_location=>[1, 0, 1, 27],
+     :node_ids=>[6, 5, 9, 10, 12, -1]},
+    "x",
+    "<compiled>",
+    "<compiled>",
+    1,
+    :method,
+    [:y, :z],
+    {:lead_num=>1},
+    [],
+    [1,
+     :RUBY_EVENT_LINE,
+     :RUBY_EVENT_CALL,
+     [:putobject_INT2FIX_1_],
+     [:setlocal_WC_0, 3],
+     [:getlocal_WC_0, 3],
+     [:getlocal_WC_0, 4],
+     [:opt_plus, {:mid=>:+, :flag=>16, :orig_argc=>1}],
+     :RUBY_EVENT_RETURN,
+     [:leave]]]],
+  [:putobject, :x],
+  [:leave]]]
+irb(main):007:0> RubyVM::InstructionSequence.compile("def x(y); z = 1; z + y; end; x(1)").to_a
+=>
+["YARVInstructionSequence/SimpleDataFormat",
+ 3,
+ 1,
+ 1,
+ {:arg_size=>0,
+  :local_size=>0,
+  :stack_max=>2,
+  :node_id=>20,
+  :code_location=>[1, 0, 1, 33],
+  :node_ids=>[1, 15, 16, 15, -1]},
+ "<compiled>",
+ "<compiled>",
+ "<compiled>",
+ 1,
+ :top,
+ [],
+ {},
+ [],
+ [1,
+  :RUBY_EVENT_LINE,
+  [:definemethod,
+   :x,
+   ["YARVInstructionSequence/SimpleDataFormat",
+    3,
+    1,
+    1,
+    {:arg_size=>1,
+     :local_size=>2,
+     :stack_max=>2,
+     :node_id=>14,
+     :code_location=>[1, 0, 1, 27],
+     :node_ids=>[6, 5, 9, 10, 12, -1]},
+    "x",
+    "<compiled>",
+    "<compiled>",
+    1,
+    :method,
+    [:y, :z],
+    {:lead_num=>1},
+    [],
+    [1,
+     :RUBY_EVENT_LINE,
+     :RUBY_EVENT_CALL,
+     [:putobject_INT2FIX_1_],
+     [:setlocal_WC_0, 3],
+     [:getlocal_WC_0, 3],
+     [:getlocal_WC_0, 4],
+     [:opt_plus, {:mid=>:+, :flag=>16, :orig_argc=>1}],
+     :RUBY_EVENT_RETURN,
+     [:leave]]]],
+  [:putself],
+  [:putobject_INT2FIX_1_],
+  [:opt_send_without_block, {:mid=>:x, :flag=>20, :orig_argc=>1}],
+  [:leave]]]
+irb(main):008:0> RubyVM::InstructionSequence.compile("def x(y); z = 1; z + y; end; x(1)").to_a

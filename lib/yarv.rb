@@ -79,7 +79,12 @@ module YARV
     # going to call into the parent runtime and let it handle the method call.
     def call_method(receiver, name, arguments, &block)
       if methods.key?([receiver.class, name])
-        methods[[receiver.class, name]].eval(self)
+        method = methods[[receiver.class, name]]
+
+        # focus on positional args first, kwargs next time
+        # validate here
+
+        method.eval(self, arguments)
         stack.last
       else
         receiver.send(name, *arguments, &block)
@@ -105,10 +110,15 @@ module YARV
     end
 
     # This executes the given instruction sequence within a new execution frame.
-    def with_frame(iseq)
+    def with_frame(iseq, arguments = [])
       current_program_counter = program_counter
       current_stack_length = stack.length
       frames.push(Frame.new(iseq))
+
+      # ruby under a microscope on "how to locals pg. 47"
+      arguments.each_with_index do |argument, index|
+        frames.last.set_local(argument, index + 3)
+      end
 
       begin
         yield
@@ -210,8 +220,8 @@ module YARV
 
     # Pushes a new frame onto the stack, executes the instructions contained
     # within this instruction sequence, then pops the frame off the stack.
-    def eval(context = ExecutionContext.new)
-      context.with_frame(self) do
+    def eval(context = ExecutionContext.new, arguments = [])
+      context.with_frame(self, arguments) do
         context.program_counter = 0
 
         loop do

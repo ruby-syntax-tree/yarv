@@ -26,9 +26,13 @@ module YARV
     end
 
     def call(context)
-      block = proc { block_iseq.eval(context) }
       receiver, *arguments = context.stack.pop(argc + 1)
-      context.stack.push(context.call_method(receiver, mid, arguments, &block))
+      result =
+        context.call_method(receiver, mid, arguments) do
+          block_iseq.eval(context)
+        end
+
+      context.stack.push(result)
     end
 
     def pretty_print(q)

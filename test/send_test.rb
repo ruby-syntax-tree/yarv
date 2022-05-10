@@ -6,7 +6,7 @@ module YARV
   class SendTest < TestCase
     def test_execute_creates_block_iseq
       source = <<~SOURCE
-        true.tap {|i| i }
+        true.tap { 1 }
       SOURCE
       assert_insns(
         [
@@ -25,10 +25,10 @@ module YARV
 
     def test_execute
       source = <<~SOURCE
-        true.tap {|i| p i }
+        true.tap { 1 }
       SOURCE
 
-      assert_stdout("true\n", source)
+      assert_stdout("", source)
     end
   end
 end
