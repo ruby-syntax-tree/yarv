@@ -7,7 +7,7 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/*_test.rb"]
 end
 
-task default: :test
+task(default: %w[test syntax_tree:check])
 
 namespace :syntax_tree do
   FILEPATHS = %w[Gemfile Rakefile lib/**/*.rb test/**/*.rb].freeze
