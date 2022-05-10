@@ -142,6 +142,8 @@ module YARV
           @labels[insn] = @insns.length
         in :branchunless, value
           @insns << BranchUnless.new(value)
+        in [:concatarray]
+          @insns << ConcatArray.new
         in :definemethod, name, iseq
           @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
