@@ -242,11 +242,7 @@ module YARV
     file = "<compiled>",
     path = "<compiled>",
     lineno = 1,
-    inline_const_cache: true,
-    peephole_optimization: true,
-    specialized_instruction: true,
-    tailcall_optimization: false,
-    trace_instruction: false
+    **options
   )
     iseq =
       RubyVM::InstructionSequence.compile(
@@ -254,13 +250,18 @@ module YARV
         file,
         path,
         lineno,
-        inline_const_cache: inline_const_cache,
-        peephole_optimization: peephole_optimization,
-        specialized_instruction: specialized_instruction,
-        tailcall_optimization: tailcall_optimization,
-        trace_instruction: trace_instruction
+        **default_compile_options.merge!(options)
       )
-
     InstructionSequence.new(Main.new, iseq.to_a)
+  end
+
+  def self.default_compile_options
+    {
+      inline_const_cache: true,
+      peephole_optimization: true,
+      specialized_instruction: true,
+      tailcall_optimization: false,
+      trace_instruction: false
+    }
   end
 end
