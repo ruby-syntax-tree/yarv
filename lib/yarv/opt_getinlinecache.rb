@@ -41,7 +41,8 @@ module YARV
     end
 
     def to_s
-      "%-38s %s, <is:%d>" % ["opt_getinlinecache", label["label_".length..], cache]
+      "%-38s %s, <is:%d>" %
+        ["opt_getinlinecache", label["label_".length..], cache]
     end
   end
 end

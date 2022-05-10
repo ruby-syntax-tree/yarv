@@ -16,6 +16,7 @@ module YARV
 
   # This class represents information about a specific call-site in the code.
   class CallData
+    # stree-ignore
     FLAGS = [
       :ARGS_SPLAT,    # m(*args)
       :ARGS_BLOCKARG, # m(&block)
@@ -47,9 +48,11 @@ module YARV
     private
 
     def flags
-      FLAGS.each_with_index.each_with_object([]) do |(value, index), result|
-        result << value if flag & (1 << index) != 0
-      end
+      FLAGS
+        .each_with_index
+        .each_with_object([]) do |(value, index), result|
+          result << value if flag & (1 << index) != 0
+        end
     end
   end
 
@@ -70,12 +73,10 @@ module YARV
       # Fetches the value of a local variable from the frame. If the value has
       # not yet been initialized, it will raise an error.
       def get_local(index)
-        local_index = index_for(index)
-        local = locals[local_index]
-
+        local = locals[index]
         if local == UNDEFINED
           raise NameError,
-                "undefined local variable or method `#{iseq.locals[local_index]}' for #{iseq.selfo}"
+                "undefined local variable or method `#{iseq.locals[index]}' for #{iseq.selfo}"
         end
 
         local
@@ -83,13 +84,7 @@ module YARV
 
       # Sets the value of the local variable on the frame.
       def set_local(index, value)
-        @locals[index_for(index)] = value
-      end
-
-      private
-
-      def index_for(index)
-        (iseq.locals.length - (index - 3)) - 1
+        @locals[index] = value
       end
     end
 
@@ -232,8 +227,9 @@ module YARV
           @insns << GetConstant.new(name)
         in :getglobal, value
           @insns << GetGlobal.new(value)
-        in :getlocal_WC_0, index
-          @insns << GetLocalWC0.new(index)
+        in :getlocal_WC_0, offset
+          index = local_index(offset)
+          @insns << GetLocalWC0.new(locals[index], index)
         in :jump, value
           @insns << Jump.new(value)
         in [:leave]
@@ -304,8 +300,9 @@ module YARV
           @insns << PutString.new(string)
         in :setglobal, name
           @insns << SetGlobal.new(name)
-        in :setlocal_WC_0, index
-          @insns << SetLocalWC0.new(index)
+        in :setlocal_WC_0, offset
+          index = local_index(offset)
+          @insns << SetLocalWC0.new(locals[index], index)
         in [:swap]
           @insns << Swap.new
         end
@@ -342,6 +339,15 @@ module YARV
           break if insn in Leave
         end
       end
+    end
+
+    private
+
+    # Indices that are given for getlocal and setlocal instructions are actually
+    # how far back they are from the top of the stack. So here we do a little
+    # math to make them a little easier to work with.
+    def local_index(offset)
+      (locals.length - (offset - 3)) - 1
     end
   end
 

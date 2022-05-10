@@ -26,9 +26,10 @@ module YARV
   # ~~~
   #
   class GetLocalWC0
-    attr_reader :index
+    attr_reader :name, :index
 
-    def initialize(index)
+    def initialize(name, index)
+      @name = name
       @index = index
     end
 
@@ -38,7 +39,7 @@ module YARV
     end
 
     def to_s
-      "%-38s level=0 index=%d" % ["getlocal_WC_0", index]
+      "%-38s %s@%d" % ["getlocal_WC_0", name, index]
     end
   end
 end
