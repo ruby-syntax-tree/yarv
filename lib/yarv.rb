@@ -148,6 +148,8 @@ module YARV
           @insns << Dup.new
         in :duparray, array
           @insns << DupArray.new(array)
+        in :duphash, hash
+          @insns << DupHash.new(hash)
         in :getconstant, name
           @insns << GetConstant.new(name)
         in :getglobal, value
