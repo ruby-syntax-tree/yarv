@@ -28,5 +28,9 @@ module YARV
       array = context.stack.pop(@size)
       context.stack.push(array)
     end
+
+    def pretty_print(q)
+      q.text("newarray #{@size}")
+    end
   end
 end
