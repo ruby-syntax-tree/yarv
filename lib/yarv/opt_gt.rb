@@ -22,10 +22,16 @@ module YARV
   # ~~~
   #
   class OptGt
-    def call(context)
-      left, right = context.stack.pop(2)
+    attr_reader :call_data
 
-      result = context.call_method(left, :>, [right])
+    def initialize(call_data)
+      @call_data = call_data
+    end
+
+    def call(context)
+      receiver, *arguments = context.stack.pop(call_data.argc + 1)
+      result = context.call_method(call_data, receiver, arguments)
+
       context.stack.push(result)
     end
 

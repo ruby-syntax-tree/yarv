@@ -41,11 +41,7 @@ module YARV
     private
 
     def coerce(object)
-      if object.respond_to?(:to_a)
-        object.to_a
-      else
-        [object]
-      end
+      object.respond_to?(:to_a) ? object.to_a : [object]
     end
   end
 end
