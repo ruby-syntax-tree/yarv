@@ -212,6 +212,8 @@ module YARV
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, index
           @insns << SetLocalWC0.new(locals[index - 3], index)
+        in [:swap]
+          @insns << Swap.new
         end
       end
     end
