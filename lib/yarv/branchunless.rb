@@ -47,8 +47,8 @@ module YARV
       end
     end
 
-    def pretty_print(q)
-      q.text("branchunless #{label.inspect}")
+    def to_s
+      "%-38s %s" % ["branchunless", label["label_".length..]]
     end
   end
 end

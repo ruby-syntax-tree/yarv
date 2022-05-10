@@ -38,8 +38,8 @@ module YARV
       context.stack.push(context.globals[name])
     end
 
-    def pretty_print(q)
-      q.text("getglobal #{name.inspect}")
+    def to_s
+      "%-38s %s" % ["getglobal", name.inspect]
     end
   end
 end

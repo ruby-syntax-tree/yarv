@@ -26,8 +26,8 @@ module YARV
       context.stack.push(1)
     end
 
-    def pretty_print(q)
-      q.text("putobject_INT2FIX_1_")
+    def to_s
+      "putobject_INT2FIX_1_"
     end
   end
 end

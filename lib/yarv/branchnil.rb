@@ -37,6 +37,8 @@ module YARV
   # ~~~
   #
   class BranchNil
+    attr_reader :label
+
     def initialize(label)
       @label = label
     end
@@ -50,12 +52,8 @@ module YARV
       end
     end
 
-    def pretty_print(q)
-      q.text("branchnil #{label.inspect}")
+    def to_s
+      "%-38s %s" % ["branchnil", label["label_".length..]]
     end
-
-    private
-
-    attr_reader :label
   end
 end

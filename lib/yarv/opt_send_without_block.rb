@@ -36,10 +36,8 @@ module YARV
       context.stack.push(result)
     end
 
-    def pretty_print(q)
-      q.text(
-        "opt_send_without_block <calldata!mid:#{mid}, argc:#{argc}, FCALL|ARGS_SIMPLE>"
-      )
+    def to_s
+      "%-38s %s" % ["opt_send_without_block", call_data]
     end
   end
 end

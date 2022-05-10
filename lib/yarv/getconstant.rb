@@ -42,8 +42,8 @@ module YARV
       context.stack.push((klass || Object).const_get(name))
     end
 
-    def pretty_print(q)
-      q.text("getconstant #{name.inspect}")
+    def to_s
+      "%-38s %s" % ["getconstant", name.inspect]
     end
   end
 end

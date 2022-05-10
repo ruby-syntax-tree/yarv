@@ -53,8 +53,8 @@ module YARV
       end
     end
 
-    def pretty_print(q)
-      q.text("branchif #{label.inspect}")
+    def to_s
+      "%-38s %s" % ["branchif", label["label_"..]]
     end
   end
 end

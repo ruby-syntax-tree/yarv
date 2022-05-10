@@ -19,18 +19,21 @@ module YARV
   # # 0002 newarray                               1
   # # 0004 leave
   # ~~~
+  #
   class NewArray
+    attr_reader :size
+
     def initialize(size)
       @size = size
     end
 
     def call(context)
-      array = context.stack.pop(@size)
+      array = context.stack.pop(size)
       context.stack.push(array)
     end
 
-    def pretty_print(q)
-      q.text("newarray #{@size}")
+    def to_s
+      "%-38s %s" % ["newarray", size]
     end
   end
 end

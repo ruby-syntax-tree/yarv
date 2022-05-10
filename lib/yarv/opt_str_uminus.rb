@@ -35,10 +35,8 @@ module YARV
       context.stack.push(result)
     end
 
-    def pretty_print(q)
-      q.text(
-        "opt_str_uminus #{value.inspect} <calldata!mid:-@, argc:0, ARGS_SIMPLE>"
-      )
+    def to_s
+      "%-38s %s, %s" % ["opt_str_uminus", value.inspect, call_data]
     end
   end
 end

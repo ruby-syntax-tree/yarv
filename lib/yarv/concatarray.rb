@@ -34,8 +34,8 @@ module YARV
       context.stack.push(coerced_left)
     end
 
-    def pretty_print(q)
-      q.text("concatarray")
+    def to_s
+      "concatarray"
     end
 
     private

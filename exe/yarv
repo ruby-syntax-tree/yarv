@@ -8,13 +8,22 @@ require "yarv"
 # instructions and print each one out in turn.
 if ARGV.first == "--dump=insns"
   ARGV.shift
-  queue = [YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)]
 
+  # Check if we are reading directly from a string with -e.
+  compiled =
+    if ARGV.first == "-e"
+      ARGV.shift
+      YARV.compile(ARGV.shift, "<main>", "-e")
+    else
+      YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
+    end
+
+  queue = [compiled]
   while iseq = queue.shift
-    puts "== disasm"
+    puts "== disasm #<ISeq:#{iseq.name}>"
 
     iseq.insns.each do |insn|
-      pp insn
+      puts "0000 #{insn}"
       queue << insn.iseq if insn in YARV::DefineMethod
     end
 
@@ -24,4 +33,13 @@ if ARGV.first == "--dump=insns"
   return
 end
 
-YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno).eval
+# Check if we are reading directly from a string with -e.
+compiled =
+  if ARGV.first == "-e"
+    ARGV.shift
+    YARV.compile(ARGV.shift, "<main>", "-e")
+  else
+    YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
+  end
+
+compiled.eval

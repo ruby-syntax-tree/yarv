@@ -24,8 +24,8 @@ module YARV
       # skip for now
     end
 
-    def pretty_print(q)
-      q.text("leave")
+    def to_s
+      "leave"
     end
   end
 end

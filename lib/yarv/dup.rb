@@ -28,8 +28,8 @@ module YARV
       context.stack.push(value)
     end
 
-    def pretty_print(q)
-      q.text("dup")
+    def to_s
+      "dup"
     end
   end
 end

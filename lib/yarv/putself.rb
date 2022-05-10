@@ -32,8 +32,8 @@ module YARV
       context.stack.push(object)
     end
 
-    def pretty_print(q)
-      q.text("putself")
+    def to_s
+      "putself"
     end
   end
 end

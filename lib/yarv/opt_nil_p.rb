@@ -36,8 +36,8 @@ module YARV
       context.stack.push(result)
     end
 
-    def pretty_print(q)
-      q.text("opt_nil_p <calldata!mid:nil?, argc:0, ARGS_SIMPLE>")
+    def to_s
+      "%-38s %s%s" % ["opt_nil_p", call_data, "[CcCr]"]
     end
   end
 end

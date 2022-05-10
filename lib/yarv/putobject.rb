@@ -30,8 +30,8 @@ module YARV
       context.stack.push(object)
     end
 
-    def pretty_print(q)
-      q.text("putobject #{object.inspect}")
+    def to_s
+      "%-38s %s" % ["putobject", object.inspect]
     end
   end
 end

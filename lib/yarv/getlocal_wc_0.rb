@@ -26,9 +26,10 @@ module YARV
   # ~~~
   #
   class GetLocalWC0
-    attr_reader :index
+    attr_reader :name, :index
 
-    def initialize(index)
+    def initialize(name, index)
+      @name = name
       @index = index
     end
 
@@ -37,8 +38,8 @@ module YARV
       context.stack.push(value)
     end
 
-    def pretty_print(q)
-      q.text("getlocal_WC_0 level=0 index=#{index}")
+    def to_s
+      "%-38s %s@%d" % ["getlocal_WC_0", name, index]
     end
   end
 end

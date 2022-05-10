@@ -20,16 +20,18 @@ module YARV
   # ~~~
   #
   class DupArray
-    def initialize(array)
-      @array = array
+    attr_reader :value
+
+    def initialize(value)
+      @value = value
     end
 
     def call(context)
-      context.stack.push(@array.dup)
+      context.stack.push(value.dup)
     end
 
-    def pretty_print(q)
-      q.text("duparray #{@array}")
+    def to_s
+      "%-38s %s" % ["duparray", value.inspect]
     end
   end
 end
