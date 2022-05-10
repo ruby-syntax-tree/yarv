@@ -16,15 +16,40 @@ module YARV
 
   # This class represents information about a specific call-site in the code.
   class CallData
-    attr_reader :mid, :argc
+    FLAGS = [
+      :ARGS_SPLAT,    # m(*args)
+      :ARGS_BLOCKARG, # m(&block)
+      :FCALL,         # m(...)
+      :VCALL,         # m
+      :ARGS_SIMPLE,   # (ci->flag & (SPLAT|BLOCKARG)) && blockiseq == NULL && ci->kw_arg == NULL
+      :BLOCKISEQ,     # has blockiseq
+      :KWARG,         # has kwarg
+      :KW_SPLAT,      # m(**opts)
+      :TAILCALL,      # located at tail position
+      :SUPER,         # super
+      :ZSUPER,        # zsuper
+      :OPT_SEND,      # internal flag
+      :KW_SPLAT_MUT   # kw splat hash can be modified (to avoid allocating a new one)
+    ]
 
-    def initialize(mid, argc)
+    attr_reader :mid, :argc, :flag
+
+    def initialize(mid, argc, flag)
       @mid = mid
       @argc = argc
+      @flag = flag
     end
 
     def to_s
-      "<calldata!mid:#{mid}, argc:#{argc}>"
+      "<calldata!mid:#{mid}, argc:#{argc}, #{flags.join("|")}>"
+    end
+
+    private
+
+    def flags
+      FLAGS.each_with_index.each_with_object([]) do |(value, index), result|
+        result << value if flag & (1 << index) != 0
+      end
     end
   end
 
@@ -217,52 +242,52 @@ module YARV
           @insns << NewArray.new(size)
         in :newhash, size
           @insns << NewHash.new(size)
-        in :opt_and, { mid: :&, orig_argc: 1 }
-          @insns << OptAnd.new(CallData.new(:&, 1))
-        in :opt_aref, { mid: :[], orig_argc: 1 }
-          @insns << OptAref.new(CallData.new(:[], 1))
-        in :opt_aref_with, key, { mid: :[], orig_argc: 1 }
-          @insns << OptArefWith.new(key, CallData.new(:[], 1))
-        in :opt_div, { mid: :/, orig_argc: 1 }
-          @insns << OptDiv.new(CallData.new(:/, 1))
-        in :opt_empty_p, { mid: :empty?, orig_argc: 0 }
-          @insns << OptEmptyP.new(CallData.new(:empty?, 0))
-        in :opt_eq, { mid: :==, orig_argc: 1 }
-          @insns << OptEq.new(CallData.new(:==, 1))
-        in :opt_ge, { mid: :>=, orig_argc: 1 }
-          @insns << OptGe.new(CallData.new(:>=, 1))
-        in :opt_gt, { mid: :>, orig_argc: 1 }
-          @insns << OptGt.new(CallData.new(:>, 1))
-        in :opt_le, { mid: :<=, orig_argc: 1 }
-          @insns << OptLe.new(CallData.new(:<=, 1))
-        in :opt_lt, { mid: :<, orig_argc: 1 }
-          @insns << OptLt.new(CallData.new(:<, 1))
-        in :opt_nil_p, { mid: :nil?, orig_argc: 0 }
-          @insns << OptNilP.new(CallData.new(:nil?, 0))
+        in :opt_and, { mid: :&, orig_argc: 1, flag: }
+          @insns << OptAnd.new(CallData.new(:&, 1, flag))
+        in :opt_aref, { mid: :[], orig_argc: 1, flag: }
+          @insns << OptAref.new(CallData.new(:[], 1, flag))
+        in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
+          @insns << OptArefWith.new(key, CallData.new(:[], 1, flag))
+        in :opt_div, { mid: :/, orig_argc: 1, flag: }
+          @insns << OptDiv.new(CallData.new(:/, 1, flag))
+        in :opt_empty_p, { mid: :empty?, orig_argc: 0, flag: }
+          @insns << OptEmptyP.new(CallData.new(:empty?, 0, flag))
+        in :opt_eq, { mid: :==, orig_argc: 1, flag: }
+          @insns << OptEq.new(CallData.new(:==, 1, flag))
+        in :opt_ge, { mid: :>=, orig_argc: 1, flag: }
+          @insns << OptGe.new(CallData.new(:>=, 1, flag))
+        in :opt_gt, { mid: :>, orig_argc: 1, flag: }
+          @insns << OptGt.new(CallData.new(:>, 1, flag))
+        in :opt_le, { mid: :<=, orig_argc: 1, flag: }
+          @insns << OptLe.new(CallData.new(:<=, 1, flag))
+        in :opt_lt, { mid: :<, orig_argc: 1, flag: }
+          @insns << OptLt.new(CallData.new(:<, 1, flag))
+        in :opt_nil_p, { mid: :nil?, orig_argc: 0, flag: }
+          @insns << OptNilP.new(CallData.new(:nil?, 0, flag))
         in :opt_getinlinecache, label, cache
           @insns << OptGetInlineCache.new(label, cache)
-        in :opt_length, { mid: :length, orig_argc: 0 }
-          @insns << OptLength.new(CallData.new(:length, 0))
-        in :opt_minus, { mid: :-, orig_argc: 1 }
-          @insns << OptMinus.new(CallData.new(:-, 1))
-        in :opt_mod, { mid: :%, orig_argc: 1 }
-          @insns << OptMod.new(CallData.new(:%, 1))
-        in :opt_not, { mid: :!, orig_argc: 0 }
-          @insns << OptNot.new(CallData.new(:!, 0))
-        in :opt_or, { mid: :|, orig_argc: 1 }
-          @insns << OptOr.new(CallData.new(:|, 1))
-        in :opt_plus, { mid: :+, orig_argc: 1 }
-          @insns << OptPlus.new(CallData.new(:+, 1))
-        in :opt_send_without_block, { mid:, orig_argc: }
-          @insns << OptSendWithoutBlock.new(CallData.new(mid, orig_argc))
+        in :opt_length, { mid: :length, orig_argc: 0, flag: }
+          @insns << OptLength.new(CallData.new(:length, 0, flag))
+        in :opt_minus, { mid: :-, orig_argc: 1, flag: }
+          @insns << OptMinus.new(CallData.new(:-, 1, flag))
+        in :opt_mod, { mid: :%, orig_argc: 1, flag: }
+          @insns << OptMod.new(CallData.new(:%, 1, flag))
+        in :opt_not, { mid: :!, orig_argc: 0, flag: }
+          @insns << OptNot.new(CallData.new(:!, 0, flag))
+        in :opt_or, { mid: :|, orig_argc: 1, flag: }
+          @insns << OptOr.new(CallData.new(:|, 1, flag))
+        in :opt_plus, { mid: :+, orig_argc: 1, flag: }
+          @insns << OptPlus.new(CallData.new(:+, 1, flag))
+        in :opt_send_without_block, { mid:, orig_argc:, flag: }
+          @insns << OptSendWithoutBlock.new(CallData.new(mid, orig_argc, flag))
         in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
-        in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0 }
-          @insns << OptStrFreeze.new(value, CallData.new(:freeze, 0))
-        in :opt_str_uminus, value, { mid: :-@, orig_argc: 0 }
-          @insns << OptStrUMinus.new(value, CallData.new(:-@, 0))
-        in :opt_succ, { mid: :succ, orig_argc: 0 }
-          @insns << OptSucc.new(CallData.new(:succ, 0))
+        in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0, flag: }
+          @insns << OptStrFreeze.new(value, CallData.new(:freeze, 0, flag))
+        in :opt_str_uminus, value, { mid: :-@, orig_argc: 0, flag: }
+          @insns << OptStrUMinus.new(value, CallData.new(:-@, 0, flag))
+        in :opt_succ, { mid: :succ, orig_argc: 0, flag: }
+          @insns << OptSucc.new(CallData.new(:succ, 0, flag))
         in [:pop]
           @insns << Pop.new
         in [:putnil]

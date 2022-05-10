@@ -13,7 +13,7 @@ if ARGV.first == "--dump=insns"
   compiled =
     if ARGV.first == "-e"
       ARGV.shift
-      YARV.compile(ARGV.shift)
+      YARV.compile(ARGV.shift, "<main>", "-e")
     else
       YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
     end
@@ -37,7 +37,7 @@ end
 compiled =
   if ARGV.first == "-e"
     ARGV.shift
-    YARV.compile(ARGV.shift)
+    YARV.compile(ARGV.shift, "<main>", "-e")
   else
     YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
   end
