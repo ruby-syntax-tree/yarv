@@ -172,6 +172,8 @@ module YARV
           @insns << OptEmptyP.new
         in :opt_eq, { mid: :==, orig_argc: 1 }
           @insns << OptEq.new
+        in :opt_ge, { mid: :>=, orig_argc: 1 }
+          @insns << OptGe.new
         in :opt_nil_p, { mid: :nil?, orig_argc: 0 }
           @insns << OptNilP.new
         in :opt_getinlinecache, label, cache
