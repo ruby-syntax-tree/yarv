@@ -170,6 +170,8 @@ module YARV
           @insns << OptLength.new
         in :opt_minus, { mid: :-, orig_argc: 1 }
           @insns << OptMinus.new
+        in :opt_not, { mid: :!, orig_argc: 0 }
+          @insns << OptNot.new
         in :opt_or, { mid: :|, orig_argc: 1 }
           @insns << OptOr.new
         in :opt_plus, { mid: :+, orig_argc: 1 }
