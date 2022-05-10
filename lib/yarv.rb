@@ -12,6 +12,30 @@ module YARV
     def inspect
       "main"
     end
+
+    def require(context, filename)
+      file_path =
+        context.globals[:$:].each do |path|
+          filename += ".rb" unless filename.end_with?(".rb")
+
+          file_path = File.join(path, filename)
+          next unless File.file?(file_path) && File.readable?(file_path)
+
+          break file_path
+        end
+
+      raise LoadError, "cannot load such file -- #{filename}" unless file_path
+
+      return false if context.globals[:$"].include?(file_path)
+
+      iseq =
+        File.open(file_path, "r") do |f|
+          YARV.compile(f.read, file_path, file_path)
+        end
+
+      context.eval(iseq)
+      true
+    end
   end
 
   # This class represents information about a specific call-site in the code.
@@ -108,7 +132,8 @@ module YARV
 
     def initialize
       @stack = []
-      @globals = {}
+      # Steal the LOAD_PATHS from the host but not LOADED_FEATURES
+      @globals = { :$: => $:, :$" => [] }
       @methods = {}
       @frames = []
       @program_counter = 0
@@ -137,7 +162,7 @@ module YARV
           # Only leading arguments and we line up with the expected number
         end
 
-        method.eval(self) do
+        eval(method) do
           # Inside this block, we have already pushed the frame. So now we need
           # to establish the correct local variables.
           arguments.each_with_index do |argument, index|
@@ -146,6 +171,8 @@ module YARV
         end
 
         stack.last
+      elsif receiver.is_a?(Main) && call_data.mid == :require
+        receiver.send(call_data.mid, self, *arguments)
       else
         receiver.send(call_data.mid, *arguments)
       end
@@ -183,6 +210,22 @@ module YARV
         frames.pop
         @program_counter = current_program_counter
         @stack = @stack[0..current_stack_length]
+      end
+    end
+
+    # Pushes a new frame onto the stack, executes the instructions contained
+    # within this instruction sequence, then pops the frame off the stack.
+    def eval(iseq)
+      with_frame(iseq) do
+        yield if block_given?
+
+        loop do
+          insn = iseq.insns[program_counter]
+          self.program_counter += 1
+
+          insn.call(self)
+          break if insn in Leave
+        end
       end
     end
   end
@@ -334,20 +377,8 @@ module YARV
       iseq[11]
     end
 
-    # Pushes a new frame onto the stack, executes the instructions contained
-    # within this instruction sequence, then pops the frame off the stack.
     def eval(context = ExecutionContext.new)
-      context.with_frame(self) do
-        yield if block_given?
-
-        loop do
-          insn = insns[context.program_counter]
-          context.program_counter += 1
-
-          insn.call(context)
-          break if insn in Leave
-        end
-      end
+      context.eval(self)
     end
 
     private
