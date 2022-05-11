@@ -268,6 +268,8 @@ module YARV
           @insns << OptMinus.new(CallData.new(:-, 1, flag))
         in :opt_mod, { mid: :%, orig_argc: 1, flag: }
           @insns << OptMod.new(CallData.new(:%, 1, flag))
+        in :opt_mult, { mid: :*, orig_argc: 1, flag: }
+          @insns << OptMult.new(CallData.new(:*, 1, flag))
         in :opt_not, { mid: :!, orig_argc: 0, flag: }
           @insns << OptNot.new(CallData.new(:!, 0, flag))
         in :opt_or, { mid: :|, orig_argc: 1, flag: }
