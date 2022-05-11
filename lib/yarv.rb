@@ -275,6 +275,10 @@ module YARV
           @insns << OptMod.new(CallData.new(:%, 1, flag))
         in :opt_mult, { mid: :*, orig_argc: 1, flag: }
           @insns << OptMult.new(CallData.new(:*, 1, flag))
+        in :opt_newarray_max, size
+          @insns << OptNewArrayMax.new(size)
+        in :opt_newarray_min, size
+          @insns << OptNewArrayMin.new(size)
         in :opt_not, { mid: :!, orig_argc: 0, flag: }
           @insns << OptNot.new(CallData.new(:!, 0, flag))
         in :opt_or, { mid: :|, orig_argc: 1, flag: }
