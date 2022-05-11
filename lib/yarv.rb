@@ -273,6 +273,8 @@ module YARV
         in :getlocal_WC_0, offset
           index = local_index(offset)
           @insns << GetLocalWC0.new(locals[index], index)
+        in [:intern]
+          @insns << Intern.new
         in :jump, value
           @insns << Jump.new(value)
         in [:leave]
