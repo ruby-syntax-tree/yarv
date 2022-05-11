@@ -380,7 +380,7 @@ module YARV
         in [:swap]
           @insns << Swap.new
         in :topn, n
-          # skip for now
+          @insns << TopN.new(n)
         end
       end
     end
