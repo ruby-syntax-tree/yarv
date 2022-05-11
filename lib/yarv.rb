@@ -238,6 +238,8 @@ module YARV
           @insns << NewArray.new(size)
         in :newhash, size
           @insns << NewHash.new(size)
+        in :newrange, exclude_end
+          @insns << NewRange.new(exclude_end)
         in :opt_and, { mid: :&, orig_argc: 1, flag: }
           @insns << OptAnd.new(CallData.new(:&, 1, flag))
         in :opt_aref, { mid: :[], orig_argc: 1, flag: }
