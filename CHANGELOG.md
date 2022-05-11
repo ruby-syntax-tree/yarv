@@ -6,6 +6,38 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 ## [Unreleased]
 
+## [0.3.0] - 2022-05-10
+
+### Added
+
+- [#85](https://github.com/kddnewton/yarv/pull/85) - Implement `putnil`.
+- [#90](https://github.com/kddnewton/yarv/pull/90) - Implement `opt_eq`.
+- [#91](https://github.com/kddnewton/yarv/pull/91) - Implement `newarray`.
+- [#93](https://github.com/kddnewton/yarv/pull/93) - Implement `opt_mod`.
+- [#94](https://github.com/kddnewton/yarv/pull/94) - Implement `duparray`.
+- [#96](https://github.com/kddnewton/yarv/pull/96) - Implement `opt_not`.
+- [#101](https://github.com/kddnewton/yarv/pull/101) - Implement `concatarray`.
+- [#98](https://github.com/kddnewton/yarv/pull/98) - Implement `swap`.
+- [#106](https://github.com/kddnewton/yarv/pull/106) - Implement `newhash`.
+- [#103](https://github.com/kddnewton/yarv/pull/103) - Implement `duphash`.
+- [#117](https://github.com/kddnewton/yarv/pull/117) - Implement `opt_ge`.
+- [#113](https://github.com/kddnewton/yarv/pull/113) - Implement `jump`.
+- [#117](https://github.com/kddnewton/yarv/pull/117) - Implement `opt_gt`.
+- [#117](https://github.com/kddnewton/yarv/pull/117) - Implement `opt_le`.
+- [#117](https://github.com/kddnewton/yarv/pull/117) - Implement `opt_lt`.
+- [#118](https://github.com/kddnewton/yarv/pull/118) - Implement `opt_str_freeze`.
+- [#120](https://github.com/kddnewton/yarv/pull/120) - Implement `opt_aref_with`.
+- [#122](https://github.com/kddnewton/yarv/pull/122) - Implement `branchnil`.
+- [#124](https://github.com/kddnewton/yarv/pull/124) - Implement `branchif`.
+- [#127](https://github.com/kddnewton/yarv/pull/127) - Add `--dump=insns` and `-e` options to `exe/yarv`.
+
+### Changed
+
+- [#123](https://github.com/kddnewton/yarv/pull/123) - Handle leading arguments to method calls and fix local argument indices.
+- [#127](https://github.com/kddnewton/yarv/pull/127) - Better disasm formatting, and switch all of the instructions to use `#to_s` instead of `#pretty_print`.
+- [#127](https://github.com/kddnewton/yarv/pull/127) - Additionally track call data flags.
+- [#130](https://github.com/kddnewton/yarv/pull/130) - Improve formatting on the website.
+
 ## [0.2.0] - 2022-05-09
 
 ### Added
@@ -52,6 +84,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - 🎉 Initial release! 🎉
 
-[unreleased]: https://github.com/kddnewton/yarv/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/kddnewton/yarv/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/kddnewton/yarv/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/kddnewton/yarv/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/kddnewton/yarv/compare/002375...v0.1.0
