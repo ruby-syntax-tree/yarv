@@ -18,11 +18,22 @@ filepaths.each do |filepath|
   ast => { statements: { body: [*, SyntaxTree::ModuleDeclaration => mod] } }
   mod => { constant: { constant: { value: "YARV" } }, bodystmt: { statements: { body: [SyntaxTree::VoidStmt, *comments, SyntaxTree::ClassDeclaration] } } }
 
+  formatted_comments = comments.map { |comment| comment.value[2..-1] }.join("\n")
+
+  # Extract the ruby code block from the comments, generate the instruction
+  # sequence for it, and then inject the commented sequence into the block
+  ruby_code = formatted_comments.match(/~~~ruby\n([\S\s]*)~~~/)[1]
+
+  disasm = RubyVM::InstructionSequence.new(ruby_code).disasm
+  disasm.gsub!(/^/, "# ")
+
+  formatted_comments.gsub!(/^~~~\n$/, "\n" + disasm + "~~~\n")
+
   # Write the comments out in their own section.
   markdown.puts(<<~MARKDOWN)
     ## #{File.basename(filepath, ".rb")}
 
-    #{comments.map { |comment| comment.value[2..-1] }.join("\n")}
+    #{formatted_comments}
   MARKDOWN
 end
 
@@ -33,11 +44,52 @@ filepaths.each do |filepath|
 end
 navigation.puts
 
-body = Kramdown::Document.new(markdown.string, syntax_highlighter: :rouge).to_html
-rendered = ERB.new(DATA.read).result_with_hash(body: body, nav: navigation.string)
-
+template = ERB.new(DATA.read)
 FileUtils.mkdir_p("doc")
-File.write("doc/index.html", rendered)
+
+body = Kramdown::Document.new(markdown.string, syntax_highlighter: :rouge).to_html
+body = ERB.new(<<~HTML).result_with_hash(body: body, nav: navigation.string)
+<aside>
+  <header>
+    <h1>YARV Instructions</h1>
+  </header>
+  <nav>
+    <%= nav %>
+  </nav>
+</aside>
+<article>
+  <%= body %>
+</article>
+HTML
+
+File.write("doc/index.html", template.result_with_hash(body: body))
+
+glossary = File.read(File.expand_path("../GLOSSARY.md", __dir__))
+navigation = StringIO.new
+
+glossary.each_line(chomp: true) do |line|
+  if line =~ /^## (.+)$/
+    heading = $1
+    navigation.puts("<a href=\"##{heading.downcase.gsub(" ", "-")}\">#{heading}</a>")
+  end
+end
+
+body = Kramdown::Document.new(glossary, syntax_highlighter: :rouge).to_html
+body = ERB.new(<<~HTML).result_with_hash(body: body, nav: navigation.string)
+<aside>
+  <header>
+    <h1>Glossary of Terms</h1>
+  </header>
+  <nav>
+    <%= nav %>
+  </nav>
+</aside>
+<article>
+  <%= body %>
+</article>
+HTML
+
+File.write("doc/glossary.html", template.result_with_hash(body: body))
 
 __END__
 <!doctype html>
@@ -60,17 +112,7 @@ __END__
       </svg>
     </a>
     <main>
-      <aside>
-        <header>
-          <h1>YARV Instructions</h1>
-        </header>
-        <nav>
-          <%= nav %>
-        </nav>
-      </aside>
-      <article>
-        <%= body %>
-      </article>
+      <%= body %>
     </main>
   </body>
 </html>

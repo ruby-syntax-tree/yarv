@@ -299,6 +299,8 @@ module YARV
           @insns << OptAset.new(CallData.new(:[]=, 2, flag))
         in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
           @insns << OptArefWith.new(key, CallData.new(:[], 1, flag))
+        in :opt_case_dispatch, cdhash, offset
+          @insns << OptCaseDispatch.new(cdhash, offset)
         in :opt_div, { mid: :/, orig_argc: 1, flag: }
           @insns << OptDiv.new(CallData.new(:/, 1, flag))
         in :opt_empty_p, { mid: :empty?, orig_argc: 0, flag: }
@@ -318,6 +320,8 @@ module YARV
           @insns << OptLe.new(CallData.new(:<=, 1, flag))
         in :opt_lt, { mid: :<, orig_argc: 1, flag: }
           @insns << OptLt.new(CallData.new(:<, 1, flag))
+        in :opt_ltlt, { mid: :<<, orig_argc: 1, flag: }
+          @insns << OptLtLt.new(CallData.new(:<<, 1, flag))
         in :opt_nil_p, { mid: :nil?, orig_argc: 0, flag: }
           @insns << OptNilP.new(CallData.new(:nil?, 0, flag))
         in :opt_getinlinecache, label, cache

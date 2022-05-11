@@ -15,12 +15,6 @@ module YARV
   #
   # ~~~ruby
   # 2 + 3
-  #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,5)> (catch: FALSE)
-  # # 0000 putobject                              2                         (   1)[Li]
-  # # 0002 putobject                              3
-  # # 0004 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr]
-  # # 0006 leave
   # ~~~
   #
   class OptPlus
