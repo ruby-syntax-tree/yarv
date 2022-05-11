@@ -150,7 +150,7 @@ module YARV
     # simply the popped values off the top of the stack. It is the
     # responsibility of this method to ensure that they get copied into the
     # locals table in the correct order.
-    def call_method(call_data, receiver, arguments, &block)
+    def call_method(call_data, receiver, arguments)
       if (method = methods[[receiver.class, call_data.mid]])
         # We only support a subset of the valid argument permutations. This
         # validates each kind to make sure we don't accidentally try to handle a
@@ -174,7 +174,7 @@ module YARV
       elsif receiver.is_a?(Main) && call_data.mid == :require
         receiver.send(call_data.mid, self, *arguments)
       else
-        receiver.send(call_data.mid, *arguments, &block)
+        receiver.send(call_data.mid, *arguments)
       end
     end
 
