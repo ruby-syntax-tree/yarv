@@ -109,7 +109,7 @@ method does not return a string</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"</span><span class="si">#{</span><span class="mi">5</span><span class="si">}</span><span class="s2">"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              5</span>
 <span class="c1"># 0004 dup</span>
@@ -139,12 +139,12 @@ the jump index and continues executing there.</p>
 <span class="n">x</span> <span class="o">||=</span> <span class="s2">"foo"</span>
 <span class="nb">puts</span> <span class="n">x</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,30)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(3,6)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] x@0</span>
 <span class="c1"># 0000 putobject                              true                      (   1)[Li]</span>
 <span class="c1"># 0002 setlocal_WC_0                          x@0</span>
-<span class="c1"># 0004 getlocal_WC_0                          x@0</span>
+<span class="c1"># 0004 getlocal_WC_0                          x@0                       (   2)[Li]</span>
 <span class="c1"># 0006 dup</span>
 <span class="c1"># 0007 branchif                               15</span>
 <span class="c1"># 0009 pop</span>
@@ -152,7 +152,7 @@ the jump index and continues executing there.</p>
 <span class="c1"># 0012 dup</span>
 <span class="c1"># 0013 setlocal_WC_0                          x@0</span>
 <span class="c1"># 0015 pop</span>
-<span class="c1"># 0016 putself</span>
+<span class="c1"># 0016 putself                                                          (   3)[Li]</span>
 <span class="c1"># 0017 getlocal_WC_0                          x@0</span>
 <span class="c1"># 0019 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0021 leave</span>
@@ -179,17 +179,17 @@ the jump index and continues executing there.</p>
   <span class="nb">puts</span> <span class="s2">"hi"</span>
 <span class="k">end</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,35)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(4,3)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] x@0</span>
 <span class="c1"># 0000 putnil                                                           (   1)[Li]</span>
 <span class="c1"># 0001 setlocal_WC_0                          x@0</span>
-<span class="c1"># 0003 getlocal_WC_0                          x@0</span>
+<span class="c1"># 0003 getlocal_WC_0                          x@0                       (   2)[Li]</span>
 <span class="c1"># 0005 dup</span>
 <span class="c1"># 0006 branchnil                              10</span>
 <span class="c1"># 0008 opt_send_without_block                 &lt;calldata!mid:to_s, argc:0, ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0010 branchunless                           18</span>
-<span class="c1"># 0012 putself</span>
+<span class="c1"># 0012 putself                                                          (   3)[Li]</span>
 <span class="c1"># 0013 putstring                              "hi"</span>
 <span class="c1"># 0015 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0017 leave</span>
@@ -217,13 +217,13 @@ and pops one value off the stack, the jump condition.</p>
   <span class="nb">puts</span> <span class="s2">"foo"</span>
 <span class="k">end</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,22)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(3,3)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              2                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              3</span>
 <span class="c1"># 0004 opt_plus                               &lt;calldata!mid:+, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0006 branchunless                           14</span>
-<span class="c1"># 0008 putself</span>
-<span class="c1"># 0009 putstring                              "hi"</span>
+<span class="c1"># 0008 putself                                                          (   2)[Li]</span>
+<span class="c1"># 0009 putstring                              "foo"</span>
 <span class="c1"># 0011 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0013 leave</span>
 <span class="c1"># 0014 putnil</span>
@@ -248,7 +248,7 @@ already an Array, to avoid mutating it when concatenating.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 duparray                               [1]                       (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              2</span>
 <span class="c1"># 0004 concatarray</span>
@@ -273,7 +273,7 @@ and <code>anytostring</code> to ensure the stack contents are always strings</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"</span><span class="si">#{</span><span class="mi">5</span><span class="si">}</span><span class="s2">"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              5</span>
 <span class="c1"># 0004 dup</span>
@@ -299,12 +299,12 @@ The second is the instruction sequence representing the body of the method.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">value</span> <span class="o">=</span> <span class="s2">"value"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 definemethod                           :value, value             (   1)[Li]</span>
 <span class="c1"># 0003 putobject                              :value</span>
 <span class="c1"># 0005 leave</span>
-<span class="c1">#</span>
-<span class="c1"># == disasm: #&lt;ISeq:value@-e:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
+<span class="c1"># </span>
+<span class="c1"># == disasm: #&lt;ISeq:value@&lt;compiled&gt;:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putstring                              "value"                   (   1)[Ca]</span>
 <span class="c1"># 0002 leave                                  [Re]</span>
 </code></pre></div></div>
@@ -323,7 +323,7 @@ The second is the instruction sequence representing the body of the method.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
 <span class="c1"># 0002 dup</span>
 <span class="c1"># 0003 setglobal                              :$global</span>
@@ -363,7 +363,7 @@ The second is the instruction sequence representing the body of the method.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="kp">true</span><span class="p">]</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 duparray                               [true]                    (   1)[Li]</span>
 <span class="c1"># 0002 leave</span>
 </code></pre></div></div>
@@ -383,7 +383,7 @@ constant onto the stack.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Constant</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 opt_getinlinecache                     9, &lt;is:0&gt;                 (   1)[Li]</span>
 <span class="c1"># 0003 putobject                              true</span>
 <span class="c1"># 0005 getconstant                            :Constant</span>
@@ -427,12 +427,12 @@ the index given as its only argument.</p>
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">value</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,16)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(2,5)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] value@0</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
 <span class="c1"># 0002 setlocal_WC_0                          value@0</span>
-<span class="c1"># 0004 getlocal_WC_0                          value@0</span>
+<span class="c1"># 0004 getlocal_WC_0                          value@0                   (   2)[Li]</span>
 <span class="c1"># 0006 leave</span>
 </code></pre></div></div>
 
@@ -444,7 +444,7 @@ the index given as its only argument.</p>
 
 <h3 id="tracepoint-13">TracePoint</h3>
 
-<h1 id="there-is-no-trace-point-for-intern">There is no trace point for <code>intern</code>.</h1>
+<p>There is no trace point for <code>intern</code>.</p>
 
 <h3 id="usage-13">Usage</h3>
 
@@ -476,25 +476,23 @@ instruction to execute.</p>
   <span class="nb">puts</span> <span class="s2">"2"</span>
 <span class="k">end</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,48)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(6,3)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] y@0</span>
 <span class="c1"># 0000 putobject_INT2FIX_0_                                             (   1)[Li]</span>
 <span class="c1"># 0001 setlocal_WC_0                          y@0</span>
-<span class="c1"># 0003 getlocal_WC_0                          y@0</span>
+<span class="c1"># 0003 getlocal_WC_0                          y@0                       (   2)[Li]</span>
 <span class="c1"># 0005 putobject_INT2FIX_0_</span>
 <span class="c1"># 0006 opt_eq                                 &lt;calldata!mid:==, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
-<span class="c1"># 0008 branchunless                           20</span>
-<span class="c1"># 0010 jump                                   12</span>
-<span class="c1"># 0012 putself</span>
-<span class="c1"># 0013 putstring                              "0"</span>
-<span class="c1"># 0015 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
-<span class="c1"># 0017 jump                                   25</span>
-<span class="c1"># 0019 pop</span>
-<span class="c1"># 0020 putself</span>
-<span class="c1"># 0021 putstring                              "2"</span>
-<span class="c1"># 0023 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
-<span class="c1"># 0025 leave</span>
+<span class="c1"># 0008 branchunless                           16</span>
+<span class="c1"># 0010 putself                                                          (   3)[Li]</span>
+<span class="c1"># 0011 putstring                              "0"</span>
+<span class="c1"># 0013 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0015 leave                                                            (   5)</span>
+<span class="c1"># 0016 putself                                [Li]</span>
+<span class="c1"># 0017 putstring                              "2"</span>
+<span class="c1"># 0019 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0021 leave</span>
 </code></pre></div></div>
 
 <h2 id="leave">leave</h2>
@@ -511,8 +509,8 @@ instruction to execute.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">;;</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,2)&gt; (catch: FALSE)</span>
-<span class="c1"># 0000 putnil</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,2)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putnil                                                           (   1)</span>
 <span class="c1"># 0001 leave</span>
 </code></pre></div></div>
 
@@ -530,7 +528,7 @@ instruction to execute.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="s2">"string"</span><span class="p">]</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,10)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,10)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putstring                              "string"                  (   1)[Li]</span>
 <span class="c1"># 0002 newarray                               1</span>
 <span class="c1"># 0004 leave</span>
@@ -553,7 +551,12 @@ stack. <code>num</code> needs to be even.</p>
   <span class="p">{</span> <span class="n">key</span> <span class="o">=&gt;</span> <span class="n">value</span> <span class="p">}</span>
 <span class="k">end</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:foo@-e:1 (1,0)-(3,3)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(3,3)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 definemethod                           :foo, foo                 (   1)[Li]</span>
+<span class="c1"># 0003 putobject                              :foo</span>
+<span class="c1"># 0005 leave</span>
+<span class="c1"># </span>
+<span class="c1"># == disasm: #&lt;ISeq:foo@&lt;compiled&gt;:1 (1,0)-(3,3)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 2, argc: 2 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 2] key@0&lt;Arg&gt; [ 1] value@1&lt;Arg&gt;</span>
 <span class="c1"># 0000 getlocal_WC_0                          key@0                     (   2)[LiCa]</span>
@@ -579,7 +582,7 @@ is included or 1 if the end value is excluded.</p>
 <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="nb">p</span> <span class="p">(</span><span class="n">x</span><span class="o">..</span><span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span><span class="o">...</span><span class="n">y</span><span class="p">)</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@test.rb:1 (1,0)-(3,17)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(3,17)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 2, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 2] x@0        [ 1] y@1</span>
 <span class="c1"># 0000 putobject_INT2FIX_0_                                             (   1)[Li]</span>
@@ -615,7 +618,7 @@ For everything else it calls <code>to_s</code></p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"</span><span class="si">#{</span><span class="mi">5</span><span class="si">}</span><span class="s2">"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              5</span>
 <span class="c1"># 0004 dup</span>
@@ -664,7 +667,7 @@ if the receiver is an integer, array, or hash.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">7</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,4)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              7                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              2</span>
 <span class="c1"># 0004 opt_aref                               &lt;calldata!mid:[], argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -713,7 +716,7 @@ compile time. In CRuby, there are fast paths if the receiver is a hash.</p>
 <span class="c1"># 0003 putobject                              :key</span>
 <span class="c1"># 0005 putstring                              "val"</span>
 <span class="c1"># 0007 setn                                   3</span>
-<span class="c1"># 0009 opt_aset                               &lt;calldata!mid:[]=, argc:2, ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0009 opt_aset                               &lt;calldata!mid:[]=, argc:2, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0011 pop</span>
 <span class="c1"># 0012 leave</span>
 </code></pre></div></div>
@@ -734,7 +737,7 @@ for if both operands are integers, or if both operands are floats.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">/</span> <span class="mi">3</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              2                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              3</span>
 <span class="c1"># 0004 opt_div                                &lt;calldata!mid:/, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -779,7 +782,7 @@ both operands are integers, floats, symbols or strings.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">==</span> <span class="mi">2</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              2                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              2</span>
 <span class="c1"># 0004 opt_eq                                 &lt;calldata!mid:==, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -825,7 +828,7 @@ set.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Constant</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 opt_getinlinecache                     9, &lt;is:0&gt;                 (   1)[Li]</span>
 <span class="c1"># 0003 putobject                              true</span>
 <span class="c1"># 0005 getconstant                            :Constant</span>
@@ -963,7 +966,7 @@ for if both operands are integers or both operands are floats.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">4</span> <span class="o">%</span> <span class="mi">2</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              4                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              2</span>
 <span class="c1"># 0004 opt_mod                                &lt;calldata!mid:%, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -1012,7 +1015,7 @@ operands are Integers, Floats, Symbols or Strings.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">!=</span> <span class="mi">2</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              2                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              2</span>
 <span class="c1"># 0004 opt_neq                                &lt;calldata!mid:==, argc:1, ARGS_SIMPLE&gt;, &lt;calldata!mid:!=, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -1034,7 +1037,7 @@ array literal. It is used to optimize quick comparisons of array elements.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">].</span><span class="nf">max</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] x@0</span>
 <span class="c1"># 0000 putobject_INT2FIX_1_                                             (   1)[Li]</span>
@@ -1060,7 +1063,7 @@ array literal. It is used to optimize quick comparisons of array elements.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">].</span><span class="nf">min</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] x@0</span>
 <span class="c1"># 0000 putobject_INT2FIX_1_                                             (   1)[Li]</span>
@@ -1087,7 +1090,7 @@ method in other cases</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">nil?</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putstring                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 opt_nil_p                              &lt;calldata!mid:nil?, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0004 leave</span>
@@ -1107,7 +1110,7 @@ method in other cases</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="kp">true</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              true                      (   1)[Li]</span>
 <span class="c1"># 0002 opt_not                                &lt;calldata!mid:!, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0004 leave</span>
@@ -1152,7 +1155,7 @@ for if both operands are integers, floats, strings, or arrays.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,5)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              2                         (   1)[Li]</span>
 <span class="c1"># 0002 putobject                              3</span>
 <span class="c1"># 0004 opt_plus                               &lt;calldata!mid:+, argc:1, ARGS_SIMPLE&gt;[CcCr]</span>
@@ -1174,7 +1177,7 @@ occurs when a method is being called without a block.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="s2">"Hello, world!"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,20)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,20)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putself                                                          (   1)[Li]</span>
 <span class="c1"># 0001 putstring                              "Hello, world!"</span>
 <span class="c1"># 0003 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
@@ -1197,7 +1200,7 @@ an <code>opt_getinlinecache</code> instruction.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Constant</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 opt_getinlinecache                     9, &lt;is:0&gt;                 (   1)[Li]</span>
 <span class="c1"># 0003 putobject                              true</span>
 <span class="c1"># 0005 getconstant                            :Constant</span>
@@ -1221,8 +1224,8 @@ are fast paths when the receiver is either a String, Hash or Array.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">size</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
-<span class="c1"># 0000 putobject                              8                         (   1)[Li]</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putstring                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 opt_size                               &lt;calldata!mid:size, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0004 leave</span>
 </code></pre></div></div>
@@ -1242,7 +1245,7 @@ onto the stack.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"hello"</span><span class="p">.</span><span class="nf">freeze</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 opt_str_freeze                         "hello", &lt;calldata!mid:freeze, argc:0, ARGS_SIMPLE&gt;(   1)[Li]</span>
 <span class="c1"># 0003 leave</span>
 </code></pre></div></div>
@@ -1262,7 +1265,7 @@ onto the stack.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">-</span><span class="s2">"string"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,6)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 opt_str_uminus                         "string", &lt;calldata!mid:-@, argc:0, ARGS_SIMPLE&gt;(   1)[Li]</span>
 <span class="c1"># 0003 leave</span>
 </code></pre></div></div>
@@ -1283,8 +1286,8 @@ the receiver is either a String or a Fixnum.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">succ</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
-<span class="c1"># 0000 putstring                              "a"                       (   1)[Li]</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putstring                              ""                        (   1)[Li]</span>
 <span class="c1"># 0002 opt_succ                               &lt;calldata!mid:succ, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0004 leave</span>
 </code></pre></div></div>
@@ -1303,7 +1306,7 @@ the receiver is either a String or a Fixnum.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">||=</span> <span class="mi">2</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,7)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] a@0</span>
 <span class="c1"># 0000 getlocal_WC_0                          a@0                       (   1)[Li]</span>
@@ -1349,7 +1352,7 @@ the receiver is either a String or a Fixnum.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">5</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,1)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,1)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
 <span class="c1"># 0002 leave</span>
 </code></pre></div></div>
@@ -1410,7 +1413,7 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="s2">"Hello, world!"</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,20)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,20)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putself                                                          (   1)[Li]</span>
 <span class="c1"># 0001 putstring                              "Hello, world!"</span>
 <span class="c1"># 0003 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
@@ -1450,7 +1453,7 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
 <span class="c1"># 0002 dup</span>
 <span class="c1"># 0003 setglobal                              :$global</span>
@@ -1473,7 +1476,7 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,9)&gt; (catch: FALSE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,9)&gt; (catch: FALSE)</span>
 <span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
 <span class="c1"># [ 1] value@0</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
@@ -1496,15 +1499,15 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{}[</span><span class="ss">:key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'val'</span>
 
-<span class="o">==</span> <span class="ss">disasm: </span><span class="c1">#&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,16)&gt; (catch: FALSE)</span>
-<span class="mo">0000</span> <span class="n">putnil</span>                                                           <span class="p">(</span>   <span class="mi">1</span><span class="p">)[</span><span class="no">Li</span><span class="p">]</span>
-<span class="mo">0001</span> <span class="n">newhash</span>                                <span class="mi">0</span>
-<span class="mo">0003</span> <span class="n">putobject</span>                              <span class="ss">:key</span>
-<span class="mo">0005</span> <span class="n">putstring</span>                              <span class="s2">"val"</span>
-<span class="mo">0007</span> <span class="n">setn</span>                                   <span class="mi">3</span>
-<span class="mo">000</span><span class="mi">9</span> <span class="n">opt_aset</span>                               <span class="o">&lt;</span><span class="n">calldata!mid</span><span class="ss">:[]=</span><span class="p">,</span> <span class="n">argc</span><span class="p">:</span><span class="mi">2</span><span class="p">,</span> <span class="no">ARGS_SIMPLE</span><span class="o">&gt;</span>
-<span class="mo">0011</span> <span class="n">pop</span>
-<span class="mo">0012</span> <span class="n">leave</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,16)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putnil                                                           (   1)[Li]</span>
+<span class="c1"># 0001 newhash                                0</span>
+<span class="c1"># 0003 putobject                              :key</span>
+<span class="c1"># 0005 putstring                              "val"</span>
+<span class="c1"># 0007 setn                                   3</span>
+<span class="c1"># 0009 opt_aset                               &lt;calldata!mid:[]=, argc:2, ARGS_SIMPLE&gt;[CcCr]</span>
+<span class="c1"># 0011 pop</span>
+<span class="c1"># 0012 leave</span>
 </code></pre></div></div>
 
 <h2 id="swap">swap</h2>
@@ -1521,22 +1524,22 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!!</span><span class="k">defined?</span><span class="p">([[]])</span>
 
-<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,16)&gt; (catch: TRUE)</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,16)&gt; (catch: TRUE)</span>
 <span class="c1"># == catch table</span>
 <span class="c1"># | catch type: rescue st: 0001 ed: 0003 sp: 0000 cont: 0005</span>
-<span class="c1"># | == disasm: #&lt;ISeq:defined guard in &lt;main&gt;@-e:0 (0,0)-(-1,-1)&gt; (catch: FALSE)</span>
+<span class="c1"># | == disasm: #&lt;ISeq:defined guard in &lt;compiled&gt;@&lt;compiled&gt;:0 (0,0)-(-1,-1)&gt; (catch: FALSE)</span>
 <span class="c1"># | local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
-<span class="c1"># | [ 1] "\#$!"@0</span>
+<span class="c1"># | [ 1] $!@0</span>
 <span class="c1"># | 0000 putnil</span>
 <span class="c1"># | 0001 leave</span>
 <span class="c1"># |------------------------------------------------------------------------</span>
 <span class="c1"># 0000 putnil                                                           (   1)[Li]</span>
-<span class="c1"># 0001 putobject                    "expression"</span>
+<span class="c1"># 0001 putobject                              "expression"</span>
 <span class="c1"># 0003 swap</span>
 <span class="c1"># 0004 pop</span>
-<span class="c1"># 0005 opt_not                      &lt;callinfo!mid:!, argc:0, ARGS_SIMPLE&gt;, &lt;callcache&gt;</span>
-<span class="c1"># 0008 opt_not                      &lt;callinfo!mid:!, argc:0, ARGS_SIMPLE&gt;, &lt;callcache&gt;</span>
-<span class="c1"># 0011 leave</span>
+<span class="c1"># 0005 opt_not                                &lt;calldata!mid:!, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
+<span class="c1"># 0007 opt_not                                &lt;calldata!mid:!, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
+<span class="c1"># 0009 leave</span>
 </code></pre></div></div>
 
 
