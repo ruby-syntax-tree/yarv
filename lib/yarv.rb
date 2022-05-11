@@ -308,7 +308,10 @@ module YARV
         in :putstring, string
           @insns << PutString.new(string)
         in :send, { mid:, orig_argc:, flag: }, block_iseq
-          @insns << Send.new(CallData.new(mid, orig_argc, flag), InstructionSequence.new(selfo, block_iseq))
+          @insns << Send.new(
+            CallData.new(mid, orig_argc, flag),
+            InstructionSequence.new(selfo, block_iseq)
+          )
         in :setglobal, name
           @insns << SetGlobal.new(name)
         in :setlocal_WC_0, offset
