@@ -13,7 +13,7 @@ module YARV
   # ### Usage
   #
   # ~~~ruby
-  # 'hello'.freeze
+  # "hello".freeze
   #
   # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,14)> (catch: FALSE)
   # # 0000 opt_str_freeze                         "hello", <calldata!mid:freeze, argc:0, ARGS_SIMPLE>(   1)[Li]

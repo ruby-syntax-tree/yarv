@@ -16,7 +16,7 @@ module YARV
   # ### Usage
   #
   # ~~~ruby
-  # [1,*2]
+  # [1, *2]
   #
   # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,6)> (catch: FALSE)
   # # 0000 duparray                               [1]                       (   1)[Li]

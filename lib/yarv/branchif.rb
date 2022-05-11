@@ -16,7 +16,9 @@ module YARV
   # ### Usage
   #
   # ~~~ruby
-  # x = true; x ||= 'foo' ; puts x
+  # x = true
+  # x ||= "foo"
+  # puts x
   #
   # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,30)> (catch: FALSE)
   # # local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])

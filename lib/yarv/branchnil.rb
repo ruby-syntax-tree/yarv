@@ -16,7 +16,10 @@ module YARV
   # ### Usage
   #
   # ~~~ruby
-  # x = nil; if x&.to_s; puts 'hi'; end
+  # x = nil
+  # if x&.to_s
+  #   puts "hi"
+  # end
   #
   # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,35)> (catch: FALSE)
   # # local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])

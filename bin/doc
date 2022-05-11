@@ -9,14 +9,7 @@ require "stringio"
 require "syntax_tree"
 
 filepaths = Dir[File.expand_path("../lib/yarv/*.rb", __dir__)]
-
 markdown = StringIO.new
-markdown.puts(<<~MARKDOWN)
-  # YARV Instructions
-
-  Below is a list of the YARV instructions that this project has documented so far.
-
-MARKDOWN
 
 # For each YARV instruction file, we're going to yank out the comments.
 filepaths.each do |filepath|
@@ -26,7 +19,6 @@ filepaths.each do |filepath|
   mod => { constant: { constant: { value: "YARV" } }, bodystmt: { statements: { body: [SyntaxTree::VoidStmt, *comments, SyntaxTree::ClassDeclaration] } } }
 
   # Write the comments out in their own section.
-  markdown.puts("---\n\n")
   markdown.puts(<<~MARKDOWN)
     ## #{File.basename(filepath, ".rb")}
 
@@ -41,7 +33,7 @@ filepaths.each do |filepath|
 end
 navigation.puts
 
-body = Kramdown::Document.new(markdown.string).to_html
+body = Kramdown::Document.new(markdown.string, syntax_highlighter: :rouge).to_html
 rendered = ERB.new(DATA.read).result_with_hash(body: body, nav: navigation.string)
 
 FileUtils.mkdir_p("doc")
@@ -54,11 +46,24 @@ __END__
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=5">
     <title>YARV</title>
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Serif+Pro&amp;display=swap">
     <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="highlight.css">
   </head>
   <body>
+    <a href="https://github.com/kddnewton/yarv" style="position: absolute; right: 0; top: 0" aria-label="View source on GitHub">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" fill="white">
+        <path d="M0 0l115 115h15l12 27 108 108V0z" fill="var(--primary-color)" />
+        <path d="M128 109c-15-9-9-19-9-19 3-7 2-11 2-11-1-7 3-2 3-2 4 5 2 11 2 11-3 10 5 15 9 16" style="transform-origin: 130px 106px" />
+        <path d="M115 115s4 2 5 0l14-14c3-2 6-3 8-3-8-11-15-24 2-41 5-5 10-7 16-7 1-2 3-7 12-11 0 0 5 3 7 16 4 2 8 5 12 9s7 8 9 12c14 3 17 7 17 7-4 8-9 11-11 11 0 6-2 11-7 16-16 16-30 10-41 2 0 3-1 7-5 11l-12 11c-1 1 1 5 1 5z" />
+      </svg>
+    </a>
     <main>
       <aside>
+        <header>
+          <h1>YARV Instructions</h1>
+        </header>
         <nav>
           <%= nav %>
         </nav>
