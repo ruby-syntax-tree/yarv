@@ -14,11 +14,6 @@ module YARV
   # ~~~ruby
   # $global = 5
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,11)> (catch: FALSE)
-  # # 0000 putobject                              5                         (   1)[Li]
-  # # 0002 dup
-  # # 0003 setglobal                              :$global
-  # # 0005 leave
   # ~~~
   #
   class SetGlobal

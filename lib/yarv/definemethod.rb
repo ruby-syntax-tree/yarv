@@ -16,14 +16,7 @@ module YARV
   # ~~~ruby
   # def value = "value"
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,19)> (catch: FALSE)
-  # # 0000 definemethod                           :value, value             (   1)[Li]
-  # # 0003 putobject                              :value
-  # # 0005 leave
   # #
-  # # == disasm: #<ISeq:value@-e:1 (1,0)-(1,19)> (catch: FALSE)
-  # # 0000 putstring                              "value"                   (   1)[Ca]
-  # # 0002 leave                                  [Re]
   # ~~~
   #
   class DefineMethod

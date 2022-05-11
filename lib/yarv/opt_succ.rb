@@ -16,10 +16,6 @@ module YARV
   # ~~~ruby
   # "".succ
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,8)> (catch: FALSE)
-  # # 0000 putstring                              "a"                       (   1)[Li]
-  # # 0002 opt_succ                               <calldata!mid:succ, argc:0, ARGS_SIMPLE>[CcCr]
-  # # 0004 leave
   # ~~~
   #
   class OptSucc

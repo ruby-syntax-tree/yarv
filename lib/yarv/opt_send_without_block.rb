@@ -15,11 +15,6 @@ module YARV
   # ~~~ruby
   # puts "Hello, world!"
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,20)> (catch: FALSE)
-  # # 0000 putself                                                          (   1)[Li]
-  # # 0001 putstring                              "Hello, world!"
-  # # 0003 opt_send_without_block                 <calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE>
-  # # 0005 leave
   # ~~~
   #
   class OptSendWithoutBlock

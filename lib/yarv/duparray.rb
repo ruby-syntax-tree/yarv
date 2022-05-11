@@ -14,9 +14,6 @@ module YARV
   # ~~~ruby
   # [true]
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,6)> (catch: FALSE)
-  # # 0000 duparray                               [true]                    (   1)[Li]
-  # # 0002 leave
   # ~~~
   #
   class DupArray

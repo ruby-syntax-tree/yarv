@@ -16,9 +16,6 @@ module YARV
   # ~~~ruby
   # 1
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,1)> (catch: FALSE)
-  # # 0000 putobject_INT2FIX_1_                                             (   1)[Li]
-  # # 0001 leave
   # ~~~
   #
   class PutObjectInt2Fix1

@@ -14,9 +14,6 @@ module YARV
   # ~~~ruby
   # 5
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,1)> (catch: FALSE)
-  # # 0000 putobject                              5                         (   1)[Li]
-  # # 0002 leave
   # ~~~
   #
   class PutObject

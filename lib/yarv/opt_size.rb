@@ -16,10 +16,6 @@ module YARV
   # ~~~ruby
   # "".size
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,6)> (catch: FALSE)
-  # # 0000 putobject                              8                         (   1)[Li]
-  # # 0002 opt_size                               <calldata!mid:size, argc:0, ARGS_SIMPLE>[CcCr]
-  # # 0004 leave
   # ~~~
   #
   class OptSize

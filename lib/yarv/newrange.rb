@@ -17,22 +17,6 @@ module YARV
   # y = 1
   # p (x..y), (x...y)
   #
-  # # == disasm: #<ISeq:<main>@test.rb:1 (1,0)-(3,17)> (catch: FALSE)
-  # # local table (size: 2, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
-  # # [ 2] x@0        [ 1] y@1
-  # # 0000 putobject_INT2FIX_0_                                             (   1)[Li]
-  # # 0001 setlocal_WC_0                          x@0
-  # # 0003 putobject_INT2FIX_1_                                             (   2)[Li]
-  # # 0004 setlocal_WC_0                          y@1
-  # # 0006 putself                                                          (   3)[Li]
-  # # 0007 getlocal_WC_0                          x@0
-  # # 0009 getlocal_WC_0                          y@1
-  # # 0011 newrange                               0
-  # # 0013 getlocal_WC_0                          x@0
-  # # 0015 getlocal_WC_0                          y@1
-  # # 0017 newrange                               1
-  # # 0019 opt_send_without_block                 <calldata!mid:p, argc:2, FCALL|ARGS_SIMPLE>
-  # # 0021 leave
   # ~~~
   #
   class NewRange

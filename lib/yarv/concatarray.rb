@@ -18,11 +18,6 @@ module YARV
   # ~~~ruby
   # [1, *2]
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,6)> (catch: FALSE)
-  # # 0000 duparray                               [1]                       (   1)[Li]
-  # # 0002 putobject                              2
-  # # 0004 concatarray
-  # # 0005 leave
   # ~~~
   #
   class ConcatArray

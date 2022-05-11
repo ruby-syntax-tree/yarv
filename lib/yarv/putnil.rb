@@ -14,9 +14,6 @@ module YARV
   # ~~~ruby
   # nil
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,3)> (catch: FALSE)
-  # # 0000 putnil                                                           (   1)[Li]
-  # # 0001 leave
   # ~~~
   #
   class PutNil

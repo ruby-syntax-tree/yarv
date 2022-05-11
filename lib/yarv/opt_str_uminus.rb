@@ -15,9 +15,6 @@ module YARV
   # ~~~ruby
   # -"string"
   #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,6)> (catch: FALSE)
-  # # 0000 opt_str_uminus                         "string", <calldata!mid:-@, argc:0, ARGS_SIMPLE>(   1)[Li]
-  # # 0003 leave
   # ~~~
   #
   class OptStrUMinus
