@@ -54,6 +54,8 @@
 <a href="#optmod">opt_mod</a>
 <a href="#optmult">opt_mult</a>
 <a href="#optneq">opt_neq</a>
+<a href="#optnewarraymax">opt_newarray_max</a>
+<a href="#optnewarraymin">opt_newarray_min</a>
 <a href="#optnilp">opt_nil_p</a>
 <a href="#optnot">opt_not</a>
 <a href="#optor">opt_or</a>
@@ -843,19 +845,71 @@ operands are Integers, Floats, Symbols or Strings.</p>
 <span class="c1"># 0007 leave</span>
 </code></pre></div></div>
 
-<h2 id="optnilp">opt_nil_p</h2>
+<h2 id="optnewarraymax">opt_newarray_max</h2>
 
 <h3 id="summary-31">Summary</h3>
+
+<p><code>opt_newarray_max</code> is an instruction that represents calling <code>max</code> on an
+array literal. It is used to optimize quick comparisons of array elements.</p>
+
+<h3 id="tracepoint-31">TracePoint</h3>
+
+<p><code>opt_newarray_max</code> does not dispatch any events.</p>
+
+<h3 id="usage-31">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">].</span><span class="nf">max</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
+<span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
+<span class="c1"># [ 1] x@0</span>
+<span class="c1"># 0000 putobject_INT2FIX_1_                                             (   1)[Li]</span>
+<span class="c1"># 0001 putobject                              2</span>
+<span class="c1"># 0003 dup</span>
+<span class="c1"># 0004 setlocal_WC_0                          x@0</span>
+<span class="c1"># 0006 opt_newarray_max                       2</span>
+<span class="c1"># 0008 leave</span>
+</code></pre></div></div>
+
+<h2 id="optnewarraymin">opt_newarray_min</h2>
+
+<h3 id="summary-32">Summary</h3>
+
+<p><code>opt_newarray_min</code> is an instruction that represents calling <code>min</code> on an
+array literal. It is used to optimize quick comparisons of array elements.</p>
+
+<h3 id="tracepoint-32">TracePoint</h3>
+
+<p><code>opt_newarray_min</code> does not dispatch any events.</p>
+
+<h3 id="usage-32">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">2</span><span class="p">].</span><span class="nf">min</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,14)&gt; (catch: FALSE)</span>
+<span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
+<span class="c1"># [ 1] x@0</span>
+<span class="c1"># 0000 putobject_INT2FIX_1_                                             (   1)[Li]</span>
+<span class="c1"># 0001 putobject                              2</span>
+<span class="c1"># 0003 dup</span>
+<span class="c1"># 0004 setlocal_WC_0                          x@0</span>
+<span class="c1"># 0006 opt_newarray_min                       2</span>
+<span class="c1"># 0008 leave</span>
+</code></pre></div></div>
+
+<h2 id="optnilp">opt_nil_p</h2>
+
+<h3 id="summary-33">Summary</h3>
 
 <p><code>opt_nil_p</code> is an optimization applied when the method <code>nil?</code> is called. It
 returns true immediately when the receiver is <code>nil</code> and defers to the <code>nil?</code>
 method in other cases</p>
 
-<h3 id="tracepoint-31">TracePoint</h3>
+<h3 id="tracepoint-33">TracePoint</h3>
 
 <p><code>opt_nil_p</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-31">Usage</h3>
+<h3 id="usage-33">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">nil?</span>
 
@@ -867,15 +921,15 @@ method in other cases</p>
 
 <h2 id="optnot">opt_not</h2>
 
-<h3 id="summary-32">Summary</h3>
+<h3 id="summary-34">Summary</h3>
 
 <p><code>opt_not</code> negates the value on top of the stack.</p>
 
-<h3 id="tracepoint-32">TracePoint</h3>
+<h3 id="tracepoint-34">TracePoint</h3>
 
 <p><code>opt_not</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-32">Usage</h3>
+<h3 id="usage-34">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!</span><span class="kp">true</span>
 
@@ -887,17 +941,17 @@ method in other cases</p>
 
 <h2 id="optor">opt_or</h2>
 
-<h3 id="summary-33">Summary</h3>
+<h3 id="summary-35">Summary</h3>
 
 <p><code>opt_or</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>|</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers.</p>
 
-<h3 id="tracepoint-33">TracePoint</h3>
+<h3 id="tracepoint-35">TracePoint</h3>
 
 <p><code>opt_or</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-33">Usage</h3>
+<h3 id="usage-35">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">|</span> <span class="mi">3</span>
 
@@ -910,17 +964,17 @@ for if both operands are integers.</p>
 
 <h2 id="optplus">opt_plus</h2>
 
-<h3 id="summary-34">Summary</h3>
+<h3 id="summary-36">Summary</h3>
 
 <p><code>opt_plus</code> is a specialization of the <code>opt_send_without_block</code> instruction
 that occurs when the <code>+</code> operator is used. In CRuby, there are fast paths
 for if both operands are integers, floats, strings, or arrays.</p>
 
-<h3 id="tracepoint-34">TracePoint</h3>
+<h3 id="tracepoint-36">TracePoint</h3>
 
 <p><code>opt_plus</code> can dispatch both the <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-34">Usage</h3>
+<h3 id="usage-36">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">2</span> <span class="o">+</span> <span class="mi">3</span>
 
@@ -933,16 +987,16 @@ for if both operands are integers, floats, strings, or arrays.</p>
 
 <h2 id="optsendwithoutblock">opt_send_without_block</h2>
 
-<h3 id="summary-35">Summary</h3>
+<h3 id="summary-37">Summary</h3>
 
 <p><code>opt_send_without_block</code> is a specialization of the send instruction that
 occurs when a method is being called without a block.</p>
 
-<h3 id="tracepoint-35">TracePoint</h3>
+<h3 id="tracepoint-37">TracePoint</h3>
 
 <p><code>opt_send_without_block</code> does not dispatch any events.</p>
 
-<h3 id="usage-35">Usage</h3>
+<h3 id="usage-37">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="s2">"Hello, world!"</span>
 
@@ -955,17 +1009,17 @@ occurs when a method is being called without a block.</p>
 
 <h2 id="optsetinlinecache">opt_setinlinecache</h2>
 
-<h3 id="summary-36">Summary</h3>
+<h3 id="summary-38">Summary</h3>
 
 <p><code>opt_setinlinecache</code> is the final instruction after a series of
 <code>getconstant</code> instructions that populates the inline cache associated with
 an <code>opt_getinlinecache</code> instruction.</p>
 
-<h3 id="tracepoint-36">TracePoint</h3>
+<h3 id="tracepoint-38">TracePoint</h3>
 
 <p><code>opt_setinlinecache</code> does not dispatch any events.</p>
 
-<h3 id="usage-36">Usage</h3>
+<h3 id="usage-38">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="no">Constant</span>
 
@@ -979,17 +1033,17 @@ an <code>opt_getinlinecache</code> instruction.</p>
 
 <h2 id="optsize">opt_size</h2>
 
-<h3 id="summary-37">Summary</h3>
+<h3 id="summary-39">Summary</h3>
 
 <p><code>opt_size</code> is a specialization of <code>opt_send_without_block</code>, when the
 <code>size</code> method is called on a Ruby type with a known size. In CRuby there
 are fast paths when the receiver is either a String, Hash or Array.</p>
 
-<h3 id="tracepoint-37">TracePoint</h3>
+<h3 id="tracepoint-39">TracePoint</h3>
 
 <p><code>opt_size</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-37">Usage</h3>
+<h3 id="usage-39">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">size</span>
 
@@ -1001,16 +1055,16 @@ are fast paths when the receiver is either a String, Hash or Array.</p>
 
 <h2 id="optstrfreeze">opt_str_freeze</h2>
 
-<h3 id="summary-38">Summary</h3>
+<h3 id="summary-40">Summary</h3>
 
 <p><code>opt_str_freeze</code> pushes a frozen known string value with no interpolation
 onto the stack.</p>
 
-<h3 id="tracepoint-38">TracePoint</h3>
+<h3 id="tracepoint-40">TracePoint</h3>
 
 <p><code>opt_str_freeze</code> does not dispatch any events.</p>
 
-<h3 id="usage-38">Usage</h3>
+<h3 id="usage-40">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"hello"</span><span class="p">.</span><span class="nf">freeze</span>
 
@@ -1021,16 +1075,16 @@ onto the stack.</p>
 
 <h2 id="optstruminus">opt_str_uminus</h2>
 
-<h3 id="summary-39">Summary</h3>
+<h3 id="summary-41">Summary</h3>
 
 <p><code>opt_str_uminus</code> pushes a frozen known string value with no interpolation
 onto the stack.</p>
 
-<h3 id="tracepoint-39">TracePoint</h3>
+<h3 id="tracepoint-41">TracePoint</h3>
 
 <p><code>opt_str_uminus</code> does not dispatch any events.</p>
 
-<h3 id="usage-39">Usage</h3>
+<h3 id="usage-41">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">-</span><span class="s2">"string"</span>
 
@@ -1041,17 +1095,17 @@ onto the stack.</p>
 
 <h2 id="optsucc">opt_succ</h2>
 
-<h3 id="summary-40">Summary</h3>
+<h3 id="summary-42">Summary</h3>
 
 <p><code>opt_succ</code> is a specialization of the <code>opt_send_without_block</code> instruction
 when the method being called is <code>succ</code>. Fast paths exist within CRuby when
 the receiver is either a String or a Fixnum.</p>
 
-<h3 id="tracepoint-40">TracePoint</h3>
+<h3 id="tracepoint-42">TracePoint</h3>
 
 <p><code>opt_succ</code> can dispatch <code>c_call</code> and <code>c_return</code> events.</p>
 
-<h3 id="usage-40">Usage</h3>
+<h3 id="usage-42">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">""</span><span class="p">.</span><span class="nf">succ</span>
 
@@ -1063,15 +1117,15 @@ the receiver is either a String or a Fixnum.</p>
 
 <h2 id="pop">pop</h2>
 
-<h3 id="summary-41">Summary</h3>
+<h3 id="summary-43">Summary</h3>
 
 <p><code>pop</code> pops the top value off the stack.</p>
 
-<h3 id="tracepoint-41">TracePoint</h3>
+<h3 id="tracepoint-43">TracePoint</h3>
 
 <p><code>pop</code> does not dispatch any events.</p>
 
-<h3 id="usage-41">Usage</h3>
+<h3 id="usage-43">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">a</span> <span class="o">||=</span> <span class="mi">2</span>
 
@@ -1090,15 +1144,15 @@ the receiver is either a String or a Fixnum.</p>
 
 <h2 id="putnil">putnil</h2>
 
-<h3 id="summary-42">Summary</h3>
+<h3 id="summary-44">Summary</h3>
 
 <p><code>putnil</code> pushes a global nil object onto the stack.</p>
 
-<h3 id="tracepoint-42">TracePoint</h3>
+<h3 id="tracepoint-44">TracePoint</h3>
 
 <p><code>putnil</code> can dispatch the line event.</p>
 
-<h3 id="usage-42">Usage</h3>
+<h3 id="usage-44">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kp">nil</span>
 
@@ -1109,15 +1163,15 @@ the receiver is either a String or a Fixnum.</p>
 
 <h2 id="putobject">putobject</h2>
 
-<h3 id="summary-43">Summary</h3>
+<h3 id="summary-45">Summary</h3>
 
 <p><code>putobject</code> pushes a known value onto the stack.</p>
 
-<h3 id="tracepoint-43">TracePoint</h3>
+<h3 id="tracepoint-45">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-43">Usage</h3>
+<h3 id="usage-45">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">5</span>
 
@@ -1128,17 +1182,17 @@ the receiver is either a String or a Fixnum.</p>
 
 <h2 id="putobjectint2fix0">putobject_int2fix_0</h2>
 
-<h3 id="summary-44">Summary</h3>
+<h3 id="summary-46">Summary</h3>
 
 <p><code>putobject_INT2FIX_0_</code> pushes 0 on the stack.
 It is a specialized instruction resulting from the operand
 unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
-<h3 id="tracepoint-44">TracePoint</h3>
+<h3 id="tracepoint-46">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-44">Usage</h3>
+<h3 id="usage-46">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">0</span>
 
@@ -1149,17 +1203,17 @@ unification optimization. It is the equivalent to <code>putobject 0</code>.</p>
 
 <h2 id="putobjectint2fix1">putobject_int2fix_1</h2>
 
-<h3 id="summary-45">Summary</h3>
+<h3 id="summary-47">Summary</h3>
 
 <p><code>putobject_INT2FIX_1_</code> pushes 1 on the stack.
 It is a specialized instruction resulting from the operand
 unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
-<h3 id="tracepoint-45">TracePoint</h3>
+<h3 id="tracepoint-47">TracePoint</h3>
 
 <p><code>putobject</code> can dispatch the line event.</p>
 
-<h3 id="usage-45">Usage</h3>
+<h3 id="usage-47">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mi">1</span>
 
@@ -1170,15 +1224,15 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h2 id="putself">putself</h2>
 
-<h3 id="summary-46">Summary</h3>
+<h3 id="summary-48">Summary</h3>
 
 <p><code>putself</code> pushes the current value of self onto the stack.</p>
 
-<h3 id="tracepoint-46">TracePoint</h3>
+<h3 id="tracepoint-48">TracePoint</h3>
 
 <p><code>putself</code> can dispatch the line event.</p>
 
-<h3 id="usage-46">Usage</h3>
+<h3 id="usage-48">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">puts</span> <span class="s2">"Hello, world!"</span>
 
@@ -1191,15 +1245,15 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h2 id="putstring">putstring</h2>
 
-<h3 id="summary-47">Summary</h3>
+<h3 id="summary-49">Summary</h3>
 
 <p><code>putstring</code> pushes a string literal onto the stack.</p>
 
-<h3 id="tracepoint-47">TracePoint</h3>
+<h3 id="tracepoint-49">TracePoint</h3>
 
 <p><code>putstring</code> can dispatch the line event.</p>
 
-<h3 id="usage-47">Usage</h3>
+<h3 id="usage-49">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"foo"</span>
 
@@ -1210,15 +1264,15 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h2 id="setglobal">setglobal</h2>
 
-<h3 id="summary-48">Summary</h3>
+<h3 id="summary-50">Summary</h3>
 
 <p><code>setglobal</code> sets the value of a global variable.</p>
 
-<h3 id="tracepoint-48">TracePoint</h3>
+<h3 id="tracepoint-50">TracePoint</h3>
 
 <p><code>setglobal</code> does not dispatch any events.</p>
 
-<h3 id="usage-48">Usage</h3>
+<h3 id="usage-50">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
 
@@ -1231,17 +1285,17 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h2 id="setlocalwc0">setlocal_wc_0</h2>
 
-<h3 id="summary-49">Summary</h3>
+<h3 id="summary-51">Summary</h3>
 
 <p><code>setlocal_WC_0</code> is a specialized version of the <code>setlocal</code> instruction. It
 sets the value of a local variable on the current frame to the value at the
 top of the stack as determined by the index given as its only argument.</p>
 
-<h3 id="tracepoint-49">TracePoint</h3>
+<h3 id="tracepoint-51">TracePoint</h3>
 
 <p><code>setlocal_WC_0</code> does not dispatch any events.</p>
 
-<h3 id="usage-49">Usage</h3>
+<h3 id="usage-51">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 
@@ -1256,15 +1310,15 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <h2 id="swap">swap</h2>
 
-<h3 id="summary-50">Summary</h3>
+<h3 id="summary-52">Summary</h3>
 
 <p><code>swap</code> swaps the top two elements in the stack.</p>
 
-<h3 id="tracepoint-50">TracePoint</h3>
+<h3 id="tracepoint-52">TracePoint</h3>
 
 <p><code>swap</code> does not dispatch any events.</p>
 
-<h3 id="usage-50">Usage</h3>
+<h3 id="usage-52">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!!</span><span class="k">defined?</span><span class="p">([[]])</span>
 
