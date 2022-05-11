@@ -5,7 +5,7 @@ module YARV
   #
   # ### TracePoint
   #
-  # TODO
+  #  # `setn` does not dispatch any events.
   #
   # ### Usage
   #
