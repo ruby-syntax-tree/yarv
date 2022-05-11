@@ -20,7 +20,6 @@ module YARV
   # if x&.to_s
   #   puts "hi"
   # end
-  #
   # ~~~
   #
   class BranchNil

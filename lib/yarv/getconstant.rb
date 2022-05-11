@@ -14,7 +14,6 @@ module YARV
   #
   # ~~~ruby
   # Constant
-  #
   # ~~~
   #
   class GetConstant

@@ -11,7 +11,6 @@ module YARV
   #
   # ~~~ruby
   # {}[:key] = 'val'
-  #
   # ~~~
   #
   class Setn

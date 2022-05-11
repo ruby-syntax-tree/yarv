@@ -17,7 +17,6 @@ module YARV
   #
   # ~~~ruby
   # 2 != 2
-  #
   # ~~~
   #
   class OptNeq

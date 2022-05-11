@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # 3 < 4
-  #
   # ~~~
   #
   class OptLt

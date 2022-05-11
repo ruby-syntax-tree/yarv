@@ -12,7 +12,6 @@ module YARV
   #
   # ~~~ruby
   # [1, x = 2].max
-  #
   # ~~~
   #
   class OptNewArrayMax

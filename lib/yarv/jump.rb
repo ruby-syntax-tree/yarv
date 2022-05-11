@@ -19,7 +19,6 @@ module YARV
   # else
   #   puts "2"
   # end
-  #
   # ~~~
   #
   class Jump

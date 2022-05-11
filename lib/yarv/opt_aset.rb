@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # {}[:key] = 'val'
-  #
   # ~~~
   #
   class OptAset

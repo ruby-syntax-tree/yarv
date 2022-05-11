@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # :"#{"foo"}"
-  #
   # ~~~
   #
   class Intern

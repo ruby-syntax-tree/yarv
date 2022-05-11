@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # 3 - 2
-  #
   # ~~~
   #
   class OptMinus

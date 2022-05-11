@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # 7[2]
-  #
   # ~~~
   #
   class OptAref

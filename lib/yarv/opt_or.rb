@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # 2 | 3
-  #
   # ~~~
   #
   class OptOr

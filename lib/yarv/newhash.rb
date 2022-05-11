@@ -16,7 +16,6 @@ module YARV
   # def foo(key, value)
   #   { key => value }
   # end
-  #
   # ~~~
   #
   class NewHash

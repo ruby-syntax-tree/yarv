@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # { 'test' => true }['test']
-  #
   # ~~~
   #
   class OptArefWith

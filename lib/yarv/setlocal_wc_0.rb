@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # value = 5
-  #
   # ~~~
   #
   class SetLocalWC0

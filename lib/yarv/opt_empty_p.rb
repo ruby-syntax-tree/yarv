@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # "".empty?
-  #
   # ~~~
   #
   class OptEmptyP

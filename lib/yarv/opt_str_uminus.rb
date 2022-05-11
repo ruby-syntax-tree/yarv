@@ -14,7 +14,6 @@ module YARV
   #
   # ~~~ruby
   # -"string"
-  #
   # ~~~
   #
   class OptStrUMinus

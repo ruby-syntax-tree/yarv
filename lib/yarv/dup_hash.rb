@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # { a: 1 }
-  #
   # ~~~
   #
   class DupHash

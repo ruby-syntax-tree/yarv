@@ -16,7 +16,6 @@ module YARV
   # x = 0
   # y = 1
   # p (x..y), (x...y)
-  #
   # ~~~
   #
   class NewRange

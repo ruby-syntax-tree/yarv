@@ -20,7 +20,6 @@ module YARV
   #
   # ~~~ruby
   # "#{5}"
-  #
   # ~~~
   #
   class AnyToString

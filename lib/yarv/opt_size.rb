@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # "".size
-  #
   # ~~~
   #
   class OptSize

@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # puts "Hello, world!"
-  #
   # ~~~
   #
   class PutSelf

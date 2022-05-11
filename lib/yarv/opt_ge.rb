@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # 4 >= 3
-  #
   # ~~~
   #
   class OptGe

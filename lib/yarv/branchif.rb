@@ -19,7 +19,6 @@ module YARV
   # x = true
   # x ||= "foo"
   # puts x
-  #
   # ~~~
   #
   class BranchIf

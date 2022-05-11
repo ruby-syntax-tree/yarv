@@ -14,7 +14,6 @@ module YARV
   #
   # ~~~ruby
   # "hello".freeze
-  #
   # ~~~
   #
   class OptStrFreeze

@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # a ||= 2
-  #
   # ~~~
   #
   class Pop

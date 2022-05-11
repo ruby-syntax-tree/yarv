@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # $global = 5
-  #
   # ~~~
   #
   class SetGlobal

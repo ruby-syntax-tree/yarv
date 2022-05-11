@@ -15,7 +15,6 @@ module YARV
   #
   # ~~~ruby
   # 1
-  #
   # ~~~
   #
   class PutObjectInt2Fix1

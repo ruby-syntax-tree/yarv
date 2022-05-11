@@ -19,7 +19,6 @@ module YARV
   # if 2 + 3
   #   puts "foo"
   # end
-  #
   # ~~~
   #
   class BranchUnless

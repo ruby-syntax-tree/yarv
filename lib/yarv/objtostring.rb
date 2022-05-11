@@ -17,7 +17,6 @@ module YARV
   #
   # ~~~ruby
   # "#{5}"
-  #
   # ~~~
   #
   class ObjToString

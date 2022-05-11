@@ -13,7 +13,6 @@ module YARV
   #
   # ~~~ruby
   # !true
-  #
   # ~~~
   #
   class OptNot
