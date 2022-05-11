@@ -37,13 +37,12 @@ module YARV
     end
 
     def call(context)
-      receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      result =
-        context.call_method(call_data, receiver, arguments) do
-          block_iseq.eval(context)
+      arguments = context.stack.pop(call_data.argc + 1)
+      block_iseq.eval(context) do
+        arguments.each_with_index do |argument, index|
+          context.current_frame.locals[index] = argument
         end
-
-      context.stack.push(result)
+      end
     end
 
     def to_s
