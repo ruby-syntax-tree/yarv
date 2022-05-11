@@ -318,6 +318,8 @@ module YARV
           @insns << OptLe.new(CallData.new(:<=, 1, flag))
         in :opt_lt, { mid: :<, orig_argc: 1, flag: }
           @insns << OptLt.new(CallData.new(:<, 1, flag))
+        in :opt_ltlt, { mid: :<<, orig_argc: 1, flag: }
+          @insns << OptLtLt.new(CallData.new(:<<, 1, flag))
         in :opt_nil_p, { mid: :nil?, orig_argc: 0, flag: }
           @insns << OptNilP.new(CallData.new(:nil?, 0, flag))
         in :opt_getinlinecache, label, cache
