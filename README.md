@@ -22,6 +22,8 @@ To learn more about this kind of content, there are a number of articles and blo
 * https://i.loveruby.net/ja/rhg/book/ - (Jul 2004) Ruby source code complete explanation
 * https://magazine.rubyist.net/articles/0006/0006-YarvManiacs.html - (May 2005) YARV maniacs
 * http://graysoftinc.com/the-ruby-vm-interview/the-ruby-vm-serial-interview - (Feb 2007) The Ruby VM Serial Interview
+* https://lifegoo.pluskid.org/upload/doc/yarv/yarv_iset.html - (Apr 2008) YARV instruction set
+* https://patshaughnessy.net/2012/6/29/how-ruby-executes-your-code - (Jun 2012) How Ruby Executes Your Code (excerpt from _Ruby Under a Microscope_)
 * http://www.atdot.net/~ko1/diary/201212.html#d1 - (Dec 2012) ko1's 2012 Ruby VM advent calendar
 * https://qiita.com/sisshiki1969/items/3d25aa81a376eee2e7c2 - (Dec 2019) Ruby made with Rust
 * https://iliabylich.github.io/2020/01/25/evaluating-ruby-in-ruby.html - (Jan 2020) Evaluating Ruby in Ruby
