@@ -278,6 +278,8 @@ module YARV
           @insns << OptSendWithoutBlock.new(CallData.new(mid, orig_argc, flag))
         in :opt_setinlinecache, cache
           @insns << OptSetInlineCache.new(cache)
+        in :opt_size, { mid: :size, orig_argc: 0, flag: }
+          @insns << OptSize.new(CallData.new(:size, 0, flag))
         in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0, flag: }
           @insns << OptStrFreeze.new(value, CallData.new(:freeze, 0, flag))
         in :opt_str_uminus, value, { mid: :-@, orig_argc: 0, flag: }
