@@ -13,11 +13,6 @@ module YARV
   #
   # ~~~ruby
   # ["string"]
-  #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,10)> (catch: FALSE)
-  # # 0000 putstring                              "string"                  (   1)[Li]
-  # # 0002 newarray                               1
-  # # 0004 leave
   # ~~~
   #
   class NewArray

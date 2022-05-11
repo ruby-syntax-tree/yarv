@@ -18,11 +18,22 @@ filepaths.each do |filepath|
   ast => { statements: { body: [*, SyntaxTree::ModuleDeclaration => mod] } }
   mod => { constant: { constant: { value: "YARV" } }, bodystmt: { statements: { body: [SyntaxTree::VoidStmt, *comments, SyntaxTree::ClassDeclaration] } } }
 
+  formatted_comments = comments.map { |comment| comment.value[2..-1] }.join("\n")
+
+  # Extract the ruby code block from the comments, generate the instruction
+  # sequence for it, and then inject the commented sequence into the block
+  ruby_code = formatted_comments.match(/~~~ruby\n([\S\s]*)~~~/)[1]
+
+  disasm = RubyVM::InstructionSequence.new(ruby_code).disasm
+  disasm.gsub!(/^/, "# ")
+
+  formatted_comments.gsub!(/^~~~\n$/, "\n" + disasm + "~~~\n")
+
   # Write the comments out in their own section.
   markdown.puts(<<~MARKDOWN)
     ## #{File.basename(filepath, ".rb")}
 
-    #{comments.map { |comment| comment.value[2..-1] }.join("\n")}
+    #{formatted_comments}
   MARKDOWN
 end
 
