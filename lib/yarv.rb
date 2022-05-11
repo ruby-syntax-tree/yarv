@@ -295,6 +295,8 @@ module YARV
           @insns << OptAnd.new(CallData.new(:&, 1, flag))
         in :opt_aref, { mid: :[], orig_argc: 1, flag: }
           @insns << OptAref.new(CallData.new(:[], 1, flag))
+        in :opt_aset, { mid: :[]=, orig_argc: 2 }
+          @insns << OptAset.new(CallData.new(:[]=, 2, flag))
         in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
           @insns << OptArefWith.new(key, CallData.new(:[], 1, flag))
         in :opt_div, { mid: :/, orig_argc: 1, flag: }
@@ -366,6 +368,8 @@ module YARV
           @insns << PutString.new(string)
         in :setglobal, name
           @insns << SetGlobal.new(name)
+        in :setn, index
+          @insns << Setn.new(index)
         in :setlocal_WC_0, offset
           index = local_index(offset)
           @insns << SetLocalWC0.new(locals[index], index)
