@@ -86,6 +86,7 @@
 <a href="#setn">setn</a>
 <a href="#swap">swap</a>
 <a href="#topn">topn</a>
+<a href="#toregexp">toregexp</a>
 
 
   </nav>
@@ -1690,6 +1691,43 @@ stack and pushes it on the stack.</p>
 <span class="c1"># 0015 putstring                              "foo"</span>
 <span class="c1"># 0017 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0019 leave</span>
+</code></pre></div></div>
+
+<h2 id="toregexp">toregexp</h2>
+
+<h3 id="summary-63">Summary</h3>
+
+<p><code>toregexp</code> is generated when string interpolation is used inside a regex
+literal <code>//</code>. It pops a defined number of values from the stack, combines
+them into a single string and coerces that string into a <code>Regexp</code> object,
+which it pushes back onto the stack</p>
+
+<h3 id="tracepoint-63">TracePoint</h3>
+
+<p><code>toregexp</code> cannot dispatch any TracePoint events.</p>
+
+<h3 id="usage-63">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"/</span><span class="si">#{</span><span class="kp">true</span><span class="si">}</span><span class="s2">/"</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,9)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putobject                              ""                        (   1)[Li]</span>
+<span class="c1"># 0002 putobject                              true</span>
+<span class="c1"># 0004 dup</span>
+<span class="c1"># 0005 objtostring                            &lt;calldata!mid:to_s, argc:0, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0007 anytostring</span>
+<span class="c1"># 0008 toregexp                               0, 2</span>
+<span class="c1"># 0011 leave</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putobject                              "/"                       (   1)[Li]</span>
+<span class="c1"># 0002 putobject                              true</span>
+<span class="c1"># 0004 dup</span>
+<span class="c1"># 0005 objtostring                            &lt;calldata!mid:to_s, argc:0, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0007 anytostring</span>
+<span class="c1"># 0008 putobject                              "/"</span>
+<span class="c1"># 0010 concatstrings                          3</span>
+<span class="c1"># 0012 leave</span>
 </code></pre></div></div>
 
 
