@@ -1,4 +1,8 @@
 html, body {
+  --primary-color: #008080;
+  font-family: "Source Serif Pro", serif;
+  font-size: 16px;
+  line-height: 1.2em;
   margin: 0;
 }
 
@@ -8,29 +12,60 @@ main {
 
 aside {
   background-color: #f6f6f6;
+  box-shadow: 1px 0 3px 0px rgb(0 0 0 / 33%);
+  min-height: 100vh;
+}
+
+header {
+  background-color: #666;
+}
+
+header h1 {
+  color: white;
+  margin: 0;
+  padding: 0.5em 1em;
+  white-space: nowrap;
 }
 
 nav {
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   max-height: 100vh;
   overflow-y: auto;
-  padding: 0.5em;
+  padding: 1em;
   position: sticky;
   top: 0;
 }
 
 nav a {
   border-radius: 5px;
-  color: #0000ee;
-  padding: 0.3em 1em;
+  color: var(--primary-color);
+  padding: 0.5em 3em 0.5em 1em;
   text-decoration: none;
 }
 
 nav a:hover {
-  background: #eee;
+  background: #ddd;
 }
 
 article {
-  padding: 0 1em;
+  box-sizing: border-box;
+  flex-grow: 1;
+  padding: 0 2em 2em;
+}
+
+article h2 {
+  border-bottom: 2px solid currentColor;
+  color: var(--primary-color);
+  margin-top: 1.5em;
+  padding-bottom: 0.2em;
+}
+
+article h2:first-child {
+  margin-right: 2em;
+}
+
+article h3 {
+  font-size: 1.5em;
 }
