@@ -250,6 +250,11 @@ module YARV
           @insns << OptEmptyP.new(CallData.new(:empty?, 0, flag))
         in :opt_eq, { mid: :==, orig_argc: 1, flag: }
           @insns << OptEq.new(CallData.new(:==, 1, flag))
+        in :opt_neq, eq_cd, neq_cd
+          @insns << OptNeq.new(
+            CallData.new(:==, 1, eq_cd.fetch(:flag)),
+            CallData.new(:!=, 1, neq_cd.fetch(:flag))
+          )
         in :opt_ge, { mid: :>=, orig_argc: 1, flag: }
           @insns << OptGe.new(CallData.new(:>=, 1, flag))
         in :opt_gt, { mid: :>, orig_argc: 1, flag: }
