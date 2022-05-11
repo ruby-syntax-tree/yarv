@@ -381,6 +381,8 @@ module YARV
           @insns << Swap.new
         in :topn, n
           @insns << TopN.new(n)
+        in :toregexp, opts, cnt
+          @insns << Toregexp.new(opts, cnt)
         end
       end
     end
