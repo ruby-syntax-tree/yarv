@@ -375,6 +375,8 @@ module YARV
           @insns << SetLocalWC0.new(locals[index], index)
         in [:swap]
           @insns << Swap.new
+        in :toregexp, opts, cnt
+          @insns << Toregexp.new(opts, cnt)
         end
       end
     end
