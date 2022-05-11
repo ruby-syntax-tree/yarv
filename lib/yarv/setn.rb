@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
 module YARV
   # ### Summary
   #
-  # `opt_aset` is an instruction for `recv[obj] = set` format # TODO expand me
+  # `setn` is an instruction for set Nth stack entry to stack top
   #
   # ### TracePoint
   #
@@ -25,22 +23,19 @@ module YARV
   # 0012 leave
   # ~~~
   #
-  class OptAset
-    attr_reader :call_data
+  class Setn
+    attr_reader :index
 
-    def initialize(call_data)
-      @call_data = call_data
+    def initialize(index)
+      @index = index
     end
 
     def call(context)
-      receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      result = context.call_method(call_data, receiver, arguments)
-
-      context.stack.push(result)
+      context.stack[-index - 1] = context.stack.last
     end
 
     def to_s
-      "%-38s %s%s" % ["opt_aset", call_data, "[CcCr]"]
+      "%-38s %s" % ["setn", index]
     end
   end
 end
