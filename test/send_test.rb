@@ -9,10 +9,7 @@ module YARV
         true.tap { |i| p i }
       SOURCE
 
-      assert_insns(
-        [PutObject, Send, Leave],
-        source
-      )
+      assert_insns([PutObject, Send, Leave], source)
       iseq = YARV.compile(source)
       assert_equal(
         [PutSelf, GetLocalWC0, OptSendWithoutBlock, Leave],
