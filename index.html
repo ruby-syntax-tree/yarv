@@ -85,6 +85,7 @@
 <a href="#setlocalwc0">setlocal_wc_0</a>
 <a href="#setn">setn</a>
 <a href="#swap">swap</a>
+<a href="#topn">topn</a>
 
 
   </nav>
@@ -1640,6 +1641,55 @@ top of the stack as determined by the index given as its only argument.</p>
 <span class="c1"># 0005 opt_not                                &lt;calldata!mid:!, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0007 opt_not                                &lt;calldata!mid:!, argc:0, ARGS_SIMPLE&gt;[CcCr]</span>
 <span class="c1"># 0009 leave</span>
+</code></pre></div></div>
+
+<h2 id="topn">topn</h2>
+
+<h3 id="summary-62">Summary</h3>
+
+<p><code>topn</code> has one argument: <code>n</code>. It gets the nth element from the top of the
+stack and pushes it on the stack.</p>
+
+<h3 id="tracepoint-62">TracePoint</h3>
+
+<p><code>topn</code> does not dispatch any events.</p>
+
+<h3 id="usage-62">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="mi">3</span>
+<span class="k">when</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span>
+  <span class="nb">puts</span> <span class="s2">"foo"</span>
+<span class="k">end</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,36)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putobject                              3                         (   1)[Li]</span>
+<span class="c1"># 0002 putobject                              1..5</span>
+<span class="c1"># 0004 topn                                   1</span>
+<span class="c1"># 0006 opt_send_without_block                 &lt;calldata!mid:===, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0008 branchif                               13</span>
+<span class="c1"># 0010 pop</span>
+<span class="c1"># 0011 putnil</span>
+<span class="c1"># 0012 leave</span>
+<span class="c1"># 0013 pop</span>
+<span class="c1"># 0014 putself</span>
+<span class="c1"># 0015 putstring                              "foo"</span>
+<span class="c1"># 0017 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0019 leave</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(4,3)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putobject                              3                         (   1)[Li]</span>
+<span class="c1"># 0002 putobject                              1..5                      (   2)</span>
+<span class="c1"># 0004 topn                                   1</span>
+<span class="c1"># 0006 opt_send_without_block                 &lt;calldata!mid:===, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0008 branchif                               13</span>
+<span class="c1"># 0010 pop                                                              (   1)</span>
+<span class="c1"># 0011 putnil</span>
+<span class="c1"># 0012 leave                                                            (   3)</span>
+<span class="c1"># 0013 pop                                                              (   2)</span>
+<span class="c1"># 0014 putself                                                          (   3)[Li]</span>
+<span class="c1"># 0015 putstring                              "foo"</span>
+<span class="c1"># 0017 opt_send_without_block                 &lt;calldata!mid:puts, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0019 leave</span>
 </code></pre></div></div>
 
 
