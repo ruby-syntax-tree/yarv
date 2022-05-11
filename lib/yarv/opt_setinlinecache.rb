@@ -36,8 +36,8 @@ module YARV
       # to do anything in this instruction.
     end
 
-    def pretty_print(q)
-      q.text("opt_setinlinecache")
+    def to_s
+      "%-38s <is:%d>" % ["opt_setinlinecache", cache]
     end
   end
 end

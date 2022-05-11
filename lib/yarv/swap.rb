@@ -39,8 +39,8 @@ module YARV
       context.stack.push(left)
     end
 
-    def pretty_print(q)
-      q.text("swap")
+    def to_s
+      "swap"
     end
   end
 end

@@ -32,8 +32,8 @@ module YARV
       context.stack.pop
     end
 
-    def pretty_print(q)
-      q.text("pop")
+    def to_s
+      "pop"
     end
   end
 end

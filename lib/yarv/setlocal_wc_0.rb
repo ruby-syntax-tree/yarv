@@ -26,9 +26,10 @@ module YARV
   # ~~~
   #
   class SetLocalWC0
-    attr_reader :index
+    attr_reader :name, :index
 
-    def initialize(index)
+    def initialize(name, index)
+      @name = name
       @index = index
     end
 
@@ -37,8 +38,8 @@ module YARV
       context.current_frame.set_local(index, value)
     end
 
-    def pretty_print(q)
-      q.text("setlocal_WC_0 level=0 index=#{index}")
+    def to_s
+      "%-38s %s@%d" % ["setlocal_WC_0", name, index]
     end
   end
 end

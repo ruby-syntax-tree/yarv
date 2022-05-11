@@ -38,8 +38,8 @@ module YARV
       context.define_method(context.current_iseq.selfo, name, iseq)
     end
 
-    def pretty_print(q)
-      q.text("definemethod #{name.inspect}")
+    def to_s
+      "%-38s %s, %s" % ["definemethod", name.inspect, iseq.name]
     end
   end
 end

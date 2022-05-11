@@ -40,8 +40,9 @@ module YARV
       context.stack.push(nil)
     end
 
-    def pretty_print(q)
-      q.text("opt_getinlinecache")
+    def to_s
+      "%-38s %s, <is:%d>" %
+        ["opt_getinlinecache", label["label_".length..], cache]
     end
   end
 end
