@@ -299,6 +299,8 @@ module YARV
           @insns << OptAset.new(CallData.new(:[]=, 2, flag))
         in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
           @insns << OptArefWith.new(key, CallData.new(:[], 1, flag))
+        in :opt_case_dispatch, cdhash, offset
+          @insns << OptCaseDispatch.new(cdhash, offset)
         in :opt_div, { mid: :/, orig_argc: 1, flag: }
           @insns << OptDiv.new(CallData.new(:/, 1, flag))
         in :opt_empty_p, { mid: :empty?, orig_argc: 0, flag: }
@@ -377,6 +379,8 @@ module YARV
           @insns << SetLocalWC0.new(locals[index], index)
         in [:swap]
           @insns << Swap.new
+        in :topn, n
+          # skip for now
         end
       end
     end
