@@ -14,7 +14,8 @@ module YARV
   # ### Usage
   #
   # ~~~ruby
-  # value = 5; value
+  # value = 5
+  # value
   #
   # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,16)> (catch: FALSE)
   # # local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])

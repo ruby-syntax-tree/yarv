@@ -20,7 +20,6 @@ module YARV
   # # 0000 duphash                                {"test"=>true}            (   1)[Li]
   # # 0002 opt_aref_with                          "test", <calldata!mid:[], argc:1, ARGS_SIMPLE>
   # # 0005 leave
-  #
   # ~~~
   #
   class OptArefWith

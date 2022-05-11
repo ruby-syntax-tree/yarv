@@ -16,10 +16,10 @@ module YARV
   # ~~~ruby
   # "".length
   #
-  # #== disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,9)> (catch: FALSE)
-  # #0000 putstring                              ""                        (   1)[Li]
-  # #0002 opt_length                             <calldata!mid:length, argc:0, ARGS_SIMPLE>[CcCr]
-  # #0004 leave
+  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,9)> (catch: FALSE)
+  # # 0000 putstring                              ""                        (   1)[Li]
+  # # 0002 opt_length                             <calldata!mid:length, argc:0, ARGS_SIMPLE>[CcCr]
+  # # 0004 leave
   # ~~~
   #
   class OptLength
