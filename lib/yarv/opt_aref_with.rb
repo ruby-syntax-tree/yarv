@@ -15,11 +15,6 @@ module YARV
   #
   # ~~~ruby
   # { 'test' => true }['test']
-  #
-  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,26)> (catch: FALSE)
-  # # 0000 duphash                                {"test"=>true}            (   1)[Li]
-  # # 0002 opt_aref_with                          "test", <calldata!mid:[], argc:1, ARGS_SIMPLE>
-  # # 0005 leave
   # ~~~
   #
   class OptArefWith

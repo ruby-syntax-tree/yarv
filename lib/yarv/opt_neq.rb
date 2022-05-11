@@ -17,12 +17,6 @@ module YARV
   #
   # ~~~ruby
   # 2 != 2
-  #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,6)> (catch: FALSE)
-  # # 0000 putobject                              2                         (   1)[Li]
-  # # 0002 putobject                              2
-  # # 0004 opt_neq                                <calldata!mid:==, argc:1, ARGS_SIMPLE>, <calldata!mid:!=, argc:1, ARGS_SIMPLE>[CcCr]
-  # # 0007 leave
   # ~~~
   #
   class OptNeq

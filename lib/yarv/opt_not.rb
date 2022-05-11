@@ -13,11 +13,6 @@ module YARV
   #
   # ~~~ruby
   # !true
-  #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,5)> (catch: FALSE)
-  # # 0000 putobject                              true                      (   1)[Li]
-  # # 0002 opt_not                                <calldata!mid:!, argc:0, ARGS_SIMPLE>[CcCr]
-  # # 0004 leave
   # ~~~
   #
   class OptNot
