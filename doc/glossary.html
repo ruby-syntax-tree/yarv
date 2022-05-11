@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=5">
+    <title>YARV</title>
+    <link rel="icon" href="favicon.svg">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro|Source+Serif+Pro&amp;display=swap">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="highlight.css">
+  </head>
+  <body>
+    <a href="https://github.com/kddnewton/yarv" style="position: absolute; right: 0; top: 0" aria-label="View source on GitHub">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 250 250" fill="white">
+        <path d="M0 0l115 115h15l12 27 108 108V0z" fill="var(--primary-color)" />
+        <path d="M128 109c-15-9-9-19-9-19 3-7 2-11 2-11-1-7 3-2 3-2 4 5 2 11 2 11-3 10 5 15 9 16" style="transform-origin: 130px 106px" />
+        <path d="M115 115s4 2 5 0l14-14c3-2 6-3 8-3-8-11-15-24 2-41 5-5 10-7 16-7 1-2 3-7 12-11 0 0 5 3 7 16 4 2 8 5 12 9s7 8 9 12c14 3 17 7 17 7-4 8-9 11-11 11 0 6-2 11-7 16-16 16-30 10-41 2 0 3-1 7-5 11l-12 11c-1 1 1 5 1 5z" />
+      </svg>
+    </a>
+    <main>
+      <aside>
+  <header>
+    <h1>Glossary of Terms</h1>
+  </header>
+  <nav>
+    <a href="#abstract-syntax-tree">abstract syntax tree</a>
+<a href="#argc">argc</a>
+<a href="#binding">binding</a>
+<a href="#branch">branch</a>
+<a href="#byte">byte</a>
+<a href="#bytecode">bytecode</a>
+<a href="#call-data">call data</a>
+<a href="#call-site">call site</a>
+<a href="#call-stack">call stack</a>
+<a href="#calling-convention">calling convention</a>
+<a href="#catch-table">catch table</a>
+<a href="#cd-hash">cd hash</a>
+<a href="#control-frame">control frame</a>
+
+  </nav>
+</aside>
+<article>
+  <h2 id="abstract-syntax-tree">abstract syntax tree</h2>
+
+<p>An intermediate data structure created by a compiler that is used as a representation of the source code.</p>
+
+<h2 id="argc">argc</h2>
+
+<p>Short for argument count. The number of values being sent as part of a method call to the receiver. This includes any kind of argument (positional, keyword, block, etc.).</p>
+
+<h2 id="binding">binding</h2>
+
+<p>An object that wraps a <a href="#control-frame">control frame</a> in the YARV virtual machine and retains its context for future use.</p>
+
+<h2 id="branch">branch</h2>
+
+<p>A place in a list of instructions where the next instruction to execute may no longer be the next instruction in sequence.</p>
+
+<h2 id="byte">byte</h2>
+
+<p>The byte is a unit of digital information that most commonly consists of eight bits.</p>
+
+<h2 id="bytecode">bytecode</h2>
+
+<p>A programming language consisting of simple, low-level instructions which are designed to be easy and fast to execute.</p>
+
+<h2 id="call-data">call data</h2>
+
+<p>Metadata about a specific call-site in the source. For example: <code>1.to_s</code> represents a single call-site. It has an <code>argc</code> of <code>0</code>, a <code>mid</code> (the ID of the method being called) of <code>:to_s</code>, and a <code>flag</code> value corresponding to <code>ARGS_SIMPLE</code>.</p>
+
+<h2 id="call-site">call site</h2>
+
+<p>Any place in source code where a method is called.</p>
+
+<h2 id="call-stack">call stack</h2>
+
+<p>A stack of bindings used to track the scope of the program when a new method or block is called. Every time a new method is called, this call is pushed onto the stack. When that call returns, it is popped off the stack.</p>
+
+<h2 id="calling-convention">calling convention</h2>
+
+<p>An low-level scheme for how methods receive parameters from their caller and how they return a result.</p>
+
+<h2 id="catch-table">catch table</h2>
+
+<p>A list of pointers to instructions in the bytecode that represent where to continue execution when the <code>throw</code> instruction is executed. This happens as a result of control-flow keywords like <code>break</code> and <code>next</code>.</p>
+
+<h2 id="cd-hash">cd hash</h2>
+
+<p>A Ruby hash used for handling optimized <code>case</code> statements. The keys are the conditions of <code>when</code> clauses in the <code>case</code> statement,
+and the values are the labels to which to jump. This optimization can be applied only when the keys can be directly compared. For example:</p>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="mi">1</span>
+<span class="k">when</span> <span class="mi">1</span>
+  <span class="nb">puts</span> <span class="s2">"foo"</span>
+<span class="k">else</span>
+  <span class="nb">puts</span> <span class="s2">"bar"</span>
+<span class="k">end</span>
+</code></pre></div></div>
+
+<h2 id="control-frame">control frame</h2>
+
+<p>An object that encapsulates the execution context at some particular place in the code. This includes things like local variables, the current value of <code>self</code>, etc.</p>
+
+</article>
+
+    </main>
+  </body>
+</html>
