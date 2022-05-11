@@ -10,6 +10,10 @@ main {
   display: flex;
 }
 
+a {
+  color: var(--primary-color);
+}
+
 aside {
   background-color: #f6f6f6;
   box-shadow: 1px 0 3px 0px rgb(0 0 0 / 33%);
@@ -40,7 +44,6 @@ nav {
 
 nav a {
   border-radius: 5px;
-  color: var(--primary-color);
   padding: 0.5em 3em 0.5em 1em;
   text-decoration: none;
 }
