@@ -15,8 +15,6 @@ module YARV
   #
   # ~~~ruby
   # def value = "value"
-  #
-  # #
   # ~~~
   #
   class DefineMethod
