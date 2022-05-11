@@ -27,7 +27,7 @@ module YARV
     end
 
     def to_s
-      "%-38s" % "intern"
+      "intern"
     end
   end
 end
