@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require_relative './getlocal'
 
 module YARV
   # ### Summary
@@ -26,21 +27,15 @@ module YARV
   # # 0006 leave
   # ~~~
   #
-  class GetLocalWC0
-    attr_reader :name, :index
-
+  class GetLocalWC0 < GetLocal
     def initialize(name, index)
-      @name = name
-      @index = index
+      super(name, index, 0)
     end
 
-    def call(context)
-      value = context.current_frame.get_local(index)
-      context.stack.push(value)
-    end
+    private
 
-    def to_s
-      "%-38s %s@%d" % ["getlocal_WC_0", name, index]
+    def instruction_name
+      "getlocal_WC_0"
     end
   end
 end

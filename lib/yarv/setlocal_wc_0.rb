@@ -25,21 +25,15 @@ module YARV
   # # 0005 leave
   # ~~~
   #
-  class SetLocalWC0
-    attr_reader :name, :index
-
+  class SetLocalWC0 < SetLocal
     def initialize(name, index)
-      @name = name
-      @index = index
+      super(name, index, 0)
     end
 
-    def call(context)
-      value = context.stack.pop
-      context.current_frame.set_local(index, value)
-    end
+    private
 
-    def to_s
-      "%-38s %s@%d" % ["setlocal_WC_0", name, index]
+    def instruction_name
+      "setlocal_WC_0"
     end
   end
 end

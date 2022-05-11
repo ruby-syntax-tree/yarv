@@ -240,6 +240,10 @@ module YARV
           @insns << NewHash.new(size)
         in :opt_and, { mid: :&, orig_argc: 1, flag: }
           @insns << OptAnd.new(CallData.new(:&, 1, flag))
+        in :opt_aset, { mid: :[]=, orig_argc: 2, flag: }
+          @insns << OptAset.new(CallData.new(:[]=, 2, flag))
+        in :opt_aset_with, key, { mid: :[]=, orig_argc: 2, flag: }
+          @insns << OptAsetWith.new(CallData.new(:[]=, 2, flag))
         in :opt_aref, { mid: :[], orig_argc: 1, flag: }
           @insns << OptAref.new(CallData.new(:[], 1, flag))
         in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
