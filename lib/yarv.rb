@@ -250,6 +250,8 @@ module YARV
           # skip for now
         in Symbol
           @labels[insn] = @insns.length
+        in [:anytostring]
+          @insns << AnyToString.new
         in :branchif, value
           @insns << BranchIf.new(value)
         in :branchnil, value
@@ -258,6 +260,8 @@ module YARV
           @insns << BranchUnless.new(value)
         in [:concatarray]
           @insns << ConcatArray.new
+        in :concatstrings, num
+          @insns << ConcatStrings.new(num)
         in :definemethod, name, iseq
           @insns << DefineMethod.new(name, InstructionSequence.new(selfo, iseq))
         in [:dup]
@@ -285,6 +289,8 @@ module YARV
           @insns << NewHash.new(size)
         in :newrange, exclude_end
           @insns << NewRange.new(exclude_end)
+        in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
+          @insns << ObjToString.new(CallData.new(:to_s, 0, flag))
         in :opt_and, { mid: :&, orig_argc: 1, flag: }
           @insns << OptAnd.new(CallData.new(:&, 1, flag))
         in :opt_aref, { mid: :[], orig_argc: 1, flag: }
