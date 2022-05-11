@@ -375,6 +375,8 @@ module YARV
           @insns << SetLocalWC0.new(locals[index], index)
         in [:swap]
           @insns << Swap.new
+        in :topn, n
+          @insns << TopN.new(n)
         end
       end
     end
