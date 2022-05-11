@@ -7,17 +7,17 @@ module YARV
   #
   # ### TracePoint
   #
-  # TODO
+  # # There is no trace point for `intern`.
   #
   # ### Usage
   #
   # ~~~ruby
   # :"#{"foo"}"
   #
-  # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,11)> (catch: FALSE)
-  #  0000 putstring                              "foo"                     (   1)[Li]
-  #  0002 intern
-  #  0003 leave
+  # # == disasm: #<ISeq:<compiled>@<compiled>:1 (1,0)-(1,11)> (catch: FALSE)
+  # # 0000 putstring                              "foo"                     (   1)[Li]
+  # # 0002 intern
+  # # 0003 leave
   # ~~~
   #
   class Intern
