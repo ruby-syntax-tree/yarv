@@ -26,7 +26,7 @@ module YARV
 
       raise LoadError, "cannot load such file -- #{filename}" unless file_path
 
-      return false if context.globals[:$"].include?(file_path)
+      return false if context.globals[:"$\""].include?(file_path)
 
       iseq =
         File.open(file_path, "r") do |f|
@@ -133,7 +133,7 @@ module YARV
     def initialize
       @stack = []
       # Steal the LOAD_PATHS from the host but not LOADED_FEATURES
-      @globals = { :$: => $:, :$" => [] }
+      @globals = { :$: => $:, :"$\"" => [] }
       @methods = {}
       @frames = []
       @program_counter = 0
