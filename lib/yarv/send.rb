@@ -41,13 +41,18 @@ module YARV
       if block_iseq.nil?
         result = context.call_method(call_data, receiver, arguments)
       else
-        result = context.call_method(call_data, receiver, arguments) do |*block_arguments|
-          context.eval(block_iseq) do
-            block_arguments.each_with_index do |block_argument, index|
-              context.current_frame.locals[index] = block_argument
+        result =
+          context.call_method(
+            call_data,
+            receiver,
+            arguments
+          ) do |*block_arguments|
+            context.eval(block_iseq) do
+              block_arguments.each_with_index do |block_argument, index|
+                context.current_frame.locals[index] = block_argument
+              end
             end
           end
-        end
       end
 
       context.stack.push(result)

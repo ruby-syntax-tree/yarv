@@ -373,7 +373,8 @@ module YARV
         in :putstring, string
           @insns << PutString.new(string)
         in :send, { mid:, orig_argc:, flag: }, block_iseq
-          block_iseq = InstructionSequence.new(selfo, block_iseq) unless block_iseq.nil?
+          block_iseq =
+            InstructionSequence.new(selfo, block_iseq) unless block_iseq.nil?
           @insns << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
         in :setglobal, name
           @insns << SetGlobal.new(name)
