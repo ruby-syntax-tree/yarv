@@ -50,7 +50,7 @@ module YARV
     end
 
     def to_s
-      "%-38s %s, block in <main>" % ["send", call_data]
+      "%-38s %s, %s" % ["send", call_data, block_iseq.name]
     end
   end
 end
