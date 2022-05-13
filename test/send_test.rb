@@ -18,5 +18,16 @@ module YARV
 
       assert_stdout("true\n", source)
     end
+
+    def test_compile_returns_correct_instructions_2
+      source = "puts 'hello'"
+      iseq = YARV.compile(source, specialized_instruction: false)
+      assert_equal(
+        [PutSelf, PutString, Send, Leave],
+        iseq.insns.map(&:class)
+      )
+
+      assert_stdout("hello\n", source)
+    end
   end
 end

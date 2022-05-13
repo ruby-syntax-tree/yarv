@@ -38,10 +38,14 @@ module YARV
 
     def call(context)
       receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      result = context.call_method(call_data, receiver, arguments) do |*block_arguments|
-        context.eval(block_iseq) do
-          block_arguments.each_with_index do |block_argument, index|
-            context.current_frame.locals[index] = block_argument
+      if block_iseq.nil?
+        result = context.call_method(call_data, receiver, arguments)
+      else
+        result = context.call_method(call_data, receiver, arguments) do |*block_arguments|
+          context.eval(block_iseq) do
+            block_arguments.each_with_index do |block_argument, index|
+              context.current_frame.locals[index] = block_argument
+            end
           end
         end
       end
