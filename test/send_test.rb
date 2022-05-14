@@ -4,7 +4,7 @@ require_relative "test_case"
 
 module YARV
   class SendTest < TestCase
-    def test_compile_returns_correct_instructions
+    def test_executes_correctly
       source = <<~SOURCE
         true.tap { |i| p i }
       SOURCE
@@ -19,7 +19,7 @@ module YARV
       assert_stdout("true\n", source)
     end
 
-    def test_compile_returns_correct_instructions_2
+    def test_executes_without_block_correctly
       source = "puts 'hello'"
       iseq = YARV.compile(source, specialized_instruction: false)
       assert_equal([PutSelf, PutString, Send, Leave], iseq.insns.map(&:class))
