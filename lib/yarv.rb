@@ -150,8 +150,10 @@ module YARV
     # simply the popped values off the top of the stack. It is the
     # responsibility of this method to ensure that they get copied into the
     # locals table in the correct order.
-    def call_method(call_data, receiver, arguments)
+    def call_method(call_data, receiver, arguments, &block)
       if (method = methods[[receiver.class, call_data.mid]])
+        # TODO: handle InvokeBlock
+
         # We only support a subset of the valid argument permutations. This
         # validates each kind to make sure we don't accidentally try to handle a
         # method that we currently don't support.
@@ -174,7 +176,7 @@ module YARV
       elsif receiver.is_a?(Main) && call_data.mid == :require
         receiver.send(call_data.mid, self, *arguments)
       else
-        receiver.send(call_data.mid, *arguments)
+        receiver.send(call_data.mid, *arguments, &block)
       end
     end
 
@@ -370,6 +372,10 @@ module YARV
           @insns << PutSelf.new(selfo)
         in :putstring, string
           @insns << PutString.new(string)
+        in :send, { mid:, orig_argc:, flag: }, block_iseq
+          block_iseq =
+            InstructionSequence.new(selfo, block_iseq) unless block_iseq.nil?
+          @insns << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
         in :setglobal, name
           @insns << SetGlobal.new(name)
         in :setn, index
