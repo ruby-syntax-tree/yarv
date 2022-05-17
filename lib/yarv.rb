@@ -379,7 +379,7 @@ module YARV
         in :setglobal, name
           @insns << SetGlobal.new(name)
         in :setn, index
-          @insns << Setn.new(index)
+          @insns << SetN.new(index)
         in :setlocal_WC_0, offset
           index = local_index(offset)
           @insns << SetLocalWC0.new(locals[index], index)
@@ -388,7 +388,7 @@ module YARV
         in :topn, n
           @insns << TopN.new(n)
         in :toregexp, opts, cnt
-          @insns << Toregexp.new(opts, cnt)
+          @insns << ToRegexp.new(opts, cnt)
         end
       end
     end

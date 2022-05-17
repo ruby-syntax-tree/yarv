@@ -3,10 +3,10 @@
 require_relative "test_case"
 
 module YARV
-  class ToregexpTest < TestCase
+  class ToRegexpTest < TestCase
     def test_execute
       assert_insns(
-        [PutObject, PutObject, Dup, ObjToString, AnyToString, Toregexp, Leave],
+        [PutObject, PutObject, Dup, ObjToString, AnyToString, ToRegexp, Leave],
         '/#{true}/'
       )
       assert_stdout("\"/true/\"\n", 'p "/#{true}/"')
@@ -14,7 +14,7 @@ module YARV
 
     def test_execute_multiple_interpolations
       assert_insns(
-        [PutObject, PutObject, Dup, ObjToString, AnyToString, Toregexp, Leave],
+        [PutObject, PutObject, Dup, ObjToString, AnyToString, ToRegexp, Leave],
         '/#{true}/'
       )
       assert_stdout("\"/true 5/\"\n", 'p "/#{true} #{5}/"')

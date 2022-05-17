@@ -13,7 +13,7 @@ module YARV
   # {}[:key] = 'val'
   # ~~~
   #
-  class Setn
+  class SetN
     attr_reader :index
 
     def initialize(index)
@@ -21,7 +21,7 @@ module YARV
     end
 
     def ==(other)
-      other in Setn[index: ^(index)]
+      other in SetN[index: ^(index)]
     end
 
     def call(context)

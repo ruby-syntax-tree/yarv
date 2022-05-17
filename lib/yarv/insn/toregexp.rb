@@ -27,7 +27,7 @@ module YARV
   # # 0011 leave
   # ~~~
   #
-  class Toregexp
+  class ToRegexp
     attr_reader :opts, :cnt
 
     def initialize(opts, cnt)
@@ -36,7 +36,7 @@ module YARV
     end
 
     def ==(other)
-      other in Toregexp[opts: ^(opts), cnt: ^(cnt)]
+      other in ToRegexp[opts: ^(opts), cnt: ^(cnt)]
     end
 
     def call(context)
