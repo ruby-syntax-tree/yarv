@@ -4,10 +4,12 @@ GEM
     kramdown (2.3.2)
       rexml
     power_assert (2.0.1)
+    prettier_print (0.1.0)
     rake (13.0.6)
     rexml (3.2.5)
     rouge (3.28.0)
-    syntax_tree (2.4.1)
+    syntax_tree (2.6.0)
+      prettier_print
     test-unit (3.5.3)
       power_assert
 
