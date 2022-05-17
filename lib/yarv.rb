@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
+require "syntax_tree"
+
 require_relative "yarv/call_data"
 require_relative "yarv/execution_context"
 require_relative "yarv/frame"
 require_relative "yarv/instruction_sequence"
 require_relative "yarv/main"
+require_relative "yarv/visitor"
 
 # Require all of the files nested under the lib/yarv directory.
 Dir[File.expand_path("yarv/insn/*.rb", __dir__)].each do |filepath|

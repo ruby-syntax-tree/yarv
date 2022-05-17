@@ -28,6 +28,14 @@ module YARV
       @flag = flag
     end
 
+    def ==(other)
+      other in CallData[mid: ^(mid), argc: ^(argc), flag: ^(flag)]
+    end
+
+    def deconstruct_keys(keys)
+      { mid:, argc:, flag: }
+    end
+
     def to_s
       "<calldata!mid:#{mid}, argc:#{argc}, #{flags.join("|")}>"
     end
