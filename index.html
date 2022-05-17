@@ -81,6 +81,7 @@
 <a href="#putobjectint2fix1">putobject_int2fix_1</a>
 <a href="#putself">putself</a>
 <a href="#putstring">putstring</a>
+<a href="#send">send</a>
 <a href="#setglobal">setglobal</a>
 <a href="#setlocalwc0">setlocal_wc_0</a>
 <a href="#setn">setn</a>
@@ -1541,19 +1542,48 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 <span class="c1"># 0002 leave</span>
 </code></pre></div></div>
 
-<h2 id="setglobal">setglobal</h2>
+<h2 id="send">send</h2>
 
 <h3 id="summary-58">Summary</h3>
 
-<p><code>setglobal</code> sets the value of a global variable.</p>
+<p><code>send</code> invokes a method with a block.</p>
 
 <h3 id="tracepoint-58">TracePoint</h3>
 
-<p><code>setglobal</code> does not dispatch any events.</p>
+<p><code>send</code> does not dispatch any events.</p>
 
 <h3 id="usage-58">Usage</h3>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"hello"</span><span class="p">.</span><span class="nf">tap</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="nb">p</span> <span class="n">i</span> <span class="p">}</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,23)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putstring                              "hello"                   (   1)[Li]</span>
+<span class="c1"># 0002 send                                   &lt;calldata!mid:tap, argc:0&gt;, block in &lt;main&gt;</span>
+<span class="c1"># 0005 leave</span>
+<span class="c1">#</span>
+<span class="c1"># == disasm: #&lt;ISeq:block in &lt;main&gt;@-e:1 (1,12)-(1,23)&gt; (catch: FALSE)</span>
+<span class="c1"># local table (size: 1, argc: 1 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
+<span class="c1"># [ 1] i@0&lt;Arg&gt;</span>
+<span class="c1"># 0000 putself                                                          (   1)[LiBc]</span>
+<span class="c1"># 0001 getlocal_WC_0                          i@0</span>
+<span class="c1"># 0003 opt_send_without_block                 &lt;calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0005 leave                                  [Br]</span>
+<span class="c1"># ~~~</span>
+
+<span class="c1">## setglobal</span>
+
+<span class="c1">### Summary</span>
+
+<span class="sb">`setglobal`</span> <span class="n">sets</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">a</span> <span class="n">global</span> <span class="n">variable</span><span class="o">.</span>
+
+<span class="c1">### TracePoint</span>
+
+<span class="sb">`setglobal`</span> <span class="n">does</span> <span class="n">not</span> <span class="n">dispatch</span> <span class="n">any</span> <span class="n">events</span><span class="o">.</span>
+
+<span class="c1">### Usage</span>
+
+<span class="o">~~~</span><span class="n">ruby</span>
+<span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
 
 <span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
