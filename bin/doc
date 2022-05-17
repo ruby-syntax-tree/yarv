@@ -8,7 +8,7 @@ require "kramdown"
 require "stringio"
 require "syntax_tree"
 
-filepaths = Dir[File.expand_path("../lib/yarv/*.rb", __dir__)]
+filepaths = Dir[File.expand_path("../lib/yarv/insn/*.rb", __dir__)]
 markdown = StringIO.new
 
 # For each YARV instruction file, we're going to yank out the comments.

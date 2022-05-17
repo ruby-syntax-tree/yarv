@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 # Require all of the files nested under the lib/yarv directory.
-Dir[File.expand_path("yarv/*.rb", __dir__)].each do |filepath|
-  require_relative "yarv/#{File.basename(filepath, ".rb")}"
+Dir[File.expand_path("yarv/insn/*.rb", __dir__)].each do |filepath|
+  require_relative "yarv/insn/#{File.basename(filepath, ".rb")}"
 end
 
 # The YARV module is a Ruby runtime that evlauates YARV instructions.

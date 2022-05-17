@@ -36,6 +36,38 @@
 <a href="#catch-table">catch table</a>
 <a href="#cd-hash">cd hash</a>
 <a href="#control-frame">control frame</a>
+<a href="#dispatch">dispatch</a>
+<a href="#execution-context">execution context</a>
+<a href="#frame">frame</a>
+<a href="#instruction">instruction</a>
+<a href="#instruction-argument">instruction argument</a>
+<a href="#instruction-operand">instruction operand</a>
+<a href="#instruction-sequence">instruction sequence</a>
+<a href="#iseq">iseq</a>
+<a href="#jump">jump</a>
+<a href="#local">local</a>
+<a href="#local-table">local table</a>
+<a href="#nop">nop</a>
+<a href="#operand">operand</a>
+<a href="#opt">opt</a>
+<a href="#optimization">optimization</a>
+<a href="#pc">pc</a>
+<a href="#pop">pop</a>
+<a href="#program-counter">program counter</a>
+<a href="#push">push</a>
+<a href="#put">put</a>
+<a href="#receiver">receiver</a>
+<a href="#send">send</a>
+<a href="#source-code">source code</a>
+<a href="#sp">sp</a>
+<a href="#specialization">specialization</a>
+<a href="#stack">stack</a>
+<a href="#stack-pointer">stack pointer</a>
+<a href="#tracepoint">tracepoint</a>
+<a href="#value-stack">value stack</a>
+<a href="#virtual-machine">virtual machine</a>
+<a href="#vm">vm</a>
+<a href="#yarv">yarv</a>
 
   </nav>
 </aside>
@@ -100,6 +132,141 @@ and the values are the labels to which to jump. This optimization can be applied
 <h2 id="control-frame">control frame</h2>
 
 <p>An object that encapsulates the execution context at some particular place in the code. This includes things like local variables, the current value of <code>self</code>, etc.</p>
+
+<h2 id="dispatch">dispatch</h2>
+
+<p>Calling a method.</p>
+
+<h2 id="execution-context">execution context</h2>
+
+<p>The global information available to the running Ruby process. This includes global variables, defined methods, constants, etc.</p>
+
+<h2 id="frame">frame</h2>
+
+<p>See <a href="#control-frame">control frame</a>.</p>
+
+<h2 id="instruction">instruction</h2>
+
+<p>One unit of work for the virtual machine to execute.</p>
+
+<h2 id="instruction-argument">instruction argument</h2>
+
+<p>Objects encoded into the bytecode that are used by an instruction that are known at compile-time.</p>
+
+<h2 id="instruction-operand">instruction operand</h2>
+
+<p>See <a href="#instruction-argument">instruction argument</a>.</p>
+
+<h2 id="instruction-sequence">instruction sequence</h2>
+
+<p>A set of instructions to be performed by the virtual machine. Every method and block compiled in Ruby will have its own instruction sequence. When those methods or blocks are executed, a <a href="#control-frame">control frame</a> will be created to wrap the execution of the instruction sequence with additional context. There are many different kinds of instruction sequences, including:</p>
+
+<ul>
+  <li><code>top</code> - the main instruction sequence executed when your program first starts running</li>
+  <li><code>method</code> - an instruction sequence representing the body of a method</li>
+  <li><code>block</code> - an instruction sequence representing the body of a block</li>
+  <li>and many more</li>
+</ul>
+
+<h2 id="iseq">iseq</h2>
+
+<p>See <a href="#instruction-sequence">instruction sequence</a>.</p>
+
+<h2 id="jump">jump</h2>
+
+<p>When the program counter is changed manually to dictate the next instruction for execution.</p>
+
+<h2 id="local">local</h2>
+
+<p>A temporary variable that can only be read in the current <a href="#control-frame">control frame</a> or its children.</p>
+
+<h2 id="local-table">local table</h2>
+
+<p>A data structure that holds metadata about local variables and arguments declared within an instruction sequence.</p>
+
+<h2 id="nop">nop</h2>
+
+<p>Short for no-op. It means to perform nothing when this instruction is executed. Typically this is used to create a space for another operation to <a href="#jump">jump</a> to when executed.</p>
+
+<h2 id="operand">operand</h2>
+
+<p>See <a href="#instruction-argument">instruction argument</a>.</p>
+
+<h2 id="opt">opt</h2>
+
+<p>Short for <a href="#optimization">optimization</a>.</p>
+
+<h2 id="optimization">optimization</h2>
+
+<p>A specialized version of a more generic function. In the context of YARV, this entails special instructions that can be made faster than their more generic counterparts. For example, <code>opt_plus</code> is used whenever there is a single argument being passed through the <code>+</code> operator.</p>
+
+<h2 id="pc">pc</h2>
+
+<p>See <a href="#program-counter">program counter</a>.</p>
+
+<h2 id="pop">pop</h2>
+
+<p>Remove and return a value from the top of a stack.</p>
+
+<h2 id="program-counter">program counter</h2>
+
+<p>The offset from the start of the instruction sequence to the currently-executing instruction. This can be dynamically changed by various instructions to accommodate constructs like <code>if</code>, <code>unless</code>, <code>while</code>, etc.</p>
+
+<h2 id="push">push</h2>
+
+<p>Add a value to the top of a stack (for example a frame, an instruction sequence, etc.).</p>
+
+<h2 id="put">put</h2>
+
+<p>See <a href="#push">push</a>.</p>
+
+<h2 id="receiver">receiver</h2>
+
+<p>The object receiving a message/method call.</p>
+
+<h2 id="send">send</h2>
+
+<p>See <a href="#dispatch">dispatch</a>.</p>
+
+<h2 id="source-code">source code</h2>
+
+<p>The human-readable representation of the code to be executed.</p>
+
+<h2 id="sp">sp</h2>
+
+<p>See <a href="#stack-pointer">stack pointer</a>.</p>
+
+<h2 id="specialization">specialization</h2>
+
+<p>See <a href="#optimization">optimization</a>.</p>
+
+<h2 id="stack">stack</h2>
+
+<p>A data structure where the last object to be added is the first object to be removed. Objects are added (<a href="#push">pushed</a>) onto the stack and removed (<a href="#pop">popped</a>) off of the stack. In the context of YARV, stacks are used to represent <a href="#control-frame">control frames</a> and the <a href="#value-stack">value stack</a>.</p>
+
+<h2 id="stack-pointer">stack pointer</h2>
+
+<p>A pointer to the next empty slot in the stack (i.e., the top).</p>
+
+<h2 id="tracepoint">tracepoint</h2>
+
+<p>A publication/subscription system for virtual machine events. Users can create tracepoints to get notified when certain events occur.</p>
+
+<h2 id="value-stack">value stack</h2>
+
+<p>A data structure used to track return values, variables, and arguments.</p>
+
+<h2 id="virtual-machine">virtual machine</h2>
+
+<p>A software implementation of a computer. In the context of YARV, the virtual machine executes the <a href="#bytecode">bytecode</a> that Ruby compiles.</p>
+
+<h2 id="vm">vm</h2>
+
+<p>See <a href="#virtual-machine">virtual machine</a>.</p>
+
+<h2 id="yarv">yarv</h2>
+
+<p>Stands for Yet Another Ruby Virtual Machine. It came around in Ruby 1.9 and replaced MRI (Matz’ Ruby Interpreter). Previously Ruby was a tree-walk interpreter (it walked the syntax tree to execute). YARV replaced that by compiling the syntax tree into a bytecode that it executes, which is must faster.</p>
 
 </article>
 
