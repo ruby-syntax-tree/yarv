@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class Dup
+    def ==(other)
+      other in Dup
+    end
+
     def call(context)
       value = context.stack.pop
       context.stack.push(value)

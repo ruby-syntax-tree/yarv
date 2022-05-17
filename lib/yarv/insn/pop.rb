@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class Pop
+    def ==(other)
+      other in Pop
+    end
+
     def call(context)
       context.stack.pop
     end

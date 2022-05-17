@@ -22,8 +22,16 @@ module YARV
       @object = object
     end
 
+    def ==(other)
+      other in PutSelf[object: ^(object)]
+    end
+
     def call(context)
       context.stack.push(object)
+    end
+
+    def deconstruct_keys(keys)
+      { object: }
     end
 
     def to_s

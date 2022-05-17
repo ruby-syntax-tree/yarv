@@ -18,6 +18,10 @@ module YARV
   # ~~~
   #
   class PutObjectInt2Fix0
+    def ==(other)
+      other in PutObjectInt2Fix0
+    end
+
     def call(context)
       context.stack.push(0)
     end

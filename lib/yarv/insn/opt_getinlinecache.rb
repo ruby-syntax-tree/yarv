@@ -25,12 +25,20 @@ module YARV
       @cache = cache
     end
 
+    def ==(other)
+      other in OptGetInlineCache[label: ^(label), cache: ^(cache)]
+    end
+
     def call(context)
       # In CRuby, this is going to check if the cache is populated and then
       # potentially jump forward to the label. We're not going to track inline
       # caches in YARV, so we'll just always push nil onto the stack as if the
       # cache weren't yet populated.
       context.stack.push(nil)
+    end
+
+    def deconstruct_keys(keys)
+      { label:, cache: }
     end
 
     def to_s

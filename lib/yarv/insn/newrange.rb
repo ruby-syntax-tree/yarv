@@ -19,18 +19,27 @@ module YARV
   # ~~~
   #
   class NewRange
+    attr_reader :exclude_end
+
     def initialize(exclude_end)
       unless exclude_end == 0 || exclude_end == 1
         raise ArgumentError, "invalid exclude_end: #{exclude_end.inspect}"
       end
+
       @exclude_end = exclude_end
     end
 
-    attr_reader :exclude_end
+    def ==(other)
+      other in NewRange[exclude_end: ^(exclude_end)]
+    end
 
     def call(context)
       range_begin, range_end = context.stack.pop(2)
       context.stack.push(Range.new(range_begin, range_end, exclude_end == 1))
+    end
+
+    def deconstruct_keys(keys)
+      { exclude_end: }
     end
 
     def to_s

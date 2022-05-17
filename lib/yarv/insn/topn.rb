@@ -35,8 +35,14 @@ module YARV
   # ~~~
   #
   class TopN
+    attr_reader :n
+
     def initialize(n)
       @n = n
+    end
+
+    def ==(other)
+      other in TopN[n: ^(n)]
     end
 
     def call(context)
@@ -44,12 +50,12 @@ module YARV
       context.stack.push(value)
     end
 
+    def deconstruct_keys(keys)
+      { n: }
+    end
+
     def to_s
       "%-38s %d" % ["topn", n]
     end
-
-    private
-
-    attr_reader :n
   end
 end

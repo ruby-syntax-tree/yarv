@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class PutNil
+    def ==(other)
+      other in PutNil
+    end
+
     def call(context)
       context.stack.push(nil)
     end

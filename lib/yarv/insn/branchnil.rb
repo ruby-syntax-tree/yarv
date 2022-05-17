@@ -29,6 +29,10 @@ module YARV
       @label = label
     end
 
+    def ==(other)
+      other in BranchNil[label: ^(label)]
+    end
+
     def call(context)
       condition = context.stack.pop
 
@@ -36,6 +40,10 @@ module YARV
         jump_index = context.current_iseq.labels[label]
         context.program_counter = jump_index
       end
+    end
+
+    def deconstruct_keys(keys)
+      { label: }
     end
 
     def to_s

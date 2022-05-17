@@ -24,11 +24,19 @@ module YARV
       @call_data = call_data
     end
 
+    def ==(other)
+      other in OptStrUMinus[value: ^(value), call_data: ^(call_data)]
+    end
+
     def call(context)
       arguments = context.stack.pop(call_data.argc)
       result = context.call_method(call_data, value, arguments)
 
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { value:, call_data: }
     end
 
     def to_s

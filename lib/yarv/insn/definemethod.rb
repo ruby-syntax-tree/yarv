@@ -25,8 +25,16 @@ module YARV
       @iseq = iseq
     end
 
+    def ==(other)
+      other in DefineMethod[name: ^(name), iseq: ^(iseq)]
+    end
+
     def call(context)
       context.define_method(context.current_iseq.selfo, name, iseq)
+    end
+
+    def deconstruct_keys(keys)
+      { name:, iseq: }
     end
 
     def to_s

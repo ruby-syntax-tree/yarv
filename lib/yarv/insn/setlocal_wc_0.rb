@@ -25,6 +25,10 @@ module YARV
       @index = index
     end
 
+    def ==(other)
+      other in SetLocalWC0[name: ^(name), index: ^(index)]
+    end
+
     def call(context)
       value = context.stack.pop
       context.current_frame.set_local(index, value)

@@ -51,9 +51,15 @@ module YARV
   # ~~~
   #
   class OptCaseDispatch
+    attr_reader :cdhash, :else_offset
+
     def initialize(cdhash, else_offset)
       @cdhash = Hash[*cdhash]
       @else_offset = else_offset
+    end
+
+    def ==(other)
+      other in OptCaseDispatch[cdhash: ^(cdhash), else_offset: ^(else_offset)]
     end
 
     def call(context)
@@ -67,13 +73,13 @@ module YARV
       end
     end
 
+    def deconstruct_keys(keys)
+      { cdhash:, else_offset: }
+    end
+
     def to_s
       "%-38s %s %s" %
         ["opt_case_dispatch", "<cdhash>,", else_offset["label_".length..]]
     end
-
-    private
-
-    attr_reader :cdhash, :else_offset
   end
 end

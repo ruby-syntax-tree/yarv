@@ -21,6 +21,10 @@ module YARV
       @size = size
     end
 
+    def ==(other)
+      other in OptNewArrayMin[size: ^(size)]
+    end
+
     def call(context)
       elements = context.stack.pop(size)
       call_data =
@@ -28,6 +32,10 @@ module YARV
 
       result = context.call_method(call_data, elements, [])
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { size: }
     end
 
     def to_s

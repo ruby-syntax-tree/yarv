@@ -23,6 +23,10 @@ module YARV
   # ~~~
   #
   class AnyToString
+    def ==(other)
+      other in AnyToString
+    end
+
     def call(context)
       maybe_string, orig_val = context.stack.pop(2)
       string = maybe_string.is_a?(String) ? maybe_string : orig_val.to_s

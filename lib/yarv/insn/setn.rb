@@ -20,8 +20,16 @@ module YARV
       @index = index
     end
 
+    def ==(other)
+      other in Setn[index: ^(index)]
+    end
+
     def call(context)
       context.stack[-index - 1] = context.stack.last
+    end
+
+    def deconstruct_keys(keys)
+      { index: }
     end
 
     def to_s

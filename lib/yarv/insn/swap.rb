@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class Swap
+    def ==(other)
+      other in Swap
+    end
+
     def call(context)
       left, right = context.stack.pop(2)
       context.stack.push(right)
