@@ -5,7 +5,7 @@ require "syntax_tree/rake_tasks"
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
-  t.test_files = FileList["test/*_test.rb"]
+  t.test_files = FileList["test/**/*_test.rb"]
 end
 
 SOURCE_FILES = %w[Gemfile Rakefile lib/**/*.rb test/**/*.rb]
