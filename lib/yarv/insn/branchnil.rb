@@ -30,7 +30,7 @@ module YARV
     end
 
     def ==(other)
-      other in BranchNil[label: ^(label)]
+      other in BranchNil # explicitly not comparing labels
     end
 
     def call(context)

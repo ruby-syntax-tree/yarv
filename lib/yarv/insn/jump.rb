@@ -29,7 +29,7 @@ module YARV
     end
 
     def ==(other)
-      other in Jump[label: ^(label)]
+      other in Jump # explicitly not comparing labels
     end
 
     def call(context)

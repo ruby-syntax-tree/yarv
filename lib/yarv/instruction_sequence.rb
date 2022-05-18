@@ -171,6 +171,14 @@ module YARV
       insns << insn
     end
 
+    def ==(other)
+      other in InstructionSequence[insns: ^(insns), labels: ^(labels.values)]
+    end
+
+    def deconstruct_keys(keys)
+      { insns:, labels: labels.values }
+    end
+
     # This is the name assigned to this instruction sequence.
     def name
       iseq[5]

@@ -3,6 +3,10 @@
 module YARV
   # This is the self object at the top of the script.
   class Main
+    def ==(other)
+      other in Main
+    end
+
     def inspect
       "main"
     end

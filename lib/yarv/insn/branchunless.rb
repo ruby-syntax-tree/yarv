@@ -29,7 +29,7 @@ module YARV
     end
 
     def ==(other)
-      other in BranchUnless[label: ^(label)]
+      other in BranchUnless # explicitly not comparing labels
     end
 
     def call(context)
