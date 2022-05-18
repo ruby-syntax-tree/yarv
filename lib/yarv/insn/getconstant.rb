@@ -23,6 +23,10 @@ module YARV
       @name = name
     end
 
+    def ==(other)
+      other in GetConstant[name: ^(name)]
+    end
+
     def call(context)
       klass, allow_nil = context.stack.pop(2)
 
@@ -33,6 +37,10 @@ module YARV
       # At the moment we're just looking up constants in the parent runtime. In
       # the future, we'll want to look up constants in the YARV runtime as well.
       context.stack.push((klass || Object).const_get(name))
+    end
+
+    def deconstruct_keys(keys)
+      { name: }
     end
 
     def to_s

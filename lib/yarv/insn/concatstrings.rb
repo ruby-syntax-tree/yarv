@@ -20,19 +20,27 @@ module YARV
   # ~~~
   #
   class ConcatStrings
-    attr_reader :num
+    attr_reader :size
 
-    def initialize(num)
-      @num = num
+    def initialize(size)
+      @size = size
+    end
+
+    def ==(other)
+      other in ConcatStrings[size: ^(size)]
     end
 
     def call(context)
-      strings = context.stack.pop(num)
+      strings = context.stack.pop(size)
       context.stack.push(strings.join)
     end
 
+    def deconstruct_keys(keys)
+      { size: }
+    end
+
     def to_s
-      "%-38s %s" % ["concatstrings", num]
+      "%-38s %s" % ["concatstrings", size]
     end
   end
 end

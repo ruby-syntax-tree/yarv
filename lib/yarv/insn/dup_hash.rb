@@ -22,8 +22,16 @@ module YARV
       @value = value
     end
 
+    def ==(other)
+      other in DupHash[value: ^(value)]
+    end
+
     def call(context)
       context.stack.push(value.dup)
+    end
+
+    def deconstruct_keys(keys)
+      { value: }
     end
 
     def to_s

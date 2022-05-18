@@ -13,15 +13,23 @@ module YARV
   # {}[:key] = 'val'
   # ~~~
   #
-  class Setn
+  class SetN
     attr_reader :index
 
     def initialize(index)
       @index = index
     end
 
+    def ==(other)
+      other in SetN[index: ^(index)]
+    end
+
     def call(context)
       context.stack[-index - 1] = context.stack.last
+    end
+
+    def deconstruct_keys(keys)
+      { index: }
     end
 
     def to_s

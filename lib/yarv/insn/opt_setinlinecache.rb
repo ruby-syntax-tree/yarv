@@ -24,9 +24,17 @@ module YARV
       @cache = cache
     end
 
+    def ==(other)
+      other in OptSetInlineCache[cache: ^(cache)]
+    end
+
     def call(context)
       # Since we're not actually populating inline caches in YARV, we don't need
       # to do anything in this instruction.
+    end
+
+    def deconstruct_keys(keys)
+      { cache: }
     end
 
     def to_s

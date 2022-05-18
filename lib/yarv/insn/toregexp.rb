@@ -27,7 +27,7 @@ module YARV
   # # 0011 leave
   # ~~~
   #
-  class Toregexp
+  class ToRegexp
     attr_reader :opts, :cnt
 
     def initialize(opts, cnt)
@@ -35,9 +35,17 @@ module YARV
       @cnt = cnt
     end
 
+    def ==(other)
+      other in ToRegexp[opts: ^(opts), cnt: ^(cnt)]
+    end
+
     def call(context)
       re_str = context.stack.pop(cnt).reverse.join
       context.stack.push(Regexp.new(re_str, opts))
+    end
+
+    def deconstruct_keys(keys)
+      { opts:, cnt: }
     end
 
     def to_s

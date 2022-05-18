@@ -26,11 +26,19 @@ module YARV
       @call_data = call_data
     end
 
+    def ==(other)
+      other in ObjToString[call_data: ^(call_data)]
+    end
+
     def call(context)
       obj = context.stack.pop
       result = context.call_method(call_data, obj, [])
 
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { call_data: }
     end
 
     def to_s

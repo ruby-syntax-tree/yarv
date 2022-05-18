@@ -18,7 +18,7 @@ jobs:
           ruby-version: '3.1'
 
       - name: Check format
-        run: bundle exec rake syntax_tree:check
+        run: bundle exec rake stree:check
 
       - name: Test
         run: bundle exec rake test

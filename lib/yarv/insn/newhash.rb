@@ -25,9 +25,17 @@ module YARV
       @size = size
     end
 
+    def ==(other)
+      other in NewHash[size: ^(size)]
+    end
+
     def call(context)
       key_values = context.stack.pop(size)
       context.stack.push(Hash[*key_values])
+    end
+
+    def deconstruct_keys(keys)
+      { size: }
     end
 
     def to_s

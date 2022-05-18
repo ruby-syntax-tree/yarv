@@ -20,6 +20,10 @@ module YARV
   # ~~~
   #
   class ConcatArray
+    def ==(other)
+      other in ConcatArray
+    end
+
     def call(context)
       left, right = context.stack.pop(2)
       coerced_left = coerce(left)

@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class Leave
+    def ==(other)
+      other in Leave
+    end
+
     def call(context)
       # skip for now
     end

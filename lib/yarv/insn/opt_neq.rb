@@ -27,11 +27,19 @@ module YARV
       @cd_neq = cd_neq
     end
 
+    def ==(other)
+      other in OptNeq[cd_eq: ^(cd_eq), cd_neq: ^(cd_neq)]
+    end
+
     def call(context)
       receiver, *arguments = context.stack.pop(cd_neq.argc + 1)
       result = context.call_method(cd_neq, receiver, arguments)
 
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { cd_eq:, cd_neq: }
     end
 
     def to_s

@@ -28,9 +28,17 @@ module YARV
       @label = label
     end
 
+    def ==(other)
+      other in Jump[label: ^(label)]
+    end
+
     def call(context)
       jump_index = context.current_iseq.labels[label]
       context.program_counter = jump_index
+    end
+
+    def deconstruct_keys(keys)
+      { label: }
     end
 
     def to_s

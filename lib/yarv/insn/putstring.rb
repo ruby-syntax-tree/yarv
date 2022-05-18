@@ -22,8 +22,16 @@ module YARV
       @string = string
     end
 
+    def ==(other)
+      other in PutString[string: ^(string)]
+    end
+
     def call(context)
       context.stack.push(string)
+    end
+
+    def deconstruct_keys(keys)
+      { string: }
     end
 
     def to_s

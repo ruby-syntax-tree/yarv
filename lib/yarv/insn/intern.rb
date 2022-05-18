@@ -16,6 +16,10 @@ module YARV
   # ~~~
   #
   class Intern
+    def ==(other)
+      other in Intern
+    end
+
     def call(context)
       string = context.stack.pop
       context.stack.push(string.to_sym)

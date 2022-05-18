@@ -26,9 +26,17 @@ module YARV
       @index = index
     end
 
+    def ==(other)
+      other in GetLocalWC0[name: ^(name), index: ^(index)]
+    end
+
     def call(context)
       value = context.current_frame.get_local(index)
       context.stack.push(value)
+    end
+
+    def deconstruct_keys(keys)
+      { name:, index: }
     end
 
     def to_s

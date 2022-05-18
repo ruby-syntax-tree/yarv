@@ -22,9 +22,17 @@ module YARV
       @size = size
     end
 
+    def ==(other)
+      other in NewArray[size: ^(size)]
+    end
+
     def call(context)
       array = context.stack.pop(size)
       context.stack.push(array)
+    end
+
+    def deconstruct_keys(keys)
+      { size: }
     end
 
     def to_s

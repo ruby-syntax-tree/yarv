@@ -25,11 +25,19 @@ module YARV
       @call_data = call_data
     end
 
+    def ==(other)
+      other in OptArefWith[key: ^(key), call_data: ^(call_data)]
+    end
+
     def call(context)
       receiver = context.stack.pop
       result = context.call_method(call_data, receiver, [key])
 
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { key: }
     end
 
     def to_s

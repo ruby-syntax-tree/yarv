@@ -22,6 +22,10 @@ module YARV
       @name = name
     end
 
+    def ==(other)
+      other in GetGlobal[name: ^(name)]
+    end
+
     def call(context)
       # If we're not currently tracking the global variable, then we're going to
       # steal the definition of it from the parent process by eval-ing it.
@@ -32,6 +36,10 @@ module YARV
       # If a global variable isn't defined for the given name, this is just
       # going to push `nil` onto the stack.
       context.stack.push(context.globals[name])
+    end
+
+    def deconstruct_keys(keys)
+      { name: }
     end
 
     def to_s

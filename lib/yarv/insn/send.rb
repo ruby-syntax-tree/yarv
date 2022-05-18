@@ -36,26 +36,30 @@ module YARV
       @block_iseq = block_iseq
     end
 
+    def ==(other)
+      other in Send[call_data: ^(call_data), block_iseq: ^(block_iseq)]
+    end
+
     def call(context)
       receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      if block_iseq.nil?
-        result = context.call_method(call_data, receiver, arguments)
-      else
-        result =
-          context.call_method(
-            call_data,
-            receiver,
-            arguments
-          ) do |*block_arguments|
+      result =
+        if block_iseq.nil?
+          context.call_method(call_data, receiver, arguments)
+        else
+          context.call_method(call_data, receiver, arguments) do |*args|
             context.eval(block_iseq) do
-              block_arguments.each_with_index do |block_argument, index|
-                context.current_frame.locals[index] = block_argument
+              args.each_with_index do |arg, index|
+                context.current_frame.locals[index] = arg
               end
             end
           end
-      end
+        end
 
       context.stack.push(result)
+    end
+
+    def deconstruct_keys(keys)
+      { call_data:, block_iseq: }
     end
 
     def to_s
