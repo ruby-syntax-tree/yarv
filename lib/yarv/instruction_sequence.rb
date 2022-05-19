@@ -28,19 +28,10 @@ module YARV
       @throw_handlers =
         (catch_table || []).map do |handler|
           type, child_iseq, begin_label, end_label, exit_label, = handler
-          ThrowHandler.new(
-            type,
-            (
-              if child_iseq
-                InstructionSequence.compile(selfo, child_iseq, iseq)
-              else
-                nil
-              end
-            ),
-            begin_label,
-            end_label,
-            exit_label
-          )
+          throw_iseq =
+            InstructionSequence.compile(selfo, child_iseq, self) if child_iseq
+
+          ThrowHandler.new(type, throw_iseq, begin_label, end_label, exit_label)
         end
     end
 

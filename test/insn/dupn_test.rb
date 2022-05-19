@@ -22,7 +22,7 @@ module YARV
         PutObject,
         DupN[offset: 2],
         Swap,
-        Proc, # this is here temporarily until setconstant is implemented
+        InstructionSequence::UnimplementedInstruction[name: "setconstant"],
         Swap,
         Pop,
         Leave]
