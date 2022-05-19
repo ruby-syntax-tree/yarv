@@ -90,6 +90,11 @@ module YARV
       methods[[object.class, name]] = iseq
     end
 
+    # This returns the parent execution frame.
+    def parent_frame
+      frames[-2]
+    end
+
     # This executes the given instruction sequence within a new execution frame.
     def with_frame(iseq)
       current_program_counter = program_counter

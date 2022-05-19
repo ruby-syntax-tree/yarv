@@ -8,15 +8,19 @@ module YARV
     # This is the native instruction sequence that we are wrapping.
     attr_reader :iseq
 
-    def initialize(selfo, iseq)
+    # This is the parent InstructionSequence object if there is one.
+    attr_reader :parent
+
+    def initialize(selfo, iseq, parent = nil)
       @selfo = selfo
       @iseq = iseq
+      @parent = parent
 
       @insns = []
       @labels = {}
     end
 
-    def self.compile(selfo, iseq)
+    def self.compile(selfo, iseq, parent = nil)
       iseq
         .last
         .each_with_object(new(selfo, iseq)) do |insn, compiled|
@@ -40,7 +44,7 @@ module YARV
           in :defined, type, object, value
             compiled << Defined.new(type, object, value)
           in :definemethod, name, iseq
-            compiled << DefineMethod.new(name, compile(selfo, iseq))
+            compiled << DefineMethod.new(name, compile(selfo, iseq, compiled))
           in [:dup]
             compiled << Dup.new
           in :duparray, array
@@ -54,6 +58,9 @@ module YARV
           in :getlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << GetLocalWC0.new(compiled.locals[index], index)
+          in :getlocal_WC_1, offset
+            index = parent.local_index(offset)
+            compiled << GetLocalWC1.new(parent.locals[index], index)
           in [:intern]
             compiled << Intern.new
           in :jump, value
@@ -154,7 +161,8 @@ module YARV
           in :putstring, string
             compiled << PutString.new(string)
           in :send, { mid:, orig_argc:, flag: }, block_iseq
-            block_iseq = compile(selfo, block_iseq) unless block_iseq.nil?
+            block_iseq =
+              compile(selfo, block_iseq, compiled) unless block_iseq.nil?
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
           in :setglobal, name
             compiled << SetGlobal.new(name)
@@ -163,6 +171,9 @@ module YARV
           in :setlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << SetLocalWC0.new(compiled.locals[index], index)
+          in :setlocal_WC_1, offset
+            index = parent.local_index(offset)
+            compiled << SetLocalWC1.new(parent.locals[index], index)
           in [:swap]
             compiled << Swap.new
           in :topn, n
