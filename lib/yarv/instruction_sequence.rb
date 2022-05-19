@@ -51,6 +51,8 @@ module YARV
             compiled << DupArray.new(array)
           in :duphash, hash
             compiled << DupHash.new(hash)
+          in :dupn, offset
+            compiled << DupN.new(offset)
           in :getconstant, name
             compiled << GetConstant.new(name)
           in :getglobal, value
@@ -171,6 +173,8 @@ module YARV
               compile(selfo, block_iseq, compiled) unless block_iseq.nil?
 
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
+          in :setconstant, name
+            compiled << -> { raise NotImplementedError, "setconstant" }
           in :setglobal, name
             compiled << SetGlobal.new(name)
           in :setlocal, offset, level
