@@ -37,6 +37,8 @@ module YARV
             compiled << ConcatArray.new
           in :concatstrings, num
             compiled << ConcatStrings.new(num)
+          in :defined, type, object, value
+            compiled << Defined.new(type, object, value)
           in :definemethod, name, iseq
             compiled << DefineMethod.new(name, compile(selfo, iseq))
           in [:dup]
