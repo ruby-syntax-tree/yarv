@@ -39,16 +39,26 @@ module YARV
             compiled << BranchNil.new(value)
           in :branchunless, value
             compiled << BranchUnless.new(value)
+          in :checkkeyword, bits_index, index
+            compiled << -> { raise NotImplementedError, "checkkeyword" }
           in :checkmatch, type
             compiled << -> { raise NotImplementedError, "checkmatch" }
+          in :checktype, type
+            compiled << -> { raise NotImplementedError, "checktype" }
           in [:concatarray]
             compiled << ConcatArray.new
           in :concatstrings, num
             compiled << ConcatStrings.new(num)
+          in :defineclass, name, iseq, flags
+            compile(selfo, iseq, compiled)
+            compiled << -> { raise NotImplementedError, "defineclass" }
           in :defined, type, object, value
             compiled << Defined.new(type, object, value)
           in :definemethod, name, iseq
             compiled << DefineMethod.new(name, compile(selfo, iseq, compiled))
+          in :definesmethod, name, iseq
+            compile(selfo, iseq, compiled)
+            compiled << -> { raise NotImplementedError, "definesmethod" }
           in [:dup]
             compiled << Dup.new
           in :duparray, array
@@ -57,10 +67,20 @@ module YARV
             compiled << DupHash.new(hash)
           in :dupn, offset
             compiled << DupN.new(offset)
+          in :expandarray, size, flag
+            compiled << -> { raise NotImplementedError, "expandarray" }
+          in :getblockparam, index, level
+            compiled << -> { raise NotImplementedError, "getblockparam" }
+          in :getblockparamproxy, index, level
+            compiled << -> { raise NotImplementedError, "getblockparamproxy" }
+          in :getclassvariable, name, cache
+            compiled << -> { raise NotImplementedError, "getclassvariable" }
           in :getconstant, name
             compiled << GetConstant.new(name)
           in :getglobal, value
             compiled << GetGlobal.new(value)
+          in :getinstancevariable, name, cache
+            compiled << -> { raise NotImplementedError, "getinstancevariable" }
           in :getlocal, offset, level
             current = compiled
             level.times { current = current.parent }
@@ -73,8 +93,15 @@ module YARV
           in :getlocal_WC_1, offset
             index = parent.local_index(offset)
             compiled << GetLocalWC1.new(parent.locals[index], index)
+          in :getspecial, key, type
+            compiled << -> { raise NotImplementedError, "getspecial" }
           in [:intern]
             compiled << Intern.new
+          in :invokeblock, { mid: nil, orig_argc: 1, flag: }
+            compiled << -> { raise NotImplementedError, "invokeblock" }
+          in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq
+            compile(selfo, block_iseq, compiled) if block_iseq
+            compiled << -> { raise NotImplementedError, "invokesuper" }
           in :jump, value
             compiled << Jump.new(value)
           in [:leave]
@@ -83,12 +110,17 @@ module YARV
             compiled << NewArray.new(size)
           in :newhash, size
             compiled << NewHash.new(size)
+          in :newarraykwsplat, size
+            compiled << -> { raise NotImplementedError, "newarraykwsplat" }
           in :newrange, exclude_end
             compiled << NewRange.new(exclude_end)
           in [:nop]
             compiled << Nop.new
           in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
             compiled << ObjToString.new(CallData.new(:to_s, 0, flag))
+          in :once, iseq, cache
+            compile(selfo, iseq, compiled)
+            compiled << -> { raise NotImplementedError, "once" }
           in :opt_and, { mid: :&, orig_argc: 1, flag: }
             compiled << OptAnd.new(CallData.new(:&, 1, flag))
           in :opt_aref, { mid: :[], orig_argc: 1, flag: }
@@ -172,6 +204,8 @@ module YARV
             compiled << PutObjectInt2Fix1.new
           in [:putself]
             compiled << PutSelf.new(selfo)
+          in :putspecialobject, type
+            compiled << -> { raise NotImplementedError, "putspecialobject" }
           in :putstring, string
             compiled << PutString.new(string)
           in :send, { mid:, orig_argc:, flag: }, block_iseq
@@ -179,10 +213,16 @@ module YARV
               compile(selfo, block_iseq, compiled) unless block_iseq.nil?
 
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
+          in :setblockparam, index, level
+            compiled << -> { raise NotImplementedError, "setblockparam" }
+          in :setclassvariable, name, cache
+            compiled << -> { raise NotImplementedError, "setclassvariable" }
           in :setconstant, name
             compiled << -> { raise NotImplementedError, "setconstant" }
           in :setglobal, name
             compiled << SetGlobal.new(name)
+          in :setinstancevariable, name, cache
+            compiled << -> { raise NotImplementedError, "setinstancevariable" }
           in :setlocal, offset, level
             current = compiled
             level.times { current = current.parent }
@@ -197,6 +237,10 @@ module YARV
             compiled << SetLocalWC1.new(parent.locals[index], index)
           in :setn, index
             compiled << SetN.new(index)
+          in :setspecial, key
+            compiled << -> { raise NotImplementedError, "setspecial" }
+          in :splatarray, flag
+            compiled << -> { raise NotImplementedError, "splatarray" }
           in [:swap]
             compiled << Swap.new
           in :throw, type

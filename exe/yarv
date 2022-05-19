@@ -37,7 +37,10 @@ def disasm(iseq, prefix = "")
     end
   end
 
-  nested.each { |nested_iseq| disasm(nested_iseq, prefix) }
+  nested.each do |nested_iseq|
+    puts
+    disasm(nested_iseq, prefix)
+  end
 end
 
 # If we're dumping instructions, then we're going to walk through the compiled
