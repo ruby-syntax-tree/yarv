@@ -24,7 +24,13 @@ if ARGV.first == "--dump=insns"
 
     iseq.insns.each do |insn|
       puts "0000 #{insn}"
-      queue << insn.iseq if insn in YARV::DefineMethod
+
+      case insn
+      when YARV::DefineMethod
+        queue << insn.iseq
+      when YARV::Send
+        queue << insn.block_iseq if insn.block_iseq
+      end
     end
 
     puts if queue.any?

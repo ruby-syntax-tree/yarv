@@ -91,8 +91,8 @@ module YARV
     end
 
     # This returns the parent execution frame.
-    def parent_frame
-      frames[-2]
+    def parent_frame(depth = 1)
+      frames[-1 - depth]
     end
 
     # This executes the given instruction sequence within a new execution frame.

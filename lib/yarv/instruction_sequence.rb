@@ -23,7 +23,7 @@ module YARV
     def self.compile(selfo, iseq, parent = nil)
       iseq
         .last
-        .each_with_object(new(selfo, iseq)) do |insn, compiled|
+        .each_with_object(new(selfo, iseq, parent)) do |insn, compiled|
           case insn
           in Integer | :RUBY_EVENT_LINE
             # skip for now
@@ -55,6 +55,12 @@ module YARV
             compiled << GetConstant.new(name)
           in :getglobal, value
             compiled << GetGlobal.new(value)
+          in :getlocal, offset, level
+            current = compiled
+            level.times { current = current.parent }
+
+            index = current.local_index(offset)
+            compiled << GetLocal.new(current.locals[index], index, level)
           in :getlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << GetLocalWC0.new(compiled.locals[index], index)
@@ -163,17 +169,24 @@ module YARV
           in :send, { mid:, orig_argc:, flag: }, block_iseq
             block_iseq =
               compile(selfo, block_iseq, compiled) unless block_iseq.nil?
+
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
           in :setglobal, name
             compiled << SetGlobal.new(name)
-          in :setn, index
-            compiled << SetN.new(index)
+          in :setlocal, offset, level
+            current = compiled
+            level.times { current = current.parent }
+
+            index = current.local_index(offset)
+            compiled << SetLocal.new(current.locals[index], index, level)
           in :setlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << SetLocalWC0.new(compiled.locals[index], index)
           in :setlocal_WC_1, offset
             index = parent.local_index(offset)
             compiled << SetLocalWC1.new(parent.locals[index], index)
+          in :setn, index
+            compiled << SetN.new(index)
           in [:swap]
             compiled << Swap.new
           in :topn, n
