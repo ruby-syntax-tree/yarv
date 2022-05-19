@@ -3,19 +3,20 @@
 module YARV
   # ### Summary
   #
-  # `opt_aset` is an instruction for setting the hash value by the key in `recv[obj] = set` format
+  # `opt_regexpmatch2` is a specialization of the `opt_send_without_block`
+  # instruction that occurs when the `=~` operator is used.
   #
   # ### TracePoint
   #
-  # There is no trace point for `opt_aset`.
+  # `opt_regexpmatch2` can dispatch both the `c_call` and `c_return` events.
   #
   # ### Usage
   #
   # ~~~ruby
-  # {}[:key] = value
+  # /a/ =~ "a"
   # ~~~
   #
-  class OptAset
+  class OptRegexpMatch2
     attr_reader :call_data
 
     def initialize(call_data)
@@ -23,7 +24,7 @@ module YARV
     end
 
     def ==(other)
-      other in OptAset[call_data: ^(call_data)]
+      other in OptRegexpMatch2[call_data: ^(call_data)]
     end
 
     def call(context)
@@ -38,7 +39,7 @@ module YARV
     end
 
     def to_s
-      "%-38s %s%s" % ["opt_aset", call_data, "[CcCr]"]
+      "%-38s %s%s" % ["opt_regexpmatch2", call_data, "[CcCr]"]
     end
   end
 end

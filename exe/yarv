@@ -4,33 +4,13 @@
 $:.unshift(File.expand_path("../lib", __dir__))
 require "yarv"
 
+dump_insns = false
+
 # If we're dumping instructions, then we're going to walk through the compiled
 # instructions and print each one out in turn.
 if ARGV.first == "--dump=insns"
   ARGV.shift
-
-  # Check if we are reading directly from a string with -e.
-  compiled =
-    if ARGV.first == "-e"
-      ARGV.shift
-      YARV.compile(ARGV.shift, "<main>", "-e")
-    else
-      YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
-    end
-
-  queue = [compiled]
-  while iseq = queue.shift
-    puts "== disasm #<ISeq:#{iseq.name}>"
-
-    iseq.insns.each do |insn|
-      puts "0000 #{insn}"
-      queue << insn.iseq if insn in YARV::DefineMethod
-    end
-
-    puts if queue.any?
-  end
-
-  return
+  dump_insns = true
 end
 
 # Check if we are reading directly from a string with -e.
@@ -42,4 +22,8 @@ compiled =
     YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
   end
 
-compiled.eval
+if dump_insns
+  puts compiled.disasm
+else
+  compiled.eval
+end

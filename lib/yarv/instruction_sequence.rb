@@ -8,23 +8,69 @@ module YARV
     # This is the native instruction sequence that we are wrapping.
     attr_reader :iseq
 
-    def initialize(selfo, iseq)
+    # This is the parent InstructionSequence object if there is one.
+    attr_reader :parent
+
+    # These handlers handle thrown exceptions.
+    ThrowHandler =
+      Struct.new(:type, :iseq, :begin_label, :end_label, :exit_label)
+
+    attr_reader :throw_handlers
+
+    def initialize(selfo, iseq, parent = nil)
       @selfo = selfo
-      @iseq = iseq
+      @iseq = iseq[...-1]
+      @parent = parent
 
       @insns = []
       @labels = {}
+
+      @throw_handlers =
+        (catch_table || []).map do |handler|
+          type, child_iseq, begin_label, end_label, exit_label, = handler
+          throw_iseq =
+            InstructionSequence.compile(selfo, child_iseq, self) if child_iseq
+
+          ThrowHandler.new(type, throw_iseq, begin_label, end_label, exit_label)
+        end
     end
 
-    def self.compile(selfo, iseq)
+    class UnimplementedInstruction
+      attr_reader :name, :args
+
+      def initialize(name, *args)
+        @name = name
+        @args = args
+      end
+
+      def ==(other)
+        other in UnimplementedInstruction[name: ^(name), args: ^(args)]
+      end
+
+      def call(context)
+        raise NotImplementedError, "Unimplemented instruction: #{name}"
+      end
+
+      def deconstruct_keys(keys)
+        { name:, args: }
+      end
+
+      def to_s
+        name.to_s
+      end
+    end
+
+    def self.compile(selfo, iseq, parent = nil)
       iseq
         .last
-        .each_with_object(new(selfo, iseq)) do |insn, compiled|
+        .each_with_object(new(selfo, iseq, parent)) do |insn, compiled|
           case insn
           in Integer | :RUBY_EVENT_LINE
             # skip for now
           in Symbol
             compiled.labels[insn] = compiled.insns.length
+          in :adjuststack, size
+            compiled << AdjustStack.new(size)
           in [:anytostring]
             compiled << AnyToString.new
           in :branchif, value
@@ -33,27 +79,103 @@ module YARV
             compiled << BranchNil.new(value)
           in :branchunless, value
             compiled << BranchUnless.new(value)
+          in :checkkeyword, bits_index, index
+            compiled << UnimplementedInstruction.new(
+              "checkkeyword",
+              bits_index,
+              index
+            )
+          in :checkmatch, type
+            compiled << UnimplementedInstruction.new("checkmatch", type)
+          in :checktype, type
+            compiled << UnimplementedInstruction.new("checktype", type)
           in [:concatarray]
             compiled << ConcatArray.new
           in :concatstrings, num
             compiled << ConcatStrings.new(num)
+          in :defineclass, name, iseq, flags
+            compiled << UnimplementedInstruction.new(
+              "defineclass",
+              name,
+              compile(selfo, iseq, compiled),
+              flags
+            )
+          in :defined, type, object, value
+            compiled << Defined.new(type, object, value)
           in :definemethod, name, iseq
-            compiled << DefineMethod.new(name, compile(selfo, iseq))
+            compiled << DefineMethod.new(name, compile(selfo, iseq, compiled))
+          in :definesmethod, name, iseq
+            compiled << UnimplementedInstruction.new(
+              "definesmethod",
+              name,
+              compile(selfo, iseq, compiled)
+            )
           in [:dup]
             compiled << Dup.new
           in :duparray, array
             compiled << DupArray.new(array)
           in :duphash, hash
             compiled << DupHash.new(hash)
+          in :dupn, offset
+            compiled << DupN.new(offset)
+          in :expandarray, size, flag
+            compiled << UnimplementedInstruction.new("expandarray", size, flag)
+          in :getblockparam, index, level
+            compiled << UnimplementedInstruction.new(
+              "getblockparam",
+              index,
+              level
+            )
+          in :getblockparamproxy, index, level
+            compiled << UnimplementedInstruction.new(
+              "getblockparamproxy",
+              index,
+              level
+            )
+          in :getclassvariable, name, cache
+            compiled << UnimplementedInstruction.new(
+              "getclassvariable",
+              name,
+              cache
+            )
           in :getconstant, name
             compiled << GetConstant.new(name)
           in :getglobal, value
             compiled << GetGlobal.new(value)
+          in :getinstancevariable, name, cache
+            compiled << UnimplementedInstruction.new(
+              "getinstancevariable",
+              name,
+              cache
+            )
+          in :getlocal, offset, level
+            current = compiled
+            level.times { current = current.parent }
+
+            index = current.local_index(offset)
+            compiled << GetLocal.new(current.locals[index], index, level)
           in :getlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << GetLocalWC0.new(compiled.locals[index], index)
+          in :getlocal_WC_1, offset
+            index = parent.local_index(offset)
+            compiled << GetLocalWC1.new(parent.locals[index], index)
+          in :getspecial, key, type
+            compiled << UnimplementedInstruction.new("getspecial", key, type)
           in [:intern]
             compiled << Intern.new
+          in :invokeblock, { mid: nil, orig_argc:, flag: }
+            compiled << UnimplementedInstruction.new(
+              "invokeblock",
+              CallData.new(nil, orig_argc, flag)
+            )
+          in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq
+            block_iseq = compile(selfo, block_iseq, compiled) if block_iseq
+            compiled << UnimplementedInstruction.new(
+              "invokesuper",
+              CallData.new(nil, orig_argc, flag),
+              block_iseq
+            )
           in :jump, value
             compiled << Jump.new(value)
           in [:leave]
@@ -62,16 +184,28 @@ module YARV
             compiled << NewArray.new(size)
           in :newhash, size
             compiled << NewHash.new(size)
+          in :newarraykwsplat, size
+            compiled << UnimplementedInstruction.new("newarraykwsplat", size)
           in :newrange, exclude_end
             compiled << NewRange.new(exclude_end)
+          in [:nop]
+            compiled << Nop.new
           in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
             compiled << ObjToString.new(CallData.new(:to_s, 0, flag))
+          in :once, iseq, cache
+            compiled << UnimplementedInstruction.new(
+              "once",
+              compile(selfo, iseq, compiled),
+              cache
+            )
           in :opt_and, { mid: :&, orig_argc: 1, flag: }
             compiled << OptAnd.new(CallData.new(:&, 1, flag))
           in :opt_aref, { mid: :[], orig_argc: 1, flag: }
             compiled << OptAref.new(CallData.new(:[], 1, flag))
-          in :opt_aset, { mid: :[]=, orig_argc: 2 }
+          in :opt_aset, { mid: :[]=, orig_argc: 2, flag: }
             compiled << OptAset.new(CallData.new(:[]=, 2, flag))
+          in :opt_aset_with, key, { mid: :[]=, orig_argc: 2, flag: }
+            compiled << OptAsetWith.new(key, CallData.new(:[]=, 2, flag))
           in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
             compiled << OptArefWith.new(key, CallData.new(:[], 1, flag))
           in :opt_case_dispatch, cdhash, offset
@@ -119,6 +253,8 @@ module YARV
             compiled << OptOr.new(CallData.new(:|, 1, flag))
           in :opt_plus, { mid: :+, orig_argc: 1, flag: }
             compiled << OptPlus.new(CallData.new(:+, 1, flag))
+          in :opt_regexpmatch2, { mid: :=~, orig_argc: 1, flag: }
+            compiled << OptRegexpMatch2.new(CallData.new(:=~, 1, flag))
           in :opt_send_without_block, { mid:, orig_argc:, flag: }
             compiled << OptSendWithoutBlock.new(
               CallData.new(mid, orig_argc, flag)
@@ -145,20 +281,59 @@ module YARV
             compiled << PutObjectInt2Fix1.new
           in [:putself]
             compiled << PutSelf.new(selfo)
+          in :putspecialobject, type
+            compiled << UnimplementedInstruction.new("putspecialobject", type)
           in :putstring, string
             compiled << PutString.new(string)
           in :send, { mid:, orig_argc:, flag: }, block_iseq
-            block_iseq = compile(selfo, block_iseq) unless block_iseq.nil?
+            block_iseq =
+              compile(selfo, block_iseq, compiled) unless block_iseq.nil?
+
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
+          in :setblockparam, index, level
+            compiled << UnimplementedInstruction.new(
+              "setblockparam",
+              index,
+              level
+            )
+          in :setclassvariable, name, cache
+            compiled << UnimplementedInstruction.new(
+              "setclassvariable",
+              name,
+              cache
+            )
+          in :setconstant, name
+            compiled << UnimplementedInstruction.new("setconstant", name)
           in :setglobal, name
             compiled << SetGlobal.new(name)
-          in :setn, index
-            compiled << SetN.new(index)
+          in :setinstancevariable, name, cache
+            compiled << UnimplementedInstruction.new(
+              "setinstancevariable",
+              name,
+              cache
+            )
+          in :setlocal, offset, level
+            current = compiled
+            level.times { current = current.parent }
+
+            index = current.local_index(offset)
+            compiled << SetLocal.new(current.locals[index], index, level)
           in :setlocal_WC_0, offset
             index = compiled.local_index(offset)
             compiled << SetLocalWC0.new(compiled.locals[index], index)
+          in :setlocal_WC_1, offset
+            index = parent.local_index(offset)
+            compiled << SetLocalWC1.new(parent.locals[index], index)
+          in :setn, index
+            compiled << SetN.new(index)
+          in :setspecial, key
+            compiled << UnimplementedInstruction.new("setspecial", key)
+          in :splatarray, flag
+            compiled << UnimplementedInstruction.new("splatarray", flag)
           in [:swap]
             compiled << Swap.new
+          in :throw, type
+            compiled << UnimplementedInstruction.new("throw", type)
           in :topn, n
             compiled << TopN.new(n)
           in :toregexp, opts, cnt
@@ -177,6 +352,51 @@ module YARV
 
     def deconstruct_keys(keys)
       { insns:, labels: labels.values }
+    end
+
+    # Print out this instruction sequence to the given output stream.
+    def disasm(output = StringIO.new, prefix = "")
+      output.print("#{prefix}== disasm #<ISeq:#{name}> ")
+      handled = []
+
+      if throw_handlers.any?
+        output.puts("(catch: TRUE)")
+        output.puts("#{prefix}== catch table")
+
+        throw_handlers.each do |handler|
+          output.puts("#{prefix}| catch type: #{handler.type}")
+
+          if handler.iseq
+            handler.iseq.disasm(output, "#{prefix}| ")
+            handled << handler.iseq
+          end
+        end
+
+        output.puts("#{prefix}|#{"-" * 72}")
+      else
+        output.puts("(catch: FALSE)")
+      end
+
+      child_iseqs = []
+      insns.each do |insn|
+        output.puts("#{prefix}0000 #{insn}")
+
+        case insn
+        when DefineMethod
+          child_iseqs << insn.iseq
+        when Send
+          if insn.block_iseq && !handled.include?(insn.block_iseq)
+            child_iseqs << insn.block_iseq
+          end
+        end
+      end
+
+      child_iseqs.each do |child_iseq|
+        output.puts
+        child_iseq.disasm(output, prefix)
+      end
+
+      output.string
     end
 
     # This is the name assigned to this instruction sequence.
@@ -200,6 +420,12 @@ module YARV
     # this instruction sequence.
     def args
       iseq[11]
+    end
+
+    # These are the various ways the instruction sequence handles raised
+    # exceptions.
+    def catch_table
+      iseq[12]
     end
 
     def eval(context = ExecutionContext.new)
