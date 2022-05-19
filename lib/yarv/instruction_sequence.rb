@@ -29,6 +29,8 @@ module YARV
             # skip for now
           in Symbol
             compiled.labels[insn] = compiled.insns.length
+          in :adjuststack, size
+            compiled << AdjustStack.new(size)
           in [:anytostring]
             compiled << AnyToString.new
           in :branchif, value
