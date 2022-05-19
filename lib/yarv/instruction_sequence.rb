@@ -64,6 +64,8 @@ module YARV
             compiled << NewHash.new(size)
           in :newrange, exclude_end
             compiled << NewRange.new(exclude_end)
+          in [:nop]
+            compiled << Nop.new
           in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
             compiled << ObjToString.new(CallData.new(:to_s, 0, flag))
           in :opt_and, { mid: :&, orig_argc: 1, flag: }

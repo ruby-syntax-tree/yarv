@@ -46,7 +46,7 @@ module YARV
     end
 
     def to_s
-      "%-38s %s" % ["branchif", label["label_"..]]
+      "%-38s %s" % ["branchif", label["label_".length..]]
     end
   end
 end
