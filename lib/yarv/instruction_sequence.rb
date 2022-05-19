@@ -123,6 +123,8 @@ module YARV
             compiled << OptOr.new(CallData.new(:|, 1, flag))
           in :opt_plus, { mid: :+, orig_argc: 1, flag: }
             compiled << OptPlus.new(CallData.new(:+, 1, flag))
+          in :opt_regexpmatch2, { mid: :=~, orig_argc: 1, flag: }
+            compiled << OptRegexpMatch2.new(CallData.new(:=~, 1, flag))
           in :opt_send_without_block, { mid:, orig_argc:, flag: }
             compiled << OptSendWithoutBlock.new(
               CallData.new(mid, orig_argc, flag)
