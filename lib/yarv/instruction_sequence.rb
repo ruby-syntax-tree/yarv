@@ -91,8 +91,10 @@ module YARV
             compiled << OptAnd.new(CallData.new(:&, 1, flag))
           in :opt_aref, { mid: :[], orig_argc: 1, flag: }
             compiled << OptAref.new(CallData.new(:[], 1, flag))
-          in :opt_aset, { mid: :[]=, orig_argc: 2 }
+          in :opt_aset, { mid: :[]=, orig_argc: 2, flag: }
             compiled << OptAset.new(CallData.new(:[]=, 2, flag))
+          in :opt_aset_with, key, { mid: :[]=, orig_argc: 2, flag: }
+            compiled << OptAsetWith.new(key, CallData.new(:[]=, 2, flag))
           in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
             compiled << OptArefWith.new(key, CallData.new(:[], 1, flag))
           in :opt_case_dispatch, cdhash, offset

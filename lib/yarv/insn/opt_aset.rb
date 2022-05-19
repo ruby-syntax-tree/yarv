@@ -7,12 +7,12 @@ module YARV
   #
   # ### TracePoint
   #
-  #   # There is no trace point for `opt_aset`.
+  # There is no trace point for `opt_aset`.
   #
   # ### Usage
   #
   # ~~~ruby
-  # {}[:key] = 'val'
+  # {}[:key] = value
   # ~~~
   #
   class OptAset
