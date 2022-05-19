@@ -4,6 +4,42 @@
 $:.unshift(File.expand_path("../lib", __dir__))
 require "yarv"
 
+def disasm(iseq, prefix = "")
+  print "#{prefix}== disasm #<ISeq:#{iseq.name}> "
+
+  catch_table = iseq.catch_table
+  if catch_table.any?
+    puts "(catch: TRUE)"
+    puts "== catch table"
+
+    catch_table.each do |handler|
+      case handler
+      in YARV::InstructionSequence::RescueHandler
+        puts "#{prefix}| catch type: rescue"
+        disasm(handler.iseq, "#{prefix}| ")
+      in YARV::InstructionSequence::RetryHandler
+        puts "#{prefix}| catch type: retry"
+      end
+    end
+  else
+    puts "(catch: FALSE)"
+  end
+
+  nested = []
+  iseq.insns.each do |insn|
+    puts "#{prefix}0000 #{insn}"
+
+    case insn
+    when YARV::DefineMethod
+      nested << insn.iseq
+    when YARV::Send
+      nested << insn.block_iseq if insn.block_iseq
+    end
+  end
+
+  nested.each { |nested_iseq| disasm(nested_iseq, prefix) }
+end
+
 # If we're dumping instructions, then we're going to walk through the compiled
 # instructions and print each one out in turn.
 if ARGV.first == "--dump=insns"
@@ -18,24 +54,7 @@ if ARGV.first == "--dump=insns"
       YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
     end
 
-  queue = [compiled]
-  while iseq = queue.shift
-    puts "== disasm #<ISeq:#{iseq.name}>"
-
-    iseq.insns.each do |insn|
-      puts "0000 #{insn}"
-
-      case insn
-      when YARV::DefineMethod
-        queue << insn.iseq
-      when YARV::Send
-        queue << insn.block_iseq if insn.block_iseq
-      end
-    end
-
-    puts if queue.any?
-  end
-
+  disasm(compiled)
   return
 end
 

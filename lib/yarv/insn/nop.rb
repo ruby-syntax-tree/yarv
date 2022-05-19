@@ -25,7 +25,7 @@ module YARV
     end
 
     def to_s
-      "%-38s %s" % ["nop"]
+      "%-38s" % ["nop"]
     end
   end
 end

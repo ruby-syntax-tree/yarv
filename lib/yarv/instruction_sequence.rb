@@ -39,6 +39,8 @@ module YARV
             compiled << BranchNil.new(value)
           in :branchunless, value
             compiled << BranchUnless.new(value)
+          in :checkmatch, type
+            compiled << -> { raise NotImplementedError, "checkmatch" }
           in [:concatarray]
             compiled << ConcatArray.new
           in :concatstrings, num
@@ -197,6 +199,8 @@ module YARV
             compiled << SetN.new(index)
           in [:swap]
             compiled << Swap.new
+          in :throw, type
+            compiled << -> { raise NotImplementedError, "throw" }
           in :topn, n
             compiled << TopN.new(n)
           in :toregexp, opts, cnt
@@ -238,6 +242,53 @@ module YARV
     # this instruction sequence.
     def args
       iseq[11]
+    end
+
+    class EnsureHandler
+      attr_reader :iseq, :begin_label, :end_label, :exit_label
+
+      def initialize(iseq, begin_label, end_label, exit_label)
+        @iseq = iseq
+        @begin_label = begin_label
+        @end_label = end_label
+        @exit_label = exit_label
+      end
+    end
+
+    class RescueHandler
+      attr_reader :iseq, :begin_label, :end_label, :exit_label
+
+      def initialize(iseq, begin_label, end_label, exit_label)
+        @iseq = iseq
+        @begin_label = begin_label
+        @end_label = end_label
+        @exit_label = exit_label
+      end
+    end
+
+    class RetryHandler
+      attr_reader :begin_label, :end_label, :exit_label
+
+      def initialize(begin_label, end_label, exit_label)
+        @begin_label = begin_label
+        @end_label = end_label
+        @exit_label = exit_label
+      end
+    end
+
+    # These are the various ways the instruction sequence handles raised
+    # exceptions.
+    def catch_table
+      iseq[12].map do |(type, iseq, begin_label, end_label, exit_label)|
+        case type
+        in :ensure
+          EnsureHandler.new(InstructionSequence.compile(selfo, iseq, self), begin_label, end_label, exit_label)
+        in :rescue
+          RescueHandler.new(InstructionSequence.compile(selfo, iseq, self), begin_label, end_label, exit_label)
+        in :retry
+          RetryHandler.new(begin_label, end_label, exit_label)
+        end
+      end
     end
 
     def eval(context = ExecutionContext.new)
