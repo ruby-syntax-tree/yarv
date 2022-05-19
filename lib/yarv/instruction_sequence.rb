@@ -11,13 +11,62 @@ module YARV
     # This is the parent InstructionSequence object if there is one.
     attr_reader :parent
 
+    # These handlers handle thrown exceptions.
+    ThrowHandler =
+      Struct.new(:type, :iseq, :begin_label, :end_label, :exit_label)
+
+    attr_reader :throw_handlers
+
     def initialize(selfo, iseq, parent = nil)
       @selfo = selfo
-      @iseq = iseq
+      @iseq = iseq[...-1]
       @parent = parent
 
       @insns = []
       @labels = {}
+
+      @throw_handlers =
+        (catch_table || []).map do |handler|
+          type, child_iseq, begin_label, end_label, exit_label, = handler
+          ThrowHandler.new(
+            type,
+            (
+              if child_iseq
+                InstructionSequence.compile(selfo, child_iseq, iseq)
+              else
+                nil
+              end
+            ),
+            begin_label,
+            end_label,
+            exit_label
+          )
+        end
+    end
+
+    class UnimplementedInstruction
+      attr_reader :name, :args
+
+      def initialize(name, *args)
+        @name = name
+        @args = args
+      end
+
+      def ==(other)
+        other in UnimplementedInstruction[name: ^(name), args: ^(args)]
+      end
+
+      def call(context)
+        raise NotImplementedError, "Unimplemented instruction: #{name}"
+      end
+
+      def deconstruct_keys(keys)
+        { name:, args: }
+      end
+
+      def to_s
+        name.to_s
+      end
     end
 
     def self.compile(selfo, iseq, parent = nil)
@@ -40,25 +89,36 @@ module YARV
           in :branchunless, value
             compiled << BranchUnless.new(value)
           in :checkkeyword, bits_index, index
-            compiled << -> { raise NotImplementedError, "checkkeyword" }
+            compiled << UnimplementedInstruction.new(
+              "checkkeyword",
+              bits_index,
+              index
+            )
           in :checkmatch, type
-            compiled << -> { raise NotImplementedError, "checkmatch" }
+            compiled << UnimplementedInstruction.new("checkmatch", type)
           in :checktype, type
-            compiled << -> { raise NotImplementedError, "checktype" }
+            compiled << UnimplementedInstruction.new("checktype", type)
           in [:concatarray]
             compiled << ConcatArray.new
           in :concatstrings, num
             compiled << ConcatStrings.new(num)
           in :defineclass, name, iseq, flags
-            compile(selfo, iseq, compiled)
-            compiled << -> { raise NotImplementedError, "defineclass" }
+            compiled << UnimplementedInstruction.new(
+              "defineclass",
+              name,
+              compile(selfo, iseq, compiled),
+              flags
+            )
           in :defined, type, object, value
             compiled << Defined.new(type, object, value)
           in :definemethod, name, iseq
             compiled << DefineMethod.new(name, compile(selfo, iseq, compiled))
           in :definesmethod, name, iseq
-            compile(selfo, iseq, compiled)
-            compiled << -> { raise NotImplementedError, "definesmethod" }
+            compiled << UnimplementedInstruction.new(
+              "definesmethod",
+              name,
+              compile(selfo, iseq, compiled)
+            )
           in [:dup]
             compiled << Dup.new
           in :duparray, array
@@ -68,19 +128,35 @@ module YARV
           in :dupn, offset
             compiled << DupN.new(offset)
           in :expandarray, size, flag
-            compiled << -> { raise NotImplementedError, "expandarray" }
+            compiled << UnimplementedInstruction.new("expandarray", size, flag)
           in :getblockparam, index, level
-            compiled << -> { raise NotImplementedError, "getblockparam" }
+            compiled << UnimplementedInstruction.new(
+              "getblockparam",
+              index,
+              level
+            )
           in :getblockparamproxy, index, level
-            compiled << -> { raise NotImplementedError, "getblockparamproxy" }
+            compiled << UnimplementedInstruction.new(
+              "getblockparamproxy",
+              index,
+              level
+            )
           in :getclassvariable, name, cache
-            compiled << -> { raise NotImplementedError, "getclassvariable" }
+            compiled << UnimplementedInstruction.new(
+              "getclassvariable",
+              name,
+              cache
+            )
           in :getconstant, name
             compiled << GetConstant.new(name)
           in :getglobal, value
             compiled << GetGlobal.new(value)
           in :getinstancevariable, name, cache
-            compiled << -> { raise NotImplementedError, "getinstancevariable" }
+            compiled << UnimplementedInstruction.new(
+              "getinstancevariable",
+              name,
+              cache
+            )
           in :getlocal, offset, level
             current = compiled
             level.times { current = current.parent }
@@ -94,14 +170,21 @@ module YARV
             index = parent.local_index(offset)
             compiled << GetLocalWC1.new(parent.locals[index], index)
           in :getspecial, key, type
-            compiled << -> { raise NotImplementedError, "getspecial" }
+            compiled << UnimplementedInstruction.new("getspecial", key, type)
           in [:intern]
             compiled << Intern.new
-          in :invokeblock, { mid: nil, orig_argc: 1, flag: }
-            compiled << -> { raise NotImplementedError, "invokeblock" }
+          in :invokeblock, { mid: nil, orig_argc:, flag: }
+            compiled << UnimplementedInstruction.new(
+              "invokeblock",
+              CallData.new(nil, orig_argc, flag)
+            )
           in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq
-            compile(selfo, block_iseq, compiled) if block_iseq
-            compiled << -> { raise NotImplementedError, "invokesuper" }
+            block_iseq = compile(selfo, block_iseq, compiled) if block_iseq
+            compiled << UnimplementedInstruction.new(
+              "invokesuper",
+              CallData.new(nil, orig_argc, flag),
+              block_iseq
+            )
           in :jump, value
             compiled << Jump.new(value)
           in [:leave]
@@ -111,7 +194,7 @@ module YARV
           in :newhash, size
             compiled << NewHash.new(size)
           in :newarraykwsplat, size
-            compiled << -> { raise NotImplementedError, "newarraykwsplat" }
+            compiled << UnimplementedInstruction.new("newarraykwsplat", size)
           in :newrange, exclude_end
             compiled << NewRange.new(exclude_end)
           in [:nop]
@@ -119,8 +202,11 @@ module YARV
           in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
             compiled << ObjToString.new(CallData.new(:to_s, 0, flag))
           in :once, iseq, cache
-            compile(selfo, iseq, compiled)
-            compiled << -> { raise NotImplementedError, "once" }
+            compiled << UnimplementedInstruction.new(
+              "once",
+              compile(selfo, iseq, compiled),
+              cache
+            )
           in :opt_and, { mid: :&, orig_argc: 1, flag: }
             compiled << OptAnd.new(CallData.new(:&, 1, flag))
           in :opt_aref, { mid: :[], orig_argc: 1, flag: }
@@ -205,7 +291,7 @@ module YARV
           in [:putself]
             compiled << PutSelf.new(selfo)
           in :putspecialobject, type
-            compiled << -> { raise NotImplementedError, "putspecialobject" }
+            compiled << UnimplementedInstruction.new("putspecialobject", type)
           in :putstring, string
             compiled << PutString.new(string)
           in :send, { mid:, orig_argc:, flag: }, block_iseq
@@ -214,15 +300,27 @@ module YARV
 
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
           in :setblockparam, index, level
-            compiled << -> { raise NotImplementedError, "setblockparam" }
+            compiled << UnimplementedInstruction.new(
+              "setblockparam",
+              index,
+              level
+            )
           in :setclassvariable, name, cache
-            compiled << -> { raise NotImplementedError, "setclassvariable" }
+            compiled << UnimplementedInstruction.new(
+              "setclassvariable",
+              name,
+              cache
+            )
           in :setconstant, name
-            compiled << -> { raise NotImplementedError, "setconstant" }
+            compiled << UnimplementedInstruction.new("setconstant", name)
           in :setglobal, name
             compiled << SetGlobal.new(name)
           in :setinstancevariable, name, cache
-            compiled << -> { raise NotImplementedError, "setinstancevariable" }
+            compiled << UnimplementedInstruction.new(
+              "setinstancevariable",
+              name,
+              cache
+            )
           in :setlocal, offset, level
             current = compiled
             level.times { current = current.parent }
@@ -238,13 +336,13 @@ module YARV
           in :setn, index
             compiled << SetN.new(index)
           in :setspecial, key
-            compiled << -> { raise NotImplementedError, "setspecial" }
+            compiled << UnimplementedInstruction.new("setspecial", key)
           in :splatarray, flag
-            compiled << -> { raise NotImplementedError, "splatarray" }
+            compiled << UnimplementedInstruction.new("splatarray", flag)
           in [:swap]
             compiled << Swap.new
           in :throw, type
-            compiled << -> { raise NotImplementedError, "throw" }
+            compiled << UnimplementedInstruction.new("throw", type)
           in :topn, n
             compiled << TopN.new(n)
           in :toregexp, opts, cnt
@@ -263,6 +361,51 @@ module YARV
 
     def deconstruct_keys(keys)
       { insns:, labels: labels.values }
+    end
+
+    # Print out this instruction sequence to the given output stream.
+    def disasm(output = StringIO.new, prefix = "")
+      output.print("#{prefix}== disasm #<ISeq:#{name}> ")
+      handled = []
+
+      if throw_handlers.any?
+        output.puts("(catch: TRUE)")
+        output.puts("#{prefix}== catch table")
+
+        throw_handlers.each do |handler|
+          output.puts("#{prefix}| catch type: #{handler.type}")
+
+          if handler.iseq
+            handler.iseq.disasm(output, "#{prefix}| ")
+            handled << handler.iseq
+          end
+        end
+
+        output.puts("#{prefix}|#{"-" * 72}")
+      else
+        output.puts("(catch: FALSE)")
+      end
+
+      child_iseqs = []
+      insns.each do |insn|
+        output.puts("#{prefix}0000 #{insn}")
+
+        case insn
+        when DefineMethod
+          child_iseqs << insn.iseq
+        when Send
+          if insn.block_iseq && !handled.include?(insn.block_iseq)
+            child_iseqs << insn.block_iseq
+          end
+        end
+      end
+
+      child_iseqs.each do |child_iseq|
+        output.puts
+        child_iseq.disasm(output, prefix)
+      end
+
+      output.string
     end
 
     # This is the name assigned to this instruction sequence.
@@ -288,51 +431,10 @@ module YARV
       iseq[11]
     end
 
-    class EnsureHandler
-      attr_reader :iseq, :begin_label, :end_label, :exit_label
-
-      def initialize(iseq, begin_label, end_label, exit_label)
-        @iseq = iseq
-        @begin_label = begin_label
-        @end_label = end_label
-        @exit_label = exit_label
-      end
-    end
-
-    class RescueHandler
-      attr_reader :iseq, :begin_label, :end_label, :exit_label
-
-      def initialize(iseq, begin_label, end_label, exit_label)
-        @iseq = iseq
-        @begin_label = begin_label
-        @end_label = end_label
-        @exit_label = exit_label
-      end
-    end
-
-    class RetryHandler
-      attr_reader :begin_label, :end_label, :exit_label
-
-      def initialize(begin_label, end_label, exit_label)
-        @begin_label = begin_label
-        @end_label = end_label
-        @exit_label = exit_label
-      end
-    end
-
     # These are the various ways the instruction sequence handles raised
     # exceptions.
     def catch_table
-      iseq[12].map do |(type, iseq, begin_label, end_label, exit_label)|
-        case type
-        in :ensure
-          EnsureHandler.new(InstructionSequence.compile(selfo, iseq, self), begin_label, end_label, exit_label)
-        in :rescue
-          RescueHandler.new(InstructionSequence.compile(selfo, iseq, self), begin_label, end_label, exit_label)
-        in :retry
-          RetryHandler.new(begin_label, end_label, exit_label)
-        end
-      end
+      iseq[12]
     end
 
     def eval(context = ExecutionContext.new)

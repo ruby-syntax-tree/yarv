@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "stringio"
 require "syntax_tree"
 
 require_relative "yarv/call_data"
