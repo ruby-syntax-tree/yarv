@@ -40,8 +40,8 @@ module YARV
     end
 
     def call(context)
-      receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      result = context.call_method(call_data, receiver, arguments, &context.current_frame.block)
+      *arguments = context.stack.pop(call_data.argc)
+      result = context.current_frame.block.call(*arguments)
 
       context.stack.push(result)
     end
