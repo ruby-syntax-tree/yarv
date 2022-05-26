@@ -5,7 +5,7 @@ module YARV
   class Frame
     UNDEFINED = Object.new
 
-    attr_reader :iseq, :locals
+    attr_reader :iseq, :locals, :block
 
     def initialize(iseq)
       @iseq = iseq

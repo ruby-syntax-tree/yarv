@@ -41,20 +41,9 @@ module YARV
 
     def call(context)
       receiver, *arguments = context.stack.pop(call_data.argc + 1)
-      # result =
-      #   if block_iseq.nil?
-      #     context.call_method(call_data, receiver, arguments)
-      #   else
-      #     context.call_method(call_data, receiver, arguments) do |*args|
-      #       context.eval(block_iseq) do
-      #         args.each_with_index do |arg, index|
-      #           context.current_frame.locals[index] = arg
-      #         end
-      #       end
-      #     end
-      #   end
+      result = context.call_method(call_data, receiver, arguments, &context.current_frame.block)
 
-      # context.stack.push(result)
+      context.stack.push(result)
     end
 
     def deconstruct_keys(keys)

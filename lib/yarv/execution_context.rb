@@ -44,8 +44,6 @@ module YARV
     # locals table in the correct order.
     def call_method(call_data, receiver, arguments, &block)
       if (method = methods[[receiver.class, call_data.mid]])
-        # TODO: handle InvokeBlock
-
         # We only support a subset of the valid argument permutations. This
         # validates each kind to make sure we don't accidentally try to handle a
         # method that we currently don't support.
@@ -62,6 +60,7 @@ module YARV
           arguments.each_with_index do |argument, index|
             current_frame.locals[index] = argument
           end
+          current_frame.set_block(block) if block_given?
         end
 
         stack.last
