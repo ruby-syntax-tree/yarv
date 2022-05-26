@@ -165,8 +165,7 @@ module YARV
           in [:intern]
             compiled << Intern.new
           in :invokeblock, { mid: nil, orig_argc:, flag: }
-            compiled << UnimplementedInstruction.new(
-              "invokeblock",
+            compiled << InvokeBlock.new(
               CallData.new(nil, orig_argc, flag)
             )
           in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq

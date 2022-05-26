@@ -10,6 +10,9 @@ module YARV
     def initialize(iseq)
       @iseq = iseq
       @locals = Array.new(iseq.locals.length) { UNDEFINED }
+      # TODO: more accurately, this should be in a locals table
+      # e.g. local table (..., block: -1, ...)
+      @block = nil
     end
 
     # Fetches the value of a local variable from the frame. If the value has
@@ -27,6 +30,10 @@ module YARV
     # Sets the value of the local variable on the frame.
     def set_local(index, value)
       @locals[index] = value
+    end
+
+    def set_block(block)
+      @block = block
     end
   end
 end
