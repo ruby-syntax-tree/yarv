@@ -3,29 +3,24 @@
 module YARV
   # ### Summary
   #
-  # `send` invokes a method with a block.
+  # `invokeblock` invokes the block passed to a method during a yield.
   #
   # ### TracePoint
   #
-  # `send` does not dispatch any events.
   #
   # ### Usage
   #
   # ~~~ruby
-  # "hello".tap { |i| p i }
+  # def foo; yield; end
   #
-  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,23)> (catch: FALSE)
-  # # 0000 putstring                              "hello"                   (   1)[Li]
-  # # 0002 send                                   <calldata!mid:tap, argc:0>, block in <main>
+  # # == disasm: #<ISeq:<main>@-e:1 (1,0)-(1,19)> (catch: FALSE)
+  # # 0000 definemethod                           :foo, foo                 (   1)[Li]
+  # # 0003 putobject                              :foo
   # # 0005 leave
   # #
-  # # == disasm: #<ISeq:block in <main>@-e:1 (1,12)-(1,23)> (catch: FALSE)
-  # # local table (size: 1, argc: 1 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])
-  # # [ 1] i@0<Arg>
-  # # 0000 putself                                                          (   1)[LiBc]
-  # # 0001 getlocal_WC_0                          i@0
-  # # 0003 opt_send_without_block                 <calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE>
-  # # 0005 leave                                  [Br]
+  # # == disasm: #<ISeq:foo@-e:1 (1,0)-(1,19)> (catch: FALSE)
+  # # 0000 invokeblock                            <calldata!argc:0, ARGS_SIMPLE>(   1)[LiCa]
+  # # 0002 leave                                  [Re]
   # # ~~~
   #
   class InvokeBlock
@@ -36,12 +31,12 @@ module YARV
     end
 
     def ==(other)
-      # other in Send[call_data: ^(call_data), block_iseq: ^(block_iseq)]
+      other in InvokeBlock[call_data: ^(call_data)]
     end
 
     def call(context)
       *arguments = context.stack.pop(call_data.argc)
-      result = context.current_frame.block.call(*arguments)
+      result = context.current_frame.execute_block(*arguments)
 
       context.stack.push(result)
     end
@@ -51,7 +46,7 @@ module YARV
     end
 
     def to_s
-      # "%-38s %s, %s" % ["send", call_data, block_iseq.name]
+      "%-38s %s" % ["invokeblock", call_data]
     end
   end
 end

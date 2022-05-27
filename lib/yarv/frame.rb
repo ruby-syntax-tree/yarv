@@ -35,5 +35,9 @@ module YARV
     def set_block(block)
       @block = block
     end
+
+    def execute_block(*arguments)
+      block.call(*arguments)
+    end
   end
 end
