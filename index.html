@@ -42,6 +42,7 @@
 <a href="#getlocalwc0">getlocal_wc_0</a>
 <a href="#getlocalwc1">getlocal_wc_1</a>
 <a href="#intern">intern</a>
+<a href="#invokeblock">invokeblock</a>
 <a href="#jump">jump</a>
 <a href="#leave">leave</a>
 <a href="#newarray">newarray</a>
@@ -637,20 +638,43 @@ the index given as its only argument.</p>
 <span class="c1"># 0003 leave</span>
 </code></pre></div></div>
 
-<h2 id="jump">jump</h2>
+<h2 id="invokeblock">invokeblock</h2>
 
 <h3 id="summary-19">Summary</h3>
 
-<p><code>jump</code> has one argument, the jump index, which it uses to set the next
-instruction to execute.</p>
+<p><code>invokeblock</code> invokes the block passed to a method during a yield.</p>
 
 <h3 id="tracepoint-19">TracePoint</h3>
 
-<p>There is no trace point for <code>jump</code>.</p>
-
 <h3 id="usage-19">Usage</h3>
 
-<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">def</span> <span class="nf">foo</span><span class="p">;</span> <span class="k">yield</span><span class="p">;</span> <span class="k">end</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;main&gt;@-e:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 definemethod                           :foo, foo                 (   1)[Li]</span>
+<span class="c1"># 0003 putobject                              :foo</span>
+<span class="c1"># 0005 leave</span>
+<span class="c1">#</span>
+<span class="c1"># == disasm: #&lt;ISeq:foo@-e:1 (1,0)-(1,19)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 invokeblock                            &lt;calldata!argc:0, ARGS_SIMPLE&gt;(   1)[LiCa]</span>
+<span class="c1"># 0002 leave                                  [Re]</span>
+<span class="c1"># ~~~</span>
+
+<span class="c1">## jump</span>
+
+<span class="c1">### Summary</span>
+
+<span class="sb">`jump`</span> <span class="n">has</span> <span class="n">one</span> <span class="n">argument</span><span class="p">,</span> <span class="n">the</span> <span class="n">jump</span> <span class="n">index</span><span class="p">,</span> <span class="n">which</span> <span class="n">it</span> <span class="n">uses</span> <span class="n">to</span> <span class="n">set</span> <span class="n">the</span> <span class="k">next</span>
+<span class="n">instruction</span> <span class="n">to</span> <span class="n">execute</span><span class="o">.</span>
+
+<span class="c1">### TracePoint</span>
+
+<span class="no">There</span> <span class="n">is</span> <span class="n">no</span> <span class="n">trace</span> <span class="n">point</span> <span class="k">for</span> <span class="sb">`jump`</span><span class="o">.</span>
+
+<span class="c1">### Usage</span>
+
+<span class="o">~~~</span><span class="n">ruby</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span>
   <span class="nb">puts</span> <span class="s2">"0"</span>
 <span class="k">else</span>
