@@ -21,7 +21,7 @@ module YARV
   # puts x
   # ~~~
   #
-  class BranchIf
+  class BranchIf < Insn
     attr_reader :label
 
     def initialize(label)
@@ -45,8 +45,9 @@ module YARV
       { label: }
     end
 
-    def to_s
-      "%-38s %s" % ["branchif", label["label_".length..]]
+    def disasm(iseq)
+      target = iseq ? iseq.labels[label] : "??"
+      "%-38s %s (%s)" % ["branchif", label, target]
     end
   end
 end

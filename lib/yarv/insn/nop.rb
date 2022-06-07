@@ -16,7 +16,7 @@ module YARV
   # raise rescue true
   # ~~~
   #
-  class Nop
+  class Nop < Insn
     def ==(other)
       other in Nop
     end
@@ -24,7 +24,7 @@ module YARV
     def call(context)
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s" % ["nop"]
     end
   end

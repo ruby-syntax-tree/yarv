@@ -17,7 +17,7 @@ module YARV
   # Constant
   # ~~~
   #
-  class OptSetInlineCache
+  class OptSetInlineCache < Insn
     attr_reader :cache
 
     def initialize(cache)
@@ -37,7 +37,7 @@ module YARV
       { cache: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s <is:%d>" % ["opt_setinlinecache", cache]
     end
   end

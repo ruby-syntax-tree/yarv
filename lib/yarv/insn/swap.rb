@@ -15,7 +15,7 @@ module YARV
   # !!defined?([[]])
   # ~~~
   #
-  class Swap
+  class Swap < Insn
     def ==(other)
       other in Swap
     end
@@ -26,7 +26,7 @@ module YARV
       context.stack.push(left)
     end
 
-    def to_s
+    def disasm(iseq)
       "swap"
     end
   end

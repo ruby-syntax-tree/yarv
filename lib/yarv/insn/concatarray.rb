@@ -19,7 +19,7 @@ module YARV
   # [1, *2]
   # ~~~
   #
-  class ConcatArray
+  class ConcatArray < Insn
     def ==(other)
       other in ConcatArray
     end
@@ -32,7 +32,7 @@ module YARV
       context.stack.push(coerced_left)
     end
 
-    def to_s
+    def disasm(iseq)
       "concatarray"
     end
 

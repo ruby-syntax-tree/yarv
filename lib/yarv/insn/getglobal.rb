@@ -15,7 +15,7 @@ module YARV
   # $$
   # ~~~
   #
-  class GetGlobal
+  class GetGlobal < Insn
     attr_reader :name
 
     def initialize(name)
@@ -42,7 +42,7 @@ module YARV
       { name: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["getglobal", name.inspect]
     end
   end

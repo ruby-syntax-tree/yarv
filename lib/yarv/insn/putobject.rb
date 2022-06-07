@@ -15,7 +15,7 @@ module YARV
   # 5
   # ~~~
   #
-  class PutObject
+  class PutObject < Insn
     attr_reader :object
 
     def initialize(object)
@@ -34,7 +34,7 @@ module YARV
       { object: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["putobject", object.inspect]
     end
   end

@@ -16,7 +16,7 @@ module YARV
   # puts "Hello, world!"
   # ~~~
   #
-  class OptSendWithoutBlock
+  class OptSendWithoutBlock < Insn
     attr_reader :call_data
 
     def initialize(call_data)
@@ -38,7 +38,7 @@ module YARV
       { call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["opt_send_without_block", call_data]
     end
   end

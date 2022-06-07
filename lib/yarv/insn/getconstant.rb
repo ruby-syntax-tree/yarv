@@ -16,7 +16,7 @@ module YARV
   # Constant
   # ~~~
   #
-  class GetConstant
+  class GetConstant < Insn
     attr_reader :name
 
     def initialize(name)
@@ -43,7 +43,7 @@ module YARV
       { name: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["getconstant", name.inspect]
     end
   end

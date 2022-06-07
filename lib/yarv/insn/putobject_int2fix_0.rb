@@ -17,7 +17,7 @@ module YARV
   # 0
   # ~~~
   #
-  class PutObjectInt2Fix0
+  class PutObjectInt2Fix0 < Insn
     def ==(other)
       other in PutObjectInt2Fix0
     end
@@ -26,7 +26,7 @@ module YARV
       context.stack.push(0)
     end
 
-    def to_s
+    def disasm(iseq)
       "putobject_INT2FIX_0_"
     end
   end

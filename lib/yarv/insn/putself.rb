@@ -15,7 +15,7 @@ module YARV
   # puts "Hello, world!"
   # ~~~
   #
-  class PutSelf
+  class PutSelf < Insn
     attr_reader :object
 
     def initialize(object)
@@ -34,7 +34,7 @@ module YARV
       { object: }
     end
 
-    def to_s
+    def disasm(iseq)
       "putself"
     end
   end

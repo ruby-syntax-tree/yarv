@@ -15,7 +15,7 @@ module YARV
   # a ||= 2
   # ~~~
   #
-  class Pop
+  class Pop < Insn
     def ==(other)
       other in Pop
     end
@@ -24,7 +24,7 @@ module YARV
       context.stack.pop
     end
 
-    def to_s
+    def disasm(iseq)
       "pop"
     end
   end

@@ -15,7 +15,7 @@ module YARV
   # :"#{"foo"}"
   # ~~~
   #
-  class Intern
+  class Intern < Insn
     def ==(other)
       other in Intern
     end
@@ -25,7 +25,7 @@ module YARV
       context.stack.push(string.to_sym)
     end
 
-    def to_s
+    def disasm(iseq)
       "intern"
     end
   end

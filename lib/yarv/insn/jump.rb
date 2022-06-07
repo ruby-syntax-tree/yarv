@@ -21,7 +21,7 @@ module YARV
   # end
   # ~~~
   #
-  class Jump
+  class Jump < Insn
     attr_reader :label
 
     def initialize(label)
@@ -41,7 +41,7 @@ module YARV
       { label: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["jump", label["label_".length..]]
     end
   end

@@ -15,7 +15,7 @@ module YARV
   # nil
   # ~~~
   #
-  class PutNil
+  class PutNil < Insn
     def ==(other)
       other in PutNil
     end
@@ -24,7 +24,7 @@ module YARV
       context.stack.push(nil)
     end
 
-    def to_s
+    def disasm(iseq)
       "putnil"
     end
   end

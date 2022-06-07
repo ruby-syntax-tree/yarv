@@ -22,7 +22,7 @@ module YARV
   # end
   # ~~~
   #
-  class BranchNil
+  class BranchNil < Insn
     attr_reader :label
 
     def initialize(label)
@@ -46,8 +46,9 @@ module YARV
       { label: }
     end
 
-    def to_s
-      "%-38s %s" % ["branchnil", label["label_".length..]]
+    def disasm(iseq)
+      target = iseq ? iseq.labels[label] : "??"
+      "%-38s %s (%s)" % ["branchnil", label, target]
     end
   end
 end

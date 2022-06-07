@@ -165,9 +165,7 @@ module YARV
           in [:intern]
             compiled << Intern.new
           in :invokeblock, { mid: nil, orig_argc:, flag: }
-            compiled << InvokeBlock.new(
-              CallData.new(nil, orig_argc, flag)
-            )
+            compiled << InvokeBlock.new(CallData.new(nil, orig_argc, flag))
           in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq
             block_iseq = compile(selfo, block_iseq, compiled) if block_iseq
             compiled << UnimplementedInstruction.new(
@@ -377,8 +375,10 @@ module YARV
       end
 
       child_iseqs = []
-      insns.each do |insn|
-        output.puts("#{prefix}0000 #{insn}")
+      insns.each_with_index do |insn, insn_pc|
+        output.puts(
+          "#{prefix}#{insn_pc.to_s.rjust(4, "0")} #{insn.disasm(self)}"
+        )
 
         case insn
         when DefineMethod

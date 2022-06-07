@@ -15,7 +15,7 @@ module YARV
   # [true]
   # ~~~
   #
-  class DupArray
+  class DupArray < Insn
     attr_reader :value
 
     def initialize(value)
@@ -34,7 +34,7 @@ module YARV
       { value: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["duparray", value.inspect]
     end
   end

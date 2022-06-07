@@ -19,7 +19,7 @@ module YARV
   # 2 != 2
   # ~~~
   #
-  class OptNeq
+  class OptNeq < Insn
     attr_reader :cd_neq, :cd_eq
 
     def initialize(cd_eq, cd_neq)
@@ -42,7 +42,7 @@ module YARV
       { cd_eq:, cd_neq: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s%s%s" % ["opt_neq", cd_eq, cd_neq, "[CcCr]"]
     end
   end

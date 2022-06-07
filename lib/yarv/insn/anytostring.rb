@@ -22,7 +22,7 @@ module YARV
   # "#{5}"
   # ~~~
   #
-  class AnyToString
+  class AnyToString < Insn
     def ==(other)
       other in AnyToString
     end
@@ -33,7 +33,7 @@ module YARV
       context.stack.push(string)
     end
 
-    def to_s
+    def disasm(iseq)
       "anytostring"
     end
   end

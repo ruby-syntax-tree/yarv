@@ -14,7 +14,7 @@ module YARV
   # [1, x = 2].max
   # ~~~
   #
-  class OptNewArrayMax
+  class OptNewArrayMax < Insn
     attr_reader :size
 
     def initialize(size)
@@ -38,7 +38,7 @@ module YARV
       { size: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %d" % ["opt_newarray_max", size]
     end
   end

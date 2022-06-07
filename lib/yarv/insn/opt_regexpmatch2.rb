@@ -16,7 +16,7 @@ module YARV
   # /a/ =~ "a"
   # ~~~
   #
-  class OptRegexpMatch2
+  class OptRegexpMatch2 < Insn
     attr_reader :call_data
 
     def initialize(call_data)
@@ -38,7 +38,7 @@ module YARV
       { call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s%s" % ["opt_regexpmatch2", call_data, "[CcCr]"]
     end
   end

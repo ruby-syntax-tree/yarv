@@ -18,7 +18,7 @@ module YARV
   # self.then { value }
   # ~~~
   #
-  class GetLocalWC1
+  class GetLocalWC1 < Insn
     attr_reader :name, :index
 
     def initialize(name, index)
@@ -39,7 +39,7 @@ module YARV
       { name:, index: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s@%d" % ["getlocal_WC_1", name, index]
     end
   end
