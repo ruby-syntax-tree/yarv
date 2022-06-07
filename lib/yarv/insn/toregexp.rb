@@ -27,7 +27,7 @@ module YARV
   # # 0011 leave
   # ~~~
   #
-  class ToRegexp
+  class ToRegexp < Insn
     attr_reader :opts, :cnt
 
     def initialize(opts, cnt)
@@ -48,7 +48,7 @@ module YARV
       { opts:, cnt: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["toregexp", opts, cnt]
     end
   end

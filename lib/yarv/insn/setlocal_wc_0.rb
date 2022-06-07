@@ -17,7 +17,7 @@ module YARV
   # value = 5
   # ~~~
   #
-  class SetLocalWC0
+  class SetLocalWC0 < Insn
     attr_reader :name, :index
 
     def initialize(name, index)
@@ -34,7 +34,7 @@ module YARV
       context.current_frame.set_local(index, value)
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s@%d" % ["setlocal_WC_0", name, index]
     end
   end

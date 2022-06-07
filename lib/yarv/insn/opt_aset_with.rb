@@ -16,7 +16,7 @@ module YARV
   # {}["key"] = value
   # ~~~
   #
-  class OptAsetWith
+  class OptAsetWith < Insn
     attr_reader :key, :call_data
 
     def initialize(key, call_data)
@@ -39,7 +39,7 @@ module YARV
       { key:, call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["opt_aset_with", key.inspect, call_data]
     end
   end

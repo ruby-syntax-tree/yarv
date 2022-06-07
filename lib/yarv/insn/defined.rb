@@ -16,7 +16,7 @@ module YARV
   # defined?(x)
   # ~~~
   #
-  class Defined
+  class Defined < Insn
     DEFINED_TYPE = %i[
       DEFINED_NOT_DEFINED
       DEFINED_NIL
@@ -57,7 +57,7 @@ module YARV
       context.stack.push(vm_defined?(context, predicate) ? value : nil)
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s, %s" % ["defined", type, object.inspect, value.inspect]
     end
 

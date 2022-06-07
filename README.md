@@ -8,6 +8,10 @@ There isn't really a canonical source for documentation for these instructions b
 
 As a part of the documentation effort, this project also aims to provide an emulator of YARV behavior. This will ensure the documentation doesn't get out of date as it will need to reflect actual Ruby semantics. To run the emulator, after cloning the repository, run `exe/yarv <path_to_file>` from the command line.
 
+### Differences to MRI's YARV
+
+We use the indices of instructions in an ISEQ for the PC, where MRI uses the byte offset of instructions, where instructions have varying length.
+
 ## Getting started
 
 To use this project as a CLI, you can execute the `exe/yarv` executable. That functions similarly to the `ruby` executable. You pass it the path to a Ruby file, and it will execute that file.

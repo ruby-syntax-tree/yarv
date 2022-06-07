@@ -18,7 +18,7 @@ module YARV
   # p (x..y), (x...y)
   # ~~~
   #
-  class NewRange
+  class NewRange < Insn
     attr_reader :exclude_end
 
     def initialize(exclude_end)
@@ -42,7 +42,7 @@ module YARV
       { exclude_end: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %d" % ["newrange", exclude_end]
     end
   end

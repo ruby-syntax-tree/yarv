@@ -28,7 +28,7 @@ module YARV
   # # 0005 leave                                  [Br]
   # # ~~~
   #
-  class Send
+  class Send < Insn
     attr_reader :call_data, :block_iseq
 
     def initialize(call_data, block_iseq)
@@ -62,7 +62,7 @@ module YARV
       { call_data:, block_iseq: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["send", call_data, block_iseq.name]
     end
   end

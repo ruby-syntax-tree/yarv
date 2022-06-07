@@ -19,7 +19,7 @@ module YARV
   # "#{5}"
   # ~~~
   #
-  class ConcatStrings
+  class ConcatStrings < Insn
     attr_reader :size
 
     def initialize(size)
@@ -39,7 +39,7 @@ module YARV
       { size: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["concatstrings", size]
     end
   end

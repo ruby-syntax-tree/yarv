@@ -17,7 +17,7 @@ module YARV
   # "".empty?
   # ~~~
   #
-  class OptEmptyP
+  class OptEmptyP < Insn
     attr_reader :call_data
 
     def initialize(call_data)
@@ -39,7 +39,7 @@ module YARV
       { call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s%s" % ["opt_empty_p", call_data, "[CcCr]"]
     end
   end

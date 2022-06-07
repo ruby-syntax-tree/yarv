@@ -50,7 +50,7 @@ module YARV
   # # 0025 leave
   # ~~~
   #
-  class OptCaseDispatch
+  class OptCaseDispatch < Insn
     attr_reader :cdhash, :else_offset
 
     def initialize(cdhash, else_offset)
@@ -77,7 +77,7 @@ module YARV
       { cdhash:, else_offset: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s %s" %
         ["opt_case_dispatch", "<cdhash>,", else_offset["label_".length..]]
     end

@@ -15,7 +15,7 @@ module YARV
   # Object::X ||= true
   # ~~~
   #
-  class DupN
+  class DupN < Insn
     attr_reader :offset
 
     def initialize(offset)
@@ -34,7 +34,7 @@ module YARV
       { offset: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %d" % ["dupn", offset]
     end
   end

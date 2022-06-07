@@ -23,7 +23,7 @@ module YARV
   # # 0002 leave                                  [Re]
   # # ~~~
   #
-  class InvokeBlock
+  class InvokeBlock < Insn
     attr_reader :call_data
 
     def initialize(call_data)
@@ -45,7 +45,7 @@ module YARV
       { call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["invokeblock", call_data]
     end
   end

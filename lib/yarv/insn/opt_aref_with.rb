@@ -17,7 +17,7 @@ module YARV
   # { 'test' => true }['test']
   # ~~~
   #
-  class OptArefWith
+  class OptArefWith < Insn
     attr_reader :key, :call_data
 
     def initialize(key, call_data)
@@ -40,7 +40,7 @@ module YARV
       { key: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["opt_aref_with", key, call_data]
     end
   end

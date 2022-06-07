@@ -19,7 +19,7 @@ module YARV
   # tap { tap { value = 10 } }
   # ~~~
   #
-  class SetLocal
+  class SetLocal < Insn
     attr_reader :name, :index, :level
 
     def initialize(name, index, level)
@@ -41,7 +41,7 @@ module YARV
       { name:, index:, level: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s@%d, %d" % ["setlocal", name, index, level]
     end
   end

@@ -13,7 +13,7 @@ module YARV
   # {}[:key] = 'val'
   # ~~~
   #
-  class SetN
+  class SetN < Insn
     attr_reader :index
 
     def initialize(index)
@@ -32,7 +32,7 @@ module YARV
       { index: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["setn", index]
     end
   end

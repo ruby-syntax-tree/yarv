@@ -15,7 +15,7 @@ module YARV
   # $global = 5
   # ~~~
   #
-  class Dup
+  class Dup < Insn
     def ==(other)
       other in Dup
     end
@@ -26,7 +26,7 @@ module YARV
       context.stack.push(value)
     end
 
-    def to_s
+    def disasm(iseq)
       "dup"
     end
   end

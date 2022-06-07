@@ -15,7 +15,7 @@ module YARV
   # 4 >= 3
   # ~~~
   #
-  class OptGe
+  class OptGe < Insn
     attr_reader :call_data
 
     def initialize(call_data)
@@ -37,7 +37,7 @@ module YARV
       { call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s%s" % ["opt_ge", call_data, "[CcCr]"]
     end
   end

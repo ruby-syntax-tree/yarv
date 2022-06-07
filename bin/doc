@@ -8,7 +8,9 @@ require "kramdown"
 require "stringio"
 require "syntax_tree"
 
-filepaths = Dir[File.expand_path("../lib/yarv/insn/*.rb", __dir__)]
+filepaths = Dir[File.expand_path("../lib/yarv/insn/*.rb", __dir__)] \
+  .reject { |filepath| filepath.end_with?("insn/insn.rb") } # Skip the abstract instruction.
+
 markdown = StringIO.new
 
 # For each YARV instruction file, we're going to yank out the comments.

@@ -17,7 +17,7 @@ module YARV
   # def value = "value"
   # ~~~
   #
-  class DefineMethod
+  class DefineMethod < Insn
     attr_reader :name, :iseq
 
     def initialize(name, iseq)
@@ -37,7 +37,7 @@ module YARV
       { name:, iseq: }
     end
 
-    def to_s
+    def disasm(containing_iseq)
       "%-38s %s, %s" % ["definemethod", name.inspect, iseq.name]
     end
   end

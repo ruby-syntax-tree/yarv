@@ -16,7 +16,7 @@ module YARV
   # -"string"
   # ~~~
   #
-  class OptStrUMinus
+  class OptStrUMinus < Insn
     attr_reader :value, :call_data
 
     def initialize(value, call_data)
@@ -39,7 +39,7 @@ module YARV
       { value:, call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["opt_str_uminus", value.inspect, call_data]
     end
   end

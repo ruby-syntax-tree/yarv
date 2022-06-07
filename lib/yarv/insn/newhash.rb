@@ -18,7 +18,7 @@ module YARV
   # end
   # ~~~
   #
-  class NewHash
+  class NewHash < Insn
     attr_reader :size
 
     def initialize(size)
@@ -38,7 +38,7 @@ module YARV
       { size: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s" % ["newhash", size]
     end
   end

@@ -16,7 +16,7 @@ module YARV
   # "hello".freeze
   # ~~~
   #
-  class OptStrFreeze
+  class OptStrFreeze < Insn
     attr_reader :value, :call_data
 
     def initialize(value, call_data)
@@ -37,7 +37,7 @@ module YARV
       { value:, call_data: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %s, %s" % ["opt_str_freeze", value.inspect, call_data]
     end
   end

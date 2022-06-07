@@ -15,7 +15,7 @@ module YARV
   # ;;
   # ~~~
   #
-  class Leave
+  class Leave < Insn
     def ==(other)
       other in Leave
     end
@@ -24,7 +24,7 @@ module YARV
       # skip for now
     end
 
-    def to_s
+    def disasm(iseq)
       "leave"
     end
   end

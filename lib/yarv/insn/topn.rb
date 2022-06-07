@@ -34,7 +34,7 @@ module YARV
   # # 0019 leave
   # ~~~
   #
-  class TopN
+  class TopN < Insn
     attr_reader :n
 
     def initialize(n)
@@ -54,7 +54,7 @@ module YARV
       { n: }
     end
 
-    def to_s
+    def disasm(iseq)
       "%-38s %d" % ["topn", n]
     end
   end
