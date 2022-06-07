@@ -4,26 +4,48 @@
 $:.unshift(File.expand_path("../lib", __dir__))
 require "yarv"
 
+sources = []
 dump_insns = false
+dump_cfg = false
+execute = true
 
-# If we're dumping instructions, then we're going to walk through the compiled
-# instructions and print each one out in turn.
-if ARGV.first == "--dump=insns"
-  ARGV.shift
-  dump_insns = true
+until ARGV.empty?
+  arg = ARGV.shift
+  if arg.start_with?('-')
+    case arg
+    when "-e"
+      source = ARGV.shift
+      raise unless source
+      sources.push [source, "<main>", "-e"]
+    when "--dump=insns"
+      dump_insns = true
+      execute = false
+    when "--dump=cfg"
+      dump_cfg = true
+      execute = false
+    else
+      raise "Unknown argument #{arg}"
+    end
+  else
+    sources.push [File.read(arg), File.basename(arg), arg]
+  end
 end
 
-# Check if we are reading directly from a string with -e.
-compiled =
-  if ARGV.first == "-e"
-    ARGV.shift
-    YARV.compile(ARGV.shift, "<main>", "-e")
-  else
-    YARV.compile(ARGF.read, ARGF.filename, ARGF.path, ARGF.lineno)
+sources.each do |source, file, path|
+  compiled = YARV.compile(source, file, path)
+
+  if dump_insns
+    puts compiled.disasm
   end
 
-if dump_insns
-  puts compiled.disasm
-else
-  compiled.eval
+  if dump_cfg
+    compiled.all_iseqs.each do |iseq|
+      cfg = YARV::CFG.new(iseq)
+      puts cfg.disasm
+    end
+  end
+
+  if execute
+    compiled.eval
+  end
 end

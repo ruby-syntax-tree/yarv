@@ -41,8 +41,13 @@ module YARV
       { label: }
     end
 
+    def branches?
+      true
+    end
+
     def disasm(iseq)
-      "%-38s %s" % ["jump", label["label_".length..]]
+      target = iseq ? iseq.labels[label] : "??"
+      "%-38s %s (%s)" % ["jump", label, target]
     end
   end
 end
