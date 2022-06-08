@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "stringio"
+require "set"
 require "syntax_tree"
 
 require_relative "yarv/call_data"
@@ -8,6 +9,7 @@ require_relative "yarv/execution_context"
 require_relative "yarv/frame"
 require_relative "yarv/insn/insn.rb"
 require_relative "yarv/instruction_sequence"
+require_relative "yarv/cfg"
 require_relative "yarv/main"
 require_relative "yarv/visitor"
 

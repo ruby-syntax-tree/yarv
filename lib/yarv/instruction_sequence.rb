@@ -351,9 +351,26 @@ module YARV
       { insns:, labels: labels.values }
     end
 
+    def child_iseqs
+      child_iseqs = []
+      insns.each do |insn|
+        case insn
+        when DefineMethod
+          child_iseqs << insn.iseq
+        when Send
+          child_iseqs << insn.block_iseq if insn.block_iseq
+        end
+      end
+      child_iseqs
+    end
+
+    def all_iseqs
+      [self] + child_iseqs.flat_map(&:all_iseqs)
+    end
+
     # Print out this instruction sequence to the given output stream.
     def disasm(output = StringIO.new, prefix = "")
-      output.print("#{prefix}== disasm #<ISeq:#{name}> ")
+      output.print("#{prefix}#{disasm_header("disasm")} ")
       handled = []
 
       if throw_handlers.any?
@@ -374,20 +391,8 @@ module YARV
         output.puts("(catch: FALSE)")
       end
 
-      child_iseqs = []
       insns.each_with_index do |insn, insn_pc|
-        output.puts(
-          "#{prefix}#{insn_pc.to_s.rjust(4, "0")} #{insn.disasm(self)}"
-        )
-
-        case insn
-        when DefineMethod
-          child_iseqs << insn.iseq
-        when Send
-          if insn.block_iseq && !handled.include?(insn.block_iseq)
-            child_iseqs << insn.block_iseq
-          end
-        end
+        output.puts(prefix + disasm_insn(insn, insn_pc))
       end
 
       child_iseqs.each do |child_iseq|
@@ -396,6 +401,14 @@ module YARV
       end
 
       output.string
+    end
+
+    def disasm_header(tag)
+      "== #{tag} #<ISeq:#{name}>"
+    end
+
+    def disasm_insn(insn, insn_pc)
+      "#{insn_pc.to_s.rjust(4, "0")} #{insn.disasm(self)}"
     end
 
     # This is the name assigned to this instruction sequence.

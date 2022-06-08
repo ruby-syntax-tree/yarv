@@ -24,6 +24,14 @@ module YARV
       # skip for now
     end
 
+    def branches?
+      true
+    end
+
+    def leaves?
+      true
+    end
+
     def disasm(iseq)
       "leave"
     end

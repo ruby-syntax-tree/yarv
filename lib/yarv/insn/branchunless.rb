@@ -45,6 +45,14 @@ module YARV
       { label: }
     end
 
+    def branches?
+      true
+    end
+
+    def falls_through?
+      true
+    end
+
     def disasm(iseq)
       target = iseq ? iseq.labels[label] : "??"
       "%-38s %s (%s)" % ["branchunless", label, target]
