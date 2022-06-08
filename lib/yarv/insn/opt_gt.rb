@@ -37,6 +37,14 @@ module YARV
       { call_data: }
     end
 
+    def reads
+      2
+    end
+
+    def writes
+      1
+    end
+
     def disasm(iseq)
       "%-38s %s%s" % ["opt_gt", call_data, "[CcCr]"]
     end

@@ -32,6 +32,14 @@ module YARV
       true
     end
 
+    def reads
+      1
+    end
+
+    def writes
+      0
+    end
+
     def disasm(iseq)
       "leave"
     end

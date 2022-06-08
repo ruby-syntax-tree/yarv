@@ -24,6 +24,14 @@ module YARV
       context.stack.pop
     end
 
+    def reads
+      1
+    end
+
+    def writes
+      0
+    end
+
     def disasm(iseq)
       "pop"
     end

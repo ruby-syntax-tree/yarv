@@ -23,7 +23,7 @@ module YARV
       DISASM
     end
 
-    def test_phi
+    def test_simple
       assert_cfg(<<~DISASM, "(n < 0 ? -1 : +1) + 100")
         == cfg #<ISeq:<compiled>>
         block_0:
@@ -95,12 +95,61 @@ module YARV
       DISASM
     end
 
+    def test_fib
+      source = <<~SOURCE
+        def fib(n)
+          if n < 2
+            n
+          else
+            fib(n - 1) + fib(n - 2)
+          end
+        end
+      SOURCE
+      assert_cfg(<<~DISASM, source)
+        == cfg #<ISeq:<compiled>>
+        block_0:
+            0000 definemethod                           :fib, fib
+            0001 putobject                              :fib
+            0002 leave
+                # to: leaves
+        == cfg #<ISeq:fib>
+        block_0:
+            0000 getlocal_WC_0                          n@0
+            0001 putobject                              2
+            0002 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr]
+            0003 branchunless                           label_11 (6)
+                # to: block_6, block_4
+        block_4: # from: block_0
+            0004 getlocal_WC_0                          n@0
+            0005 leave
+                # to: leaves
+        block_6: # from: block_0
+            0006 putself
+            0007 getlocal_WC_0                          n@0
+            0008 putobject_INT2FIX_1_
+            0009 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr]
+            0010 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE>
+            0011 putself
+            0012 getlocal_WC_0                          n@0
+            0013 putobject                              2
+            0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr]
+            0015 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE>
+            0016 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr]
+            0017 leave
+                # to: leaves
+      DISASM
+    end
+
     private
 
     def assert_cfg(expected, source)
+      string = +""
       compiled = YARV.compile(source)
-      cfg = YARV::CFG.new(compiled)
-      assert_equal(expected, cfg.disasm)
+      compiled.all_iseqs.each do |iseq|
+        cfg = YARV::CFG.new(iseq)
+        string << cfg.disasm
+      end
+      assert_equal(expected, string)
     end
   end
 end

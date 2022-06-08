@@ -35,6 +35,14 @@ module YARV
       context.stack.push(value)
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      1
+    end
+
     def deconstruct_keys(keys)
       { name:, index: }
     end

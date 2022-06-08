@@ -38,6 +38,14 @@ module YARV
       { call_data: }
     end
 
+    def reads
+      call_data.argc + 1
+    end
+
+    def writes
+      1
+    end
+
     def disasm(iseq)
       "%-38s %s" % ["opt_send_without_block", call_data]
     end

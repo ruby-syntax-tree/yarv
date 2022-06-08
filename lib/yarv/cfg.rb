@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 module YARV
+  # Constructs a control-flow-graph, or CFG, of a YARV instruction sequence.
+  # We use conventional basic-blocks.
   class CFG
     attr_reader :iseq
     attr_reader :blocks
+    attr_reader :block_map
 
     def initialize(iseq)
       if iseq.throw_handlers.any?
@@ -31,11 +34,11 @@ module YARV
       @blocks.each do |block|
         last_insn = iseq.insns[block.start + block.length - 1]
         if last_insn.branches? && last_insn.respond_to?(:label)
-          block.succs << @block_map[iseq.labels[last_insn.label]]
+          block.succs << block_map[iseq.labels[last_insn.label]]
         end
         if (!last_insn.branches? && !last_insn.leaves?) ||
              last_insn.falls_through?
-          block.succs << @block_map[block.start + block.length]
+          block.succs << block_map[block.start + block.length]
         end
         block.succs.each { |succ| succ.preds << block }
       end
@@ -80,17 +83,27 @@ module YARV
       end
 
       def disasm(output, prefix)
+        disasm_block_header output, prefix
+        disasm_block_body output, prefix
+      end
+
+      def disasm_block_header(output, prefix)
         output.print "#{prefix}block_#{start}:"
         unless preds.empty?
           output.print " # from: #{preds.map { |b| "block_#{b.start}" }.join(", ")}"
         end
         output.puts
+      end
+
+      def disasm_block_body(output, prefix)
         cfg.iseq.insns[
           start...start + length
         ].each_with_index do |insn, insn_rel_pc|
+          insn_pc = start + insn_rel_pc
           output.print prefix
           output.print "    "
-          output.print cfg.iseq.disasm_insn(insn, start + insn_rel_pc)
+          output.print cfg.iseq.disasm_insn(insn, insn_pc)
+          output.print yield(insn, insn_rel_pc) if block_given?
           output.puts
         end
         all_succs = succs.map { |b| "block_#{b.start}" }

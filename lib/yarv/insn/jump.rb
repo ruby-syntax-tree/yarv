@@ -45,6 +45,14 @@ module YARV
       true
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      0
+    end
+
     def disasm(iseq)
       target = iseq ? iseq.labels[label] : "??"
       "%-38s %s (%s)" % ["jump", label, target]

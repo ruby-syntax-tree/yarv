@@ -37,6 +37,14 @@ module YARV
       { name:, iseq: }
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      0
+    end
+
     def disasm(containing_iseq)
       "%-38s %s, %s" % ["definemethod", name.inspect, iseq.name]
     end

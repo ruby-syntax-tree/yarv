@@ -26,6 +26,14 @@ module YARV
       context.stack.push(0)
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      1
+    end
+
     def disasm(iseq)
       "putobject_INT2FIX_0_"
     end
