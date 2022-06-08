@@ -16,7 +16,7 @@ module YARV
   # "hello".freeze
   # ~~~
   #
-  class OptStrFreeze < Insn
+  class OptStrFreeze < Instruction
     attr_reader :value, :call_data
 
     def initialize(value, call_data)

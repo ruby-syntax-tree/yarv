@@ -15,7 +15,7 @@ module YARV
   # ;;
   # ~~~
   #
-  class Leave < Insn
+  class Leave < Instruction
     def ==(other)
       other in Leave
     end

@@ -18,7 +18,7 @@ module YARV
   # x[0]
   # ~~~
   #
-  class AdjustStack < Insn
+  class AdjustStack < Instruction
     attr_reader :size
 
     def initialize(size)

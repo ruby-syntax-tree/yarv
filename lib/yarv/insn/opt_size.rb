@@ -17,7 +17,7 @@ module YARV
   # "".size
   # ~~~
   #
-  class OptSize < Insn
+  class OptSize < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

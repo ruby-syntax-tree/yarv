@@ -50,7 +50,7 @@ module YARV
   # # 0025 leave
   # ~~~
   #
-  class OptCaseDispatch < Insn
+  class OptCaseDispatch < Instruction
     attr_reader :cdhash, :else_offset
 
     def initialize(cdhash, else_offset)

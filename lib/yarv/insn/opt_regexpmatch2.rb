@@ -16,7 +16,7 @@ module YARV
   # /a/ =~ "a"
   # ~~~
   #
-  class OptRegexpMatch2 < Insn
+  class OptRegexpMatch2 < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

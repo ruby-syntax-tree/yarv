@@ -15,7 +15,7 @@ module YARV
   # 5
   # ~~~
   #
-  class PutObject < Insn
+  class PutObject < Instruction
     attr_reader :object
 
     def initialize(object)

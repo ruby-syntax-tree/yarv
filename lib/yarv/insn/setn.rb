@@ -13,7 +13,7 @@ module YARV
   # {}[:key] = 'val'
   # ~~~
   #
-  class SetN < Insn
+  class SetN < Instruction
     attr_reader :index
 
     def initialize(index)

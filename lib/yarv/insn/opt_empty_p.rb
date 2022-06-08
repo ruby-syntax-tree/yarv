@@ -17,7 +17,7 @@ module YARV
   # "".empty?
   # ~~~
   #
-  class OptEmptyP < Insn
+  class OptEmptyP < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

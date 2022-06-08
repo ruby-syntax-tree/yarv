@@ -15,7 +15,7 @@ module YARV
   # $global = 5
   # ~~~
   #
-  class Dup < Insn
+  class Dup < Instruction
     def ==(other)
       other in Dup
     end

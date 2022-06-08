@@ -23,7 +23,7 @@ module YARV
   # # 0002 leave                                  [Re]
   # # ~~~
   #
-  class InvokeBlock < Insn
+  class InvokeBlock < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

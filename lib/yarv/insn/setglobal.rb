@@ -15,7 +15,7 @@ module YARV
   # $global = 5
   # ~~~
   #
-  class SetGlobal < Insn
+  class SetGlobal < Instruction
     attr_reader :name
 
     def initialize(name)

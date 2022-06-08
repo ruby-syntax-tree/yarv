@@ -17,7 +17,7 @@ module YARV
   # 3 * 2
   # ~~~
   #
-  class OptMult < Insn
+  class OptMult < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

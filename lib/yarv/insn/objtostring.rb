@@ -19,7 +19,7 @@ module YARV
   # "#{5}"
   # ~~~
   #
-  class ObjToString < Insn
+  class ObjToString < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

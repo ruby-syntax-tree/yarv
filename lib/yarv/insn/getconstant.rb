@@ -16,7 +16,7 @@ module YARV
   # Constant
   # ~~~
   #
-  class GetConstant < Insn
+  class GetConstant < Instruction
     attr_reader :name
 
     def initialize(name)

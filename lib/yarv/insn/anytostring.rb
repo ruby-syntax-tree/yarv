@@ -22,7 +22,7 @@ module YARV
   # "#{5}"
   # ~~~
   #
-  class AnyToString < Insn
+  class AnyToString < Instruction
     def ==(other)
       other in AnyToString
     end

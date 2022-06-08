@@ -15,7 +15,7 @@ module YARV
   # nil
   # ~~~
   #
-  class PutNil < Insn
+  class PutNil < Instruction
     def ==(other)
       other in PutNil
     end

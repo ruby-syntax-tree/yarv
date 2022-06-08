@@ -17,7 +17,7 @@ module YARV
   # "".succ
   # ~~~
   #
-  class OptSucc < Insn
+  class OptSucc < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

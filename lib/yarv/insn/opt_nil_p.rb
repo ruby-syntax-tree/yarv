@@ -17,7 +17,7 @@ module YARV
   # "".nil?
   # ~~~
   #
-  class OptNilP < Insn
+  class OptNilP < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

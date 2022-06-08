@@ -15,7 +15,7 @@ module YARV
   # {}[:key] = value
   # ~~~
   #
-  class OptAset < Insn
+  class OptAset < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

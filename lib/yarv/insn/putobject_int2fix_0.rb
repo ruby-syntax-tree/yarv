@@ -17,7 +17,7 @@ module YARV
   # 0
   # ~~~
   #
-  class PutObjectInt2Fix0 < Insn
+  class PutObjectInt2Fix0 < Instruction
     def ==(other)
       other in PutObjectInt2Fix0
     end

@@ -16,7 +16,7 @@ module YARV
   # raise rescue true
   # ~~~
   #
-  class Nop < Insn
+  class Nop < Instruction
     def ==(other)
       other in Nop
     end

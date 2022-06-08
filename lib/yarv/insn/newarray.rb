@@ -15,7 +15,7 @@ module YARV
   # ["string"]
   # ~~~
   #
-  class NewArray < Insn
+  class NewArray < Instruction
     attr_reader :size
 
     def initialize(size)

@@ -19,7 +19,7 @@ module YARV
   # "#{5}"
   # ~~~
   #
-  class ConcatStrings < Insn
+  class ConcatStrings < Instruction
     attr_reader :size
 
     def initialize(size)

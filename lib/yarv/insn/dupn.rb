@@ -15,7 +15,7 @@ module YARV
   # Object::X ||= true
   # ~~~
   #
-  class DupN < Insn
+  class DupN < Instruction
     attr_reader :offset
 
     def initialize(offset)

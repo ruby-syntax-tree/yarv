@@ -15,7 +15,7 @@ module YARV
   # :"#{"foo"}"
   # ~~~
   #
-  class Intern < Insn
+  class Intern < Instruction
     def ==(other)
       other in Intern
     end

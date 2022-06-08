@@ -22,7 +22,7 @@ module YARV
   # end
   # ~~~
   #
-  class BranchNil < Insn
+  class BranchNil < Instruction
     attr_reader :label
 
     def initialize(label)

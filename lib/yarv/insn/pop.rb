@@ -15,7 +15,7 @@ module YARV
   # a ||= 2
   # ~~~
   #
-  class Pop < Insn
+  class Pop < Instruction
     def ==(other)
       other in Pop
     end

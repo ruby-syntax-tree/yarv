@@ -19,7 +19,7 @@ module YARV
   # [1, *2]
   # ~~~
   #
-  class ConcatArray < Insn
+  class ConcatArray < Instruction
     def ==(other)
       other in ConcatArray
     end

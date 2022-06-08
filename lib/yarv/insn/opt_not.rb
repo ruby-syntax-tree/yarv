@@ -15,7 +15,7 @@ module YARV
   # !true
   # ~~~
   #
-  class OptNot < Insn
+  class OptNot < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

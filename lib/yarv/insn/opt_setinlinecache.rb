@@ -17,7 +17,7 @@ module YARV
   # Constant
   # ~~~
   #
-  class OptSetInlineCache < Insn
+  class OptSetInlineCache < Instruction
     attr_reader :cache
 
     def initialize(cache)

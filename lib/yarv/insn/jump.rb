@@ -21,7 +21,7 @@ module YARV
   # end
   # ~~~
   #
-  class Jump < Insn
+  class Jump < Instruction
     attr_reader :label
 
     def initialize(label)

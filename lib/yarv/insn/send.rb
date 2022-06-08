@@ -28,7 +28,7 @@ module YARV
   # # 0005 leave                                  [Br]
   # # ~~~
   #
-  class Send < Insn
+  class Send < Instruction
     attr_reader :call_data, :block_iseq
 
     def initialize(call_data, block_iseq)

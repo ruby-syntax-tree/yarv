@@ -18,7 +18,7 @@ module YARV
   # value
   # ~~~
   #
-  class GetLocalWC0 < Insn
+  class GetLocalWC0 < Instruction
     attr_reader :name, :index
 
     def initialize(name, index)

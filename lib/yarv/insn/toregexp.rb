@@ -27,7 +27,7 @@ module YARV
   # # 0011 leave
   # ~~~
   #
-  class ToRegexp < Insn
+  class ToRegexp < Instruction
     attr_reader :opts, :cnt
 
     def initialize(opts, cnt)

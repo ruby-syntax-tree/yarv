@@ -17,7 +17,7 @@ module YARV
   # def value = "value"
   # ~~~
   #
-  class DefineMethod < Insn
+  class DefineMethod < Instruction
     attr_reader :name, :iseq
 
     def initialize(name, iseq)

@@ -15,7 +15,7 @@ module YARV
   # { a: 1 }
   # ~~~
   #
-  class DupHash < Insn
+  class DupHash < Instruction
     attr_reader :value
 
     def initialize(value)

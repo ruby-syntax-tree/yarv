@@ -19,7 +19,7 @@ module YARV
   # tap { tap { value = 10 } }
   # ~~~
   #
-  class SetLocal < Insn
+  class SetLocal < Instruction
     attr_reader :name, :index, :level
 
     def initialize(name, index, level)

@@ -21,7 +21,7 @@ module YARV
   # puts x
   # ~~~
   #
-  class BranchIf < Insn
+  class BranchIf < Instruction
     attr_reader :label
 
     def initialize(label)

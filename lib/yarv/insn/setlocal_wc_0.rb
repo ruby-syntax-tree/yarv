@@ -17,7 +17,7 @@ module YARV
   # value = 5
   # ~~~
   #
-  class SetLocalWC0 < Insn
+  class SetLocalWC0 < Instruction
     attr_reader :name, :index
 
     def initialize(name, index)

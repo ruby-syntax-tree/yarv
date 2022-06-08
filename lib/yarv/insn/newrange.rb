@@ -18,7 +18,7 @@ module YARV
   # p (x..y), (x...y)
   # ~~~
   #
-  class NewRange < Insn
+  class NewRange < Instruction
     attr_reader :exclude_end
 
     def initialize(exclude_end)

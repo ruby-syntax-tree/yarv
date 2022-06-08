@@ -19,7 +19,7 @@ module YARV
   # 2 != 2
   # ~~~
   #
-  class OptNeq < Insn
+  class OptNeq < Instruction
     attr_reader :cd_neq, :cd_eq
 
     def initialize(cd_eq, cd_neq)

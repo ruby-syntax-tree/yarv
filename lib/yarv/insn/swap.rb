@@ -15,7 +15,7 @@ module YARV
   # !!defined?([[]])
   # ~~~
   #
-  class Swap < Insn
+  class Swap < Instruction
     def ==(other)
       other in Swap
     end

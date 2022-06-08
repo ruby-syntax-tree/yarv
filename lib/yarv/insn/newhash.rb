@@ -18,7 +18,7 @@ module YARV
   # end
   # ~~~
   #
-  class NewHash < Insn
+  class NewHash < Instruction
     attr_reader :size
 
     def initialize(size)

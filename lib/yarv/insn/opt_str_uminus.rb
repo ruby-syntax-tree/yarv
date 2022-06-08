@@ -16,7 +16,7 @@ module YARV
   # -"string"
   # ~~~
   #
-  class OptStrUMinus < Insn
+  class OptStrUMinus < Instruction
     attr_reader :value, :call_data
 
     def initialize(value, call_data)

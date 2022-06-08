@@ -15,7 +15,7 @@ module YARV
   # "foo"
   # ~~~
   #
-  class PutString < Insn
+  class PutString < Instruction
     attr_reader :string
 
     def initialize(string)

@@ -14,7 +14,7 @@ module YARV
   # [1, x = 2].min
   # ~~~
   #
-  class OptNewArrayMin < Insn
+  class OptNewArrayMin < Instruction
     attr_reader :size
 
     def initialize(size)

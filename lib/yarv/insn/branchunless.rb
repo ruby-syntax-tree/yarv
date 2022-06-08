@@ -21,7 +21,7 @@ module YARV
   # end
   # ~~~
   #
-  class BranchUnless < Insn
+  class BranchUnless < Instruction
     attr_reader :label
 
     def initialize(label)

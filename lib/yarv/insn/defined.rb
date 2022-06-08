@@ -16,7 +16,7 @@ module YARV
   # defined?(x)
   # ~~~
   #
-  class Defined < Insn
+  class Defined < Instruction
     DEFINED_TYPE = %i[
       DEFINED_NOT_DEFINED
       DEFINED_NIL

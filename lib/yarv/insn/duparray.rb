@@ -15,7 +15,7 @@ module YARV
   # [true]
   # ~~~
   #
-  class DupArray < Insn
+  class DupArray < Instruction
     attr_reader :value
 
     def initialize(value)

@@ -16,7 +16,7 @@ module YARV
   # puts "Hello, world!"
   # ~~~
   #
-  class OptSendWithoutBlock < Insn
+  class OptSendWithoutBlock < Instruction
     attr_reader :call_data
 
     def initialize(call_data)

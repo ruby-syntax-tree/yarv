@@ -34,7 +34,7 @@ module YARV
   # # 0019 leave
   # ~~~
   #
-  class TopN < Insn
+  class TopN < Instruction
     attr_reader :n
 
     def initialize(n)

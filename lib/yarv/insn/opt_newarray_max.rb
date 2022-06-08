@@ -14,7 +14,7 @@ module YARV
   # [1, x = 2].max
   # ~~~
   #
-  class OptNewArrayMax < Insn
+  class OptNewArrayMax < Instruction
     attr_reader :size
 
     def initialize(size)

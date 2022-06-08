@@ -19,7 +19,7 @@ module YARV
   # tap { tap { value } }
   # ~~~
   #
-  class GetLocal < Insn
+  class GetLocal < Instruction
     attr_reader :name, :index, :level
 
     def initialize(name, index, level)
