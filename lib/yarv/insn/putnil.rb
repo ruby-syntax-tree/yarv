@@ -24,6 +24,14 @@ module YARV
       context.stack.push(nil)
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      1
+    end
+
     def disasm(iseq)
       "putnil"
     end

@@ -34,6 +34,14 @@ module YARV
       context.current_frame.set_local(index, value)
     end
 
+    def reads
+      1
+    end
+
+    def writes
+      0
+    end
+
     def disasm(iseq)
       "%-38s %s@%d" % ["setlocal_WC_0", name, index]
     end

@@ -19,6 +19,16 @@ module YARV
       false
     end
 
+    # How many values are read from the stack.
+    def reads
+      raise "not implemented #{self.class}"
+    end
+
+    # How many values are written to the stack.
+    def writes
+      raise "not implemented #{self.class}"
+    end
+
     # A hook method to be called when the instruction is being disassembled. The
     # child classes will have their respective InstructionSequence passed in.
     def to_s
