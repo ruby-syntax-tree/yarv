@@ -153,10 +153,10 @@ module YARV
           if node.in.size == 1
             # Remove phi nodes with a single input.
             remove node, connect_over: true
-          elsif node.in.uniq.size == 1
+          elsif node.in.map(&:from).uniq.size == 1
             # Remove phi nodes where all inputs are the same.
-            producer = node.in.first
-            consumer = node.out.filter { |c| !c.is_a?(MergeNode) }.first
+            producer = node.in.first.from
+            consumer = node.out.filter { |e| !e.to.is_a?(MergeNode) }.first.to
             connect producer, consumer
             remove node
           end
@@ -179,15 +179,16 @@ module YARV
     # Connect one node to another.
     def connect(from, to)
       raise if from == to
-      from.out.push to
-      to.in.push from
+      edge = Edge.new(from, to)
+      from.out.push edge
+      to.in.push edge
     end
 
     # Remove a node from the graph, optionally connecting edges that went
     # through it.
     def remove(node, connect_over: false)
-      producers = node.in.dup
-      consumers = node.out.dup
+      producers = node.in.map(&:from)
+      consumers = node.out.map(&:to)
 
       if connect_over
         producers.each do |producer|
@@ -195,9 +196,9 @@ module YARV
         end
       end
 
-      producers.each { |producer| producer.out.delete node }
+      producers.each { |producer| producer.out.delete_if { |e| e.to == node } }
 
-      consumers.each { |consumer| consumer.in.delete node }
+      consumers.each { |consumer| consumer.in.delete_if { |e| e.from == node } }
 
       nodes.delete node
     end
@@ -209,7 +210,7 @@ module YARV
 
       nodes.each do |producer|
         producer.out.each do |consumer|
-          output.puts "  node_#{producer.id} --> node_#{consumer.id}"
+          output.puts "  node_#{producer.id} --> node_#{consumer.to.id}"
         end
       end
 
@@ -259,6 +260,16 @@ module YARV
     class MergeNode < SynthNode
       def to_s
         "#{id} ψ"
+      end
+    end
+
+    class Edge
+      attr_reader :from
+      attr_reader :to
+
+      def initialize(from, to)
+        @from = from
+        @to = to
       end
     end
 
