@@ -34,6 +34,10 @@ module YARV
       1
     end
 
+    def side_effects?
+      false
+    end
+
     def disasm(iseq)
       "putobject_INT2FIX_0_"
     end

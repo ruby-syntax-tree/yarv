@@ -42,6 +42,10 @@ module YARV
       1
     end
 
+    def side_effects?
+      false
+    end
+
     def disasm(iseq)
       "%-38s %s" % ["putobject", object.inspect]
     end

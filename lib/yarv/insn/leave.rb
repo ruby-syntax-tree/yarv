@@ -40,6 +40,12 @@ module YARV
       0
     end
 
+    def side_effects?
+      # Leave doesn't really have a side effects... but we say it does so that
+      # control flow has somewhere to end up.
+      true
+    end
+
     def disasm(iseq)
       "leave"
     end

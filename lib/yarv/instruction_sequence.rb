@@ -408,10 +408,10 @@ module YARV
     end
 
     def disasm_insn(insn, insn_pc)
-      "#{disasm_pc(insn_pc)} #{insn.disasm(self)}"
+      "#{InstructionSequence.disasm_pc(insn_pc)} #{insn.disasm(self)}"
     end
 
-    def disasm_pc(pc)
+    def self.disasm_pc(pc)
       pc.to_s.rjust(4, "0")
     end
 

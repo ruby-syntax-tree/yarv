@@ -11,12 +11,12 @@ module YARV
     attr_reader :block_flow
 
     def initialize(cfg)
-      @cfg = cfg
-      @insn_flow = {}
-
       if cfg.iseq.throw_handlers.any?
         raise "throw handlers not supported in DFG yet"
       end
+
+      @cfg = cfg
+      @insn_flow = {}
 
       # Create a side data structure to encode dataflow between instructions.
       @insn_flow = {}
@@ -190,7 +190,7 @@ module YARV
 
     def disasm_dataflow_connections(connections)
       connections
-        .map { |pc| pc.is_a?(Symbol) ? pc : cfg.iseq.disasm_pc(pc) }
+        .map { |pc| pc.is_a?(Symbol) ? pc : InstructionSequence.disasm_pc(pc) }
         .join(", ")
     end
 

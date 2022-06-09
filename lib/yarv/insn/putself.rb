@@ -38,6 +38,10 @@ module YARV
       1
     end
 
+    def side_effects?
+      false
+    end
+
     def deconstruct_keys(keys)
       { object: }
     end
