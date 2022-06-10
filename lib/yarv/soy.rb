@@ -28,7 +28,9 @@ module YARV
       dfg.cfg.blocks.each do |predecessor|
         predecessor_last = local_graphs[predecessor.start].last
         predecessor.succs.each do |successor|
-          connect predecessor_last, local_graphs[successor.start].first
+          connect predecessor_last,
+                  local_graphs[successor.start].first,
+                  :control
         end
       end
 
@@ -40,7 +42,7 @@ module YARV
           predecessor.succs.each do |successor|
             successor_graph = local_graphs[successor.start]
             arg_in = successor_graph.in.values[arg_n]
-            connect arg_out, arg_in
+            connect arg_out, arg_in, :data
           end
         end
       end
@@ -89,7 +91,7 @@ module YARV
           insn = dfg.cfg.iseq.insns[insn_pc]
           if insn.side_effects?
             insn_node = insn_node_map[insn_pc]
-            connect previous_fixed, insn_node if previous_fixed
+            connect previous_fixed, insn_node, :control if previous_fixed
             previous_fixed = insn_node
             first_fixed ||= insn_node
             last_fixed = insn_node
@@ -110,7 +112,7 @@ module YARV
         # Each basic block argument gets a phi node. Even if there's only one
         # predecessor! We'll tidy this up later.
         phi = PhiNode.new(self)
-        connect phi, merge if merge
+        connect phi, merge, :info if merge
         nodes.push phi
         inputs[arg] = phi
         block
@@ -118,7 +120,7 @@ module YARV
           .upto(block.start + block.length - 1) do |consumer_pc|
             consumer_dataflow = dfg.insn_flow[consumer_pc]
             consumer_dataflow.in.each do |producer|
-              connect phi, insn_node_map[consumer_pc] if producer == arg
+              connect phi, insn_node_map[consumer_pc], :data if producer == arg
             end
           end
         block_dataflow.out.each { |out| outputs[out] = phi if out == arg }
@@ -131,7 +133,7 @@ module YARV
           producer_dataflow = dfg.insn_flow[producer_pc]
           producer_dataflow.out.each do |consumer|
             if consumer.is_a?(Integer)
-              connect insn_node_map[producer_pc], insn_node_map[consumer]
+              connect insn_node_map[producer_pc], insn_node_map[consumer], :data
             else
               # This is an argument to the successor block - not to an
               # instruction here.
@@ -157,7 +159,7 @@ module YARV
             # Remove phi nodes where all inputs are the same.
             producer = node.in.first.from
             consumer = node.out.filter { |e| !e.to.is_a?(MergeNode) }.first.to
-            connect producer, consumer
+            connect producer, consumer, :data
             remove node
           end
         when InsnNode
@@ -177,9 +179,9 @@ module YARV
     end
 
     # Connect one node to another.
-    def connect(from, to)
+    def connect(from, to, *tags)
       raise if from == to
-      edge = Edge.new(from, to)
+      edge = Edge.new(from, to, *tags)
       from.out.push edge
       to.in.push edge
     end
@@ -187,18 +189,21 @@ module YARV
     # Remove a node from the graph, optionally connecting edges that went
     # through it.
     def remove(node, connect_over: false)
-      producers = node.in.map(&:from)
-      consumers = node.out.map(&:to)
-
       if connect_over
-        producers.each do |producer|
-          consumers.each { |consumer| connect producer, consumer }
+        node.in.each do |producer_edge|
+          node.out.each do |consumer_edge|
+            connect producer_edge.from, consumer_edge.to, *producer_edge.tags
+          end
         end
       end
 
-      producers.each { |producer| producer.out.delete_if { |e| e.to == node } }
+      node.in.each do |producer_edge|
+        producer_edge.from.out.delete_if { |e| e.to == node }
+      end
 
-      consumers.each { |consumer| consumer.in.delete_if { |e| e.from == node } }
+      node.out.each do |consumer_edge|
+        consumer_edge.to.in.delete_if { |e| e.from == node }
+      end
 
       nodes.delete node
     end
@@ -208,26 +213,48 @@ module YARV
 
       nodes.each { |node| output.puts "  node_#{node.id}(#{node})" }
 
+      link_counter = 0
       nodes.each do |producer|
-        producer.out.each do |consumer|
-          output.puts "  node_#{producer.id} --> node_#{consumer.to.id}"
+        producer.out.each do |consumer_edge|
+          if consumer_edge.tags.include?(:info)
+            edge = "-.->"
+          else
+            edge = "-->"
+          end
+          if consumer_edge.tags.include?(:data)
+            edge_style = "stroke:green;"
+          elsif consumer_edge.tags.include?(:control)
+            edge_style = "stroke:red;"
+          end
+          output.puts "  node_#{producer.id} #{edge} node_#{consumer_edge.to.id}"
+          output.puts "  linkStyle #{link_counter} #{edge_style}" if edge_style
+          link_counter += 1
         end
       end
 
       output.string
     end
 
-    class InsnNode
-      attr_reader :insn
-      attr_reader :insn_pc
+    class Node
       attr_reader :in
       attr_reader :out
+      attr_reader :tags
 
-      def initialize(insn, insn_pc)
-        @insn = insn
-        @insn_pc = insn_pc
+      def initialize(*tags)
         @in = []
         @out = []
+        @tags = tags
+      end
+    end
+
+    class InsnNode < Node
+      attr_reader :insn
+      attr_reader :insn_pc
+
+      def initialize(insn, insn_pc, *tags)
+        super(*tags)
+        @insn = insn
+        @insn_pc = insn_pc
       end
 
       def id
@@ -239,14 +266,11 @@ module YARV
       end
     end
 
-    class SynthNode
-      attr_reader :in
-      attr_reader :out
+    class SynthNode < Node
       attr_reader :id
 
-      def initialize(soy)
-        @in = []
-        @out = []
+      def initialize(soy, *tags)
+        super(*tags)
         @id = soy.id_counter
       end
     end
@@ -266,10 +290,12 @@ module YARV
     class Edge
       attr_reader :from
       attr_reader :to
+      attr_reader :tags
 
-      def initialize(from, to)
+      def initialize(from, to, *tags)
         @from = from
         @to = to
+        @tags = tags
       end
     end
 
