@@ -16,7 +16,6 @@ module YARV
       end
 
       @cfg = cfg
-      @insn_flow = {}
 
       # Create a side data structure to encode dataflow between instructions.
       @insn_flow = {}
