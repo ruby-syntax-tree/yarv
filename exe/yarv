@@ -8,6 +8,7 @@ sources = []
 dump_insns = false
 dump_cfg = false
 dump_dfg = false
+dump_soy = false
 execute = true
 
 until ARGV.empty?
@@ -27,6 +28,9 @@ until ARGV.empty?
     when "--dump=dfg"
       dump_dfg = true
       execute = false
+    when "--dump=soy"
+      dump_soy = true
+      execute = false
     else
       raise "Unknown argument #{arg}"
     end
@@ -42,14 +46,19 @@ sources.each do |source, file, path|
     puts compiled.disasm
   end
 
-  if dump_cfg || dump_dfg
+  if dump_cfg || dump_dfg || dump_soy
     compiled.all_iseqs.each do |iseq|
       cfg = YARV::CFG.new(iseq)
       puts cfg.disasm if dump_cfg
 
-      if dump_dfg
+      if dump_dfg || dump_soy
         dfg = YARV::DFG.new(cfg)
         puts dfg.disasm if dump_dfg
+
+        if dump_soy
+          soy = YARV::SOY.new(dfg)
+          puts soy.mermaid if dump_soy
+        end
       end
     end
   end

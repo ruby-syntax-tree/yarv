@@ -29,6 +29,12 @@ module YARV
       raise "not implemented #{self.class}"
     end
 
+    # Does the instruction have side effects? Control-flow counts as a
+    # side-effect, as do some special-case instructions like Leave
+    def side_effects?
+      true
+    end
+
     # A hook method to be called when the instruction is being disassembled. The
     # child classes will have their respective InstructionSequence passed in.
     def to_s

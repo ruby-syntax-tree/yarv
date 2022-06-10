@@ -32,6 +32,10 @@ module YARV
       0
     end
 
+    def side_effects?
+      false
+    end
+
     def disasm(iseq)
       "pop"
     end

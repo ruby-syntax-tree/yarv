@@ -11,6 +11,7 @@ require_relative "yarv/instruction"
 require_relative "yarv/instruction_sequence"
 require_relative "yarv/cfg"
 require_relative "yarv/dfg"
+require_relative "yarv/soy"
 require_relative "yarv/main"
 require_relative "yarv/visitor"
 
