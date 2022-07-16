@@ -53,7 +53,7 @@ module YARV
             insn.reads.times do
               # Was the value it pops off from another basic block?
               if stack.empty?
-                # Thi is a basic block argument.
+                # This is a basic block argument.
                 name = :"in_#{stack_initial_depth}"
                 insn_dataflow.in << name
                 block_dataflow.in << name
