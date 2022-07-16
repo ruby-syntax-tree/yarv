@@ -179,9 +179,9 @@ module YARV
     end
 
     # Connect one node to another.
-    def connect(from, to, *tags)
+    def connect(from, to, type)
       raise if from == to
-      edge = Edge.new(from, to, *tags)
+      edge = Edge.new(from, to, type)
       from.out.push edge
       to.in.push edge
     end
@@ -192,7 +192,7 @@ module YARV
       if connect_over
         node.in.each do |producer_edge|
           node.out.each do |consumer_edge|
-            connect producer_edge.from, consumer_edge.to, *producer_edge.tags
+            connect producer_edge.from, consumer_edge.to, producer_edge.type
           end
         end
       end
@@ -216,16 +216,19 @@ module YARV
       link_counter = 0
       nodes.each do |producer|
         producer.out.each do |consumer_edge|
-          if consumer_edge.tags.include?(:info)
+          case consumer_edge.type
+          when :data
+            edge = "-->"
+            edge_style = "stroke:green;"
+          when :control
+            edge = "-->"
+            edge_style = "stroke:red;"
+          when :info
             edge = "-.->"
           else
-            edge = "-->"
+            raise
           end
-          if consumer_edge.tags.include?(:data)
-            edge_style = "stroke:green;"
-          elsif consumer_edge.tags.include?(:control)
-            edge_style = "stroke:red;"
-          end
+
           output.puts "  node_#{producer.id} #{edge} node_#{consumer_edge.to.id}"
           output.puts "  linkStyle #{link_counter} #{edge_style}" if edge_style
           link_counter += 1
@@ -288,14 +291,17 @@ module YARV
     end
 
     class Edge
+      TYPES = %i[data control info]
+
       attr_reader :from
       attr_reader :to
-      attr_reader :tags
+      attr_reader :type
 
-      def initialize(from, to, *tags)
+      def initialize(from, to, type)
         @from = from
         @to = to
-        @tags = tags
+        raise unless TYPES.include?(type)
+        @type = type
       end
     end
 
