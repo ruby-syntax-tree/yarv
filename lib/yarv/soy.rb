@@ -241,12 +241,10 @@ module YARV
     class Node
       attr_reader :in
       attr_reader :out
-      attr_reader :tags
 
-      def initialize(*tags)
+      def initialize
         @in = []
         @out = []
-        @tags = tags
       end
     end
 
@@ -254,8 +252,8 @@ module YARV
       attr_reader :insn
       attr_reader :insn_pc
 
-      def initialize(insn, insn_pc, *tags)
-        super(*tags)
+      def initialize(insn, insn_pc)
+        super()
         @insn = insn
         @insn_pc = insn_pc
       end
@@ -272,8 +270,8 @@ module YARV
     class SynthNode < Node
       attr_reader :id
 
-      def initialize(soy, *tags)
-        super(*tags)
+      def initialize(soy)
+        super()
         @id = soy.id_counter
       end
     end
