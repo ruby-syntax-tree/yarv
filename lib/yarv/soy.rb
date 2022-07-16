@@ -77,7 +77,7 @@ module YARV
       # If there is more than predecessor, and we have basic block arguments
       # coming in, then we need a merge node for the phi nodes to attach to.
       if block.preds.size > 1 && !block_dataflow.in.empty?
-        merge = MergeNode.new(self)
+        merge = MergeNode.new(id_counter)
         nodes.push merge
         previous_fixed = merge
         first_fixed = merge
@@ -111,7 +111,7 @@ module YARV
       block_dataflow.in.each do |arg|
         # Each basic block argument gets a phi node. Even if there's only one
         # predecessor! We'll tidy this up later.
-        phi = PhiNode.new(self)
+        phi = PhiNode.new(id_counter)
         connect phi, merge, :info if merge
         nodes.push phi
         inputs[arg] = phi
@@ -270,9 +270,9 @@ module YARV
     class SynthNode < Node
       attr_reader :id
 
-      def initialize(soy)
+      def initialize(id)
         super()
-        @id = soy.id_counter
+        @id = id
       end
     end
 
