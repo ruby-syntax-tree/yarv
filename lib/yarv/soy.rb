@@ -179,9 +179,9 @@ module YARV
     end
 
     # Connect one node to another.
-    def connect(from, to, type)
+    def connect(from, to, type, label = nil)
       raise if from == to
-      edge = Edge.new(from, to, type)
+      edge = Edge.new(from, to, type, label)
       from.out.push edge
       to.in.push edge
     end
@@ -229,7 +229,13 @@ module YARV
             raise
           end
 
-          output.puts "  node_#{producer.id} #{edge} node_#{consumer_edge.to.id}"
+          if consumer_edge.label
+            label = "|#{consumer_edge.label}| "
+          else
+            label = ""
+          end
+
+          output.puts "  node_#{producer.id} #{edge} #{label}node_#{consumer_edge.to.id}"
           output.puts "  linkStyle #{link_counter} #{edge_style}" if edge_style
           link_counter += 1
         end
@@ -294,12 +300,14 @@ module YARV
       attr_reader :from
       attr_reader :to
       attr_reader :type
+      attr_reader :label
 
-      def initialize(from, to, type)
+      def initialize(from, to, type, label)
         @from = from
         @to = to
         raise unless TYPES.include?(type)
         @type = type
+        @label = label
       end
     end
 
