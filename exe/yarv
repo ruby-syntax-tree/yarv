@@ -54,11 +54,11 @@ sources.each do |source, file, path|
       if dump_dfg || dump_soy
         dfg = YARV::DFG.new(cfg)
         puts dfg.disasm if dump_dfg
+      end
 
-        if dump_soy
-          soy = YARV::SOY.new(dfg)
-          puts soy.mermaid if dump_soy
-        end
+      if dump_soy
+        soy = YARV::SOY.new(dfg)
+        puts soy.mermaid if dump_soy
       end
     end
   end
