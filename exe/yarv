@@ -31,6 +31,16 @@ until ARGV.empty?
     when "--dump=soy"
       dump_soy = true
       execute = false
+    when "--help"
+      puts "Usage: #{$0} [options] [source files]"
+      puts "Options:"
+      puts "  -e source     Take a string as source code"
+      puts "  --dump=insns  Dump instructions"
+      puts "  --dump=cfg    Dump a control-flow-graph"
+      puts "  --dump=dfg    Dump a data-flow-graph"
+      puts "  --dump=soy    Dump a sea-of-YARV graph, in Mermaid format - see https://mermaid.live/"
+      puts "  --help        Show this help"
+      exit 0
     else
       raise "Unknown argument #{arg}"
     end
