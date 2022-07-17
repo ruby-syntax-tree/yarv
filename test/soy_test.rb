@@ -11,13 +11,13 @@ module YARV
           node_1(0001 PutObject)
           node_2(0002 OptPlus)
           node_3(0003 Leave)
-          node_0 --> node_2
+          node_0 --> |0| node_2
           linkStyle 0 stroke:green;
-          node_1 --> node_2
+          node_1 --> |1| node_2
           linkStyle 1 stroke:green;
           node_2 --> node_3
           linkStyle 2 stroke:red;
-          node_2 --> node_3
+          node_2 --> |0| node_3
           linkStyle 3 stroke:green;
       DISASM
     end
@@ -37,36 +37,36 @@ module YARV
           node_9(0009 Leave)
           node_1000(1000 ψ)
           node_1001(1001 φ)
-          node_0 --> node_2
+          node_0 --> |0| node_2
           linkStyle 0 stroke:green;
-          node_1 --> node_2
+          node_1 --> |1| node_2
           linkStyle 1 stroke:green;
           node_2 --> node_3
           linkStyle 2 stroke:red;
-          node_2 --> node_3
+          node_2 --> |0| node_3
           linkStyle 3 stroke:green;
           node_3 --> node_6
           linkStyle 4 stroke:red;
           node_3 --> node_5
           linkStyle 5 stroke:red;
-          node_4 --> node_1001
+          node_4 --> |0005| node_1001
           linkStyle 6 stroke:green;
           node_5 --> node_1000
           linkStyle 7 stroke:red;
           node_6 --> node_1000
           linkStyle 8 stroke:red;
-          node_6 --> node_1001
+          node_6 --> |0006| node_1001
           linkStyle 9 stroke:green;
-          node_7 --> node_8
+          node_7 --> |1| node_8
           linkStyle 10 stroke:green;
           node_8 --> node_9
           linkStyle 11 stroke:red;
-          node_8 --> node_9
+          node_8 --> |0| node_9
           linkStyle 12 stroke:green;
           node_1000 --> node_8
           linkStyle 13 stroke:red;
           node_1001 -.-> node_1000
-          node_1001 --> node_8
+          node_1001 --> |0| node_8
           linkStyle 15 stroke:green;
       DISASM
     end
@@ -86,36 +86,36 @@ module YARV
           node_9(0009 Leave)
           node_1002(1002 ψ)
           node_1004(1004 φ)
-          node_0 --> node_8
+          node_0 --> |0| node_8
           linkStyle 0 stroke:green;
-          node_1 --> node_3
+          node_1 --> |0| node_3
           linkStyle 1 stroke:green;
-          node_2 --> node_3
+          node_2 --> |1| node_3
           linkStyle 2 stroke:green;
           node_3 --> node_4
           linkStyle 3 stroke:red;
-          node_3 --> node_4
+          node_3 --> |0| node_4
           linkStyle 4 stroke:green;
           node_4 --> node_7
           linkStyle 5 stroke:red;
           node_4 --> node_6
           linkStyle 6 stroke:red;
-          node_5 --> node_1004
+          node_5 --> |0006| node_1004
           linkStyle 7 stroke:green;
           node_6 --> node_1002
           linkStyle 8 stroke:red;
           node_7 --> node_1002
           linkStyle 9 stroke:red;
-          node_7 --> node_1004
+          node_7 --> |0007| node_1004
           linkStyle 10 stroke:green;
           node_8 --> node_9
           linkStyle 11 stroke:red;
-          node_8 --> node_9
+          node_8 --> |0| node_9
           linkStyle 12 stroke:green;
           node_1002 --> node_8
           linkStyle 13 stroke:red;
           node_1004 -.-> node_1002
-          node_1004 --> node_8
+          node_1004 --> |1| node_8
           linkStyle 15 stroke:green;
       DISASM
     end
@@ -156,65 +156,65 @@ module YARV
           node_21(0021 Pop)
           node_22(0022 GetLocalWC0)
           node_23(0023 Leave)
-          node_0 --> node_1
+          node_0 --> |0| node_1
           linkStyle 0 stroke:green;
           node_1 --> node_3
           linkStyle 1 stroke:red;
-          node_2 --> node_3
+          node_2 --> |0| node_3
           linkStyle 2 stroke:green;
           node_3 --> node_4
           linkStyle 3 stroke:red;
           node_4 --> node_7
           linkStyle 4 stroke:red;
-          node_5 --> node_6
+          node_5 --> |0| node_6
           linkStyle 5 stroke:green;
           node_7 --> node_16
           linkStyle 6 stroke:red;
           node_8 --> node_9
           linkStyle 7 stroke:red;
-          node_8 --> node_10
+          node_8 --> |0| node_10
           linkStyle 8 stroke:green;
           node_9 --> node_10
           linkStyle 9 stroke:red;
-          node_9 --> node_10
+          node_9 --> |1| node_10
           linkStyle 10 stroke:green;
           node_10 --> node_11
           linkStyle 11 stroke:red;
-          node_10 --> node_11
+          node_10 --> |0| node_11
           linkStyle 12 stroke:green;
           node_11 --> node_12
           linkStyle 13 stroke:red;
           node_12 --> node_14
           linkStyle 14 stroke:red;
-          node_12 --> node_14
+          node_12 --> |0| node_14
           linkStyle 15 stroke:green;
-          node_13 --> node_14
+          node_13 --> |1| node_14
           linkStyle 16 stroke:green;
           node_14 --> node_15
           linkStyle 17 stroke:red;
-          node_14 --> node_15
+          node_14 --> |0| node_15
           linkStyle 18 stroke:green;
           node_15 --> node_16
           linkStyle 19 stroke:red;
           node_16 --> node_18
           linkStyle 20 stroke:red;
-          node_16 --> node_18
+          node_16 --> |0| node_18
           linkStyle 21 stroke:green;
-          node_17 --> node_18
+          node_17 --> |1| node_18
           linkStyle 22 stroke:green;
           node_18 --> node_19
           linkStyle 23 stroke:red;
-          node_18 --> node_19
+          node_18 --> |0| node_19
           linkStyle 24 stroke:green;
           node_19 --> node_8
           linkStyle 25 stroke:red;
           node_19 --> node_22
           linkStyle 26 stroke:red;
-          node_20 --> node_21
+          node_20 --> |0| node_21
           linkStyle 27 stroke:green;
           node_22 --> node_23
           linkStyle 28 stroke:red;
-          node_22 --> node_23
+          node_22 --> |0| node_23
           linkStyle 29 stroke:green;
       DISASM
     end
@@ -236,7 +236,7 @@ module YARV
           node_2(0002 Leave)
           node_0 --> node_2
           linkStyle 0 stroke:red;
-          node_1 --> node_2
+          node_1 --> |0| node_2
           linkStyle 1 stroke:green;
         flowchart TD
           node_0(0000 GetLocalWC0)
@@ -259,13 +259,13 @@ module YARV
           node_17(0017 Leave)
           node_0 --> node_2
           linkStyle 0 stroke:red;
-          node_0 --> node_2
+          node_0 --> |0| node_2
           linkStyle 1 stroke:green;
-          node_1 --> node_2
+          node_1 --> |1| node_2
           linkStyle 2 stroke:green;
           node_2 --> node_3
           linkStyle 3 stroke:red;
-          node_2 --> node_3
+          node_2 --> |0| node_3
           linkStyle 4 stroke:green;
           node_3 --> node_7
           linkStyle 5 stroke:red;
@@ -273,43 +273,43 @@ module YARV
           linkStyle 6 stroke:red;
           node_4 --> node_5
           linkStyle 7 stroke:red;
-          node_4 --> node_5
+          node_4 --> |0| node_5
           linkStyle 8 stroke:green;
-          node_6 --> node_10
+          node_6 --> |0| node_10
           linkStyle 9 stroke:green;
           node_7 --> node_9
           linkStyle 10 stroke:red;
-          node_7 --> node_9
+          node_7 --> |0| node_9
           linkStyle 11 stroke:green;
-          node_8 --> node_9
+          node_8 --> |1| node_9
           linkStyle 12 stroke:green;
           node_9 --> node_10
           linkStyle 13 stroke:red;
-          node_9 --> node_10
+          node_9 --> |1| node_10
           linkStyle 14 stroke:green;
           node_10 --> node_12
           linkStyle 15 stroke:red;
-          node_10 --> node_16
+          node_10 --> |0| node_16
           linkStyle 16 stroke:green;
-          node_11 --> node_15
+          node_11 --> |0| node_15
           linkStyle 17 stroke:green;
           node_12 --> node_14
           linkStyle 18 stroke:red;
-          node_12 --> node_14
+          node_12 --> |0| node_14
           linkStyle 19 stroke:green;
-          node_13 --> node_14
+          node_13 --> |1| node_14
           linkStyle 20 stroke:green;
           node_14 --> node_15
           linkStyle 21 stroke:red;
-          node_14 --> node_15
+          node_14 --> |1| node_15
           linkStyle 22 stroke:green;
           node_15 --> node_16
           linkStyle 23 stroke:red;
-          node_15 --> node_16
+          node_15 --> |1| node_16
           linkStyle 24 stroke:green;
           node_16 --> node_17
           linkStyle 25 stroke:red;
-          node_16 --> node_17
+          node_16 --> |0| node_17
           linkStyle 26 stroke:green;
       DISASM
     end

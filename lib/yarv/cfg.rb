@@ -118,6 +118,10 @@ module YARV
       def leaves?
         @leaves
       end
+
+      def end
+        start + length - 1
+      end
     end
   end
 end

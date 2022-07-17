@@ -42,13 +42,33 @@ module YARV
           predecessor.succs.each do |successor|
             successor_graph = local_graphs[successor.start]
             arg_in = successor_graph.in.values[arg_n]
-            connect arg_out, arg_in, :data
+
+            # We're connecting to a phi node, so we may need a special label.
+            raise unless arg_in.is_a?(PhiNode)
+            case arg_out
+            when InsnNode
+              # Instructions that go into a phi node are labelled by the PC of
+              # last instruction in the block that executed them. This way you
+              # know which value to use for the phi, based on the last
+              # instruction you executed.
+              arg_out_block = dfg.cfg.block_map[arg_out.insn_pc]
+              label = arg_out_block.end
+            when PhiNode
+              # Phi nodes to phi nodes are not labelled.
+              label = nil
+            else
+              raise
+            end
+            connect arg_out, arg_in, :data, label
           end
         end
       end
 
       # Run post-build clean up.
       post_build
+
+      # Verify.
+      verify_graph
     end
 
     # Create a sub-graph for a single basic block - block block argument inputs
@@ -119,22 +139,39 @@ module YARV
           .start
           .upto(block.start + block.length - 1) do |consumer_pc|
             consumer_dataflow = dfg.insn_flow[consumer_pc]
-            consumer_dataflow.in.each do |producer|
-              connect phi, insn_node_map[consumer_pc], :data if producer == arg
+            consumer_dataflow.in.each_with_index do |producer, n|
+              if producer == arg
+                connect phi, insn_node_map[consumer_pc], :data, n
+              end
             end
           end
         block_dataflow.out.each { |out| outputs[out] = phi if out == arg }
       end
 
-      # Connect local dataflow.
+      # Connect local dataflow from consumers back to producers.
+      block
+        .start
+        .upto(block.start + block.length - 1) do |consumer_pc|
+          consumer_dataflow = dfg.insn_flow[consumer_pc]
+
+          consumer_dataflow.in.each_with_index do |producer, n|
+            if producer.is_a?(Integer)
+              producer_pc = producer
+              connect insn_node_map[producer_pc],
+                      insn_node_map[consumer_pc],
+                      :data,
+                      n
+            end
+          end
+        end
+
+      # Connect dataflow from producers that leaves the block.
       block
         .start
         .upto(block.start + block.length - 1) do |producer_pc|
           producer_dataflow = dfg.insn_flow[producer_pc]
           producer_dataflow.out.each do |consumer|
-            if consumer.is_a?(Integer)
-              connect insn_node_map[producer_pc], insn_node_map[consumer], :data
-            else
+            unless consumer.is_a?(Integer)
               # This is an argument to the successor block - not to an
               # instruction here.
               outputs[consumer] = insn_node_map[producer_pc]
@@ -157,9 +194,12 @@ module YARV
             remove node, connect_over: true
           elsif node.in.map(&:from).uniq.size == 1
             # Remove phi nodes where all inputs are the same.
-            producer = node.in.first.from
-            consumer = node.out.filter { |e| !e.to.is_a?(MergeNode) }.first.to
-            connect producer, consumer, :data
+            producer_edge = node.in.first
+            consumer_edge = node.out.filter { |e| !e.to.is_a?(MergeNode) }.first
+            connect producer_edge.from,
+                    consumer_edge.to,
+                    :data,
+                    consumer_edge.label
             remove node
           end
         end
@@ -174,6 +214,7 @@ module YARV
     # Connect one node to another.
     def connect(from, to, type, label = nil)
       raise if from == to
+      raise if type == :data && label.nil? unless to.is_a?(PhiNode)
       edge = Edge.new(from, to, type, label)
       from.out.push edge
       to.in.push edge
@@ -201,6 +242,27 @@ module YARV
       nodes.delete node
     end
 
+    def verify_graph
+      # Verify edge labels.
+      nodes.each do |node|
+        # Not talking about phi nodes right now.
+        next if node.is_a?(SOY::PhiNode)
+
+        labels = node.in.filter { |e| e.type == :data }.map(&:label)
+        next if labels.empty?
+
+        # No nil labels
+        raise if labels.any?(&:nil?)
+
+        # Labels should start at zero.
+        raise unless labels.min.zero?
+
+        # Labels should be contiguous.
+        raise unless labels.sort == (labels.min..labels.max).to_a
+      end
+      true
+    end
+
     def mermaid(output = StringIO.new)
       output.puts "flowchart TD"
 
@@ -223,7 +285,13 @@ module YARV
           end
 
           if consumer_edge.label
-            label = "|#{consumer_edge.label}| "
+            if consumer_edge.to.is_a?(SOY::PhiNode)
+              # Edges into phi nodes are labelled by the PC of the instruction
+              # going into the merge.
+              label = "|#{InstructionSequence.disasm_pc(consumer_edge.label)}| "
+            else
+              label = "|#{consumer_edge.label}| "
+            end
           else
             label = ""
           end
