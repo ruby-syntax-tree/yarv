@@ -11,7 +11,7 @@ module YARV
         block_0:
             0000 putobject                              14 # out: 0002
             0001 putobject                              2 # out: 0002
-            0002 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0001, 0000; out: 0003
+            0002 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0000, 0001; out: 0003
             0003 leave # in: 0002
                 # to: leaves
       DISASM
@@ -25,7 +25,7 @@ module YARV
         block_0:
             0000 putobject                              14 # out: 0002
             0001 putobject_INT2FIX_0_ # out: 0002
-            0002 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0001, 0000; out: 0003
+            0002 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0000, 0001; out: 0003
             0003 branchunless                           label_11 (6) # in: 0002
                 # to: block_6, block_4
         block_4: # from: block_0
@@ -40,7 +40,7 @@ module YARV
         block_7: # from: block_4, block_6
                 # in: in_0
             0007 putobject                              100 # out: 0008
-            0008 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0007, in_0; out: 0009
+            0008 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: in_0, 0007; out: 0009
             0009 leave # in: 0008
                 # to: leaves
       DISASM
@@ -57,7 +57,7 @@ module YARV
             0000 putobject                              100 # out: out_0
             0001 putobject                              14 # out: 0003
             0002 putobject_INT2FIX_0_ # out: 0003
-            0003 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0002, 0001; out: 0004
+            0003 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0001, 0002; out: 0004
             0004 branchunless                           label_13 (7) # in: 0003
                 # to: block_7, block_5
                 # out: 0000
@@ -105,17 +105,17 @@ module YARV
         block_8: # from: block_16
             0008 getlocal_WC_0                          sum@1 # out: 0010
             0009 getlocal_WC_0                          n@0 # out: 0010
-            0010 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0009, 0008; out: 0011
+            0010 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0008, 0009; out: 0011
             0011 setlocal_WC_0                          sum@1 # in: 0010
             0012 getlocal_WC_0                          n@0 # out: 0014
             0013 putobject_INT2FIX_1_ # out: 0014
-            0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0013, 0012; out: 0015
+            0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0012, 0013; out: 0015
             0015 setlocal_WC_0                          n@0 # in: 0014
                 # to: block_16
         block_16: # from: block_0, block_8
             0016 getlocal_WC_0                          n@0 # out: 0018
             0017 putobject_INT2FIX_0_ # out: 0018
-            0018 opt_gt                                 <calldata!mid:>, argc:1, ARGS_SIMPLE>[CcCr] # in: 0017, 0016; out: 0019
+            0018 opt_gt                                 <calldata!mid:>, argc:1, ARGS_SIMPLE>[CcCr] # in: 0016, 0017; out: 0019
             0019 branchif                               label_13 (8) # in: 0018
                 # to: block_8, block_20
         block_20: # from: block_16
@@ -148,7 +148,7 @@ module YARV
         block_0:
             0000 getlocal_WC_0                          n@0 # out: 0002
             0001 putobject                              2 # out: 0002
-            0002 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0001, 0000; out: 0003
+            0002 opt_lt                                 <calldata!mid:<, argc:1, ARGS_SIMPLE>[CcCr] # in: 0000, 0001; out: 0003
             0003 branchunless                           label_11 (6) # in: 0002
                 # to: block_6, block_4
         block_4: # from: block_0
@@ -159,14 +159,14 @@ module YARV
             0006 putself # out: 0010
             0007 getlocal_WC_0                          n@0 # out: 0009
             0008 putobject_INT2FIX_1_ # out: 0009
-            0009 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0008, 0007; out: 0010
-            0010 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE> # in: 0009, 0006; out: 0016
+            0009 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0007, 0008; out: 0010
+            0010 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE> # in: 0006, 0009; out: 0016
             0011 putself # out: 0015
             0012 getlocal_WC_0                          n@0 # out: 0014
             0013 putobject                              2 # out: 0014
-            0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0013, 0012; out: 0015
-            0015 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE> # in: 0014, 0011; out: 0016
-            0016 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0015, 0010; out: 0017
+            0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0012, 0013; out: 0015
+            0015 opt_send_without_block                 <calldata!mid:fib, argc:1, FCALL|ARGS_SIMPLE> # in: 0011, 0014; out: 0016
+            0016 opt_plus                               <calldata!mid:+, argc:1, ARGS_SIMPLE>[CcCr] # in: 0010, 0015; out: 0017
             0017 leave # in: 0016
                 # to: leaves
       DISASM
