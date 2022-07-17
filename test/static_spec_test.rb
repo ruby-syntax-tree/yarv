@@ -3,7 +3,7 @@
 require "test_helper"
 
 module YARV
-  class SpecTest < Test::Unit::TestCase
+  class StaticSpecTest < Test::Unit::TestCase
     # We're not stupid, we just want to cache results from previous tests for
     # use in subsequent tests in COMPILED_CACHE, CFG_CACHE etc.
     self.test_order = :defined
