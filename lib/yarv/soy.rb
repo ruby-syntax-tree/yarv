@@ -27,10 +27,11 @@ module YARV
       # Connect global control flow - connect basic blocks.
       dfg.cfg.blocks.each do |predecessor|
         predecessor_last = local_graphs[predecessor.start].last
-        predecessor.succs.each do |successor|
+        predecessor.succs.each_with_index do |successor, n|
           connect predecessor_last,
                   local_graphs[successor.start].first,
-                  :control
+                  :control,
+                  %i[branched fallthrough][n]
         end
       end
 
@@ -248,19 +249,30 @@ module YARV
         # Not talking about phi nodes right now.
         next if node.is_a?(SOY::PhiNode)
 
-        labels = node.in.filter { |e| e.type == :data }.map(&:label)
-        next if labels.empty?
+        if node.is_a?(InsnNode) && node.insn.branches? &&
+             !node.insn.is_a?(Leave)
+          # A branching node must have branched and fallthrough edges
+          # coming out.
 
-        # No nil labels
-        raise if labels.any?(&:nil?)
+          labels = node.out.map(&:label)
+          unless labels.sort == %i[branched fallthrough].sort ||
+                   labels == [:branched]
+            raise
+          end
+        else
+          labels = node.in.filter { |e| e.type == :data }.map(&:label)
+          next if labels.empty?
 
-        # Labels should start at zero.
-        raise unless labels.min.zero?
+          # No nil labels
+          raise if labels.any?(&:nil?)
 
-        # Labels should be contiguous.
-        raise unless labels.sort == (labels.min..labels.max).to_a
+          # Labels should start at zero.
+          raise unless labels.min.zero?
+
+          # Labels should be contiguous.
+          raise unless labels.sort == (labels.min..labels.max).to_a
+        end
       end
-      true
     end
 
     def mermaid(output = StringIO.new)

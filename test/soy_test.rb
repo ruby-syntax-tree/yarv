@@ -45,15 +45,15 @@ module YARV
           linkStyle 2 stroke:red;
           node_2 --> |0| node_3
           linkStyle 3 stroke:green;
-          node_3 --> node_6
+          node_3 --> |branched| node_6
           linkStyle 4 stroke:red;
-          node_3 --> node_5
+          node_3 --> |fallthrough| node_5
           linkStyle 5 stroke:red;
           node_4 --> |0005| node_1001
           linkStyle 6 stroke:green;
-          node_5 --> node_1000
+          node_5 --> |branched| node_1000
           linkStyle 7 stroke:red;
-          node_6 --> node_1000
+          node_6 --> |branched| node_1000
           linkStyle 8 stroke:red;
           node_6 --> |0006| node_1001
           linkStyle 9 stroke:green;
@@ -96,15 +96,15 @@ module YARV
           linkStyle 3 stroke:red;
           node_3 --> |0| node_4
           linkStyle 4 stroke:green;
-          node_4 --> node_7
+          node_4 --> |branched| node_7
           linkStyle 5 stroke:red;
-          node_4 --> node_6
+          node_4 --> |fallthrough| node_6
           linkStyle 6 stroke:red;
           node_5 --> |0006| node_1004
           linkStyle 7 stroke:green;
-          node_6 --> node_1002
+          node_6 --> |branched| node_1002
           linkStyle 8 stroke:red;
-          node_7 --> node_1002
+          node_7 --> |branched| node_1002
           linkStyle 9 stroke:red;
           node_7 --> |0007| node_1004
           linkStyle 10 stroke:green;
@@ -164,11 +164,11 @@ module YARV
           linkStyle 2 stroke:green;
           node_3 --> node_4
           linkStyle 3 stroke:red;
-          node_4 --> node_16
+          node_4 --> |branched| node_16
           linkStyle 4 stroke:red;
           node_5 --> |0| node_6
           linkStyle 5 stroke:green;
-          node_7 --> node_16
+          node_7 --> |branched| node_16
           linkStyle 6 stroke:red;
           node_8 --> node_9
           linkStyle 7 stroke:red;
@@ -194,7 +194,7 @@ module YARV
           linkStyle 17 stroke:red;
           node_14 --> |0| node_15
           linkStyle 18 stroke:green;
-          node_15 --> node_16
+          node_15 --> |branched| node_16
           linkStyle 19 stroke:red;
           node_16 --> node_18
           linkStyle 20 stroke:red;
@@ -206,9 +206,9 @@ module YARV
           linkStyle 23 stroke:red;
           node_18 --> |0| node_19
           linkStyle 24 stroke:green;
-          node_19 --> node_8
+          node_19 --> |branched| node_8
           linkStyle 25 stroke:red;
-          node_19 --> node_22
+          node_19 --> |fallthrough| node_22
           linkStyle 26 stroke:red;
           node_20 --> |0| node_21
           linkStyle 27 stroke:green;
@@ -267,9 +267,9 @@ module YARV
           linkStyle 3 stroke:red;
           node_2 --> |0| node_3
           linkStyle 4 stroke:green;
-          node_3 --> node_7
+          node_3 --> |branched| node_7
           linkStyle 5 stroke:red;
-          node_3 --> node_4
+          node_3 --> |fallthrough| node_4
           linkStyle 6 stroke:red;
           node_4 --> node_5
           linkStyle 7 stroke:red;
