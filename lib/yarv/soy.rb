@@ -162,13 +162,6 @@ module YARV
             connect producer, consumer, :data
             remove node
           end
-        when InsnNode
-          case node.insn
-          when Jump
-            # Remove jump nodes (they were left because we needed a fixed end
-            # node for the block).
-            remove node, connect_over: true
-          end
         end
       end
     end
