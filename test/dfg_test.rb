@@ -98,6 +98,8 @@ module YARV
             0002 putobject_INT2FIX_0_ # out: 0003
             0003 setlocal_WC_0                          sum@1 # in: 0002
             0004 jump                                   label_28 (16)
+                # to: block_16
+        block_5:
             0005 putnil # out: 0006
             0006 pop # in: 0005
             0007 jump                                   label_28 (16)
@@ -112,7 +114,7 @@ module YARV
             0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr] # in: 0012, 0013; out: 0015
             0015 setlocal_WC_0                          n@0 # in: 0014
                 # to: block_16
-        block_16: # from: block_0, block_8
+        block_16: # from: block_0, block_5, block_8
             0016 getlocal_WC_0                          n@0 # out: 0018
             0017 putobject_INT2FIX_0_ # out: 0018
             0018 opt_gt                                 <calldata!mid:>, argc:1, ARGS_SIMPLE>[CcCr] # in: 0016, 0017; out: 0019

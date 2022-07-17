@@ -42,6 +42,9 @@ module YARV
         end
         block.succs.each { |succ| succ.preds << block }
       end
+
+      # Verify.
+      verify
     end
 
     def disasm(output = StringIO.new, prefix = "")
@@ -61,9 +64,18 @@ module YARV
         if insn.branches? && insn.respond_to?(:label)
           starts.add iseq.labels[insn.label]
         end
-        starts.add insn_pc + 1 if insn.falls_through?
+        starts.add insn_pc + 1 if insn.branches? && !insn.is_a?(Leave)
       end
       starts.to_a.sort
+    end
+
+    def verify
+      # Only the last instruction in a block should branch.
+      blocks.each do |block|
+        (block.start..block.end - 1).each do |n|
+          raise if iseq.insns[n].branches?
+        end
+      end
     end
 
     class BasicBlock

@@ -164,7 +164,7 @@ module YARV
           linkStyle 2 stroke:green;
           node_3 --> node_4
           linkStyle 3 stroke:red;
-          node_4 --> node_7
+          node_4 --> node_16
           linkStyle 4 stroke:red;
           node_5 --> |0| node_6
           linkStyle 5 stroke:green;
