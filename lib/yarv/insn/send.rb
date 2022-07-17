@@ -40,6 +40,14 @@ module YARV
       other in Send[call_data: ^(call_data), block_iseq: ^(block_iseq)]
     end
 
+    def reads
+      call_data.argc + 1
+    end
+
+    def writes
+      1
+    end
+
     def call(context)
       receiver, *arguments = context.stack.pop(call_data.argc + 1)
       result =

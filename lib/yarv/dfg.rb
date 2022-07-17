@@ -142,7 +142,6 @@ module YARV
         else
           # Check with successor...
           pred.succs.each do |succ|
-            succ_block = cfg.block_map[succ]
             succ_flow = block_flow[succ.start]
             # The predecessor should have as many output arguments as the
             # success has input arguments.

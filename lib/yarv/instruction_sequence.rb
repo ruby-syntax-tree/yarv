@@ -119,7 +119,7 @@ module YARV
           in :dupn, offset
             compiled << DupN.new(offset)
           in :expandarray, size, flag
-            compiled << UnimplementedInstruction.new("expandarray", size, flag)
+            compiled << ExpandArray.new(size, flag)
           in :getblockparam, index, level
             compiled << UnimplementedInstruction.new(
               "getblockparam",

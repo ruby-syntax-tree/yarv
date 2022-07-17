@@ -21,6 +21,14 @@ module YARV
       other in Nop
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      0
+    end
+
     def call(context)
     end
 

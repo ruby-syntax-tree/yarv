@@ -26,6 +26,14 @@ module YARV
       other in PutString[string: ^(string)]
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      1
+    end
+
     def call(context)
       context.stack.push(string)
     end
