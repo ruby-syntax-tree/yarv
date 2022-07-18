@@ -28,6 +28,10 @@ module YARV
       2
     end
 
+    def side_effects?
+      false
+    end
+
     def call(context)
       value = context.stack.pop
       context.stack.push(value)

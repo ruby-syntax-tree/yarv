@@ -29,6 +29,10 @@ module YARV
       0
     end
 
+    def side_effects?
+      false
+    end
+
     def call(context)
     end
 
