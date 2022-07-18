@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 return unless ENV["CI"]
-require "test_helper"
+require_relative "test_helper"
 
 module YARV
   class CompileTest < Test::Unit::TestCase

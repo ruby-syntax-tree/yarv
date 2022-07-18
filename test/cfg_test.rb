@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "test_helper"
+require_relative "test_helper"
 
 module YARV
   class CFGTest < Test::Unit::TestCase
@@ -66,6 +66,8 @@ module YARV
             0002 putobject_INT2FIX_0_
             0003 setlocal_WC_0                          sum@1
             0004 jump                                   label_28 (16)
+                # to: block_16
+        block_5:
             0005 putnil
             0006 pop
             0007 jump                                   label_28 (16)
@@ -80,7 +82,7 @@ module YARV
             0014 opt_minus                              <calldata!mid:-, argc:1, ARGS_SIMPLE>[CcCr]
             0015 setlocal_WC_0                          n@0
                 # to: block_16
-        block_16: # from: block_0, block_8
+        block_16: # from: block_0, block_5, block_8
             0016 getlocal_WC_0                          n@0
             0017 putobject_INT2FIX_0_
             0018 opt_gt                                 <calldata!mid:>, argc:1, ARGS_SIMPLE>[CcCr]

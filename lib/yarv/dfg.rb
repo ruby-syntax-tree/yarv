@@ -30,6 +30,8 @@ module YARV
       # Discover the dataflow.
       local_flow
       global_flow
+
+      # Verify.
       verify_flow
     end
 
@@ -49,18 +51,25 @@ module YARV
             insn = cfg.iseq.insns[insn_pc]
             insn_dataflow = insn_flow[insn_pc]
 
+            # How many values will be missing from the local stack to run this
+            # instruction?
+            read_off_stack = insn.reads
+            stack_depth = stack.size
+            missing_stack_values = read_off_stack - stack_depth
+
             # For every value the instruction pops off the stack...
             insn.reads.times do
               # Was the value it pops off from another basic block?
               if stack.empty?
-                # Thi is a basic block argument.
-                name = :"in_#{stack_initial_depth}"
-                insn_dataflow.in << name
-                block_dataflow.in << name
+                # This is a basic block argument.
+                name = :"in_#{missing_stack_values - 1}"
+                insn_dataflow.in.unshift name
+                block_dataflow.in.unshift name
                 stack_initial_depth += 1
+                missing_stack_values -= 1
               else
                 # Connect this consumer to the producer of the value.
-                insn_dataflow.in << stack.pop
+                insn_dataflow.in.unshift stack.pop
               end
             end
 
