@@ -21,6 +21,18 @@ module YARV
       other in Nop
     end
 
+    def reads
+      0
+    end
+
+    def writes
+      0
+    end
+
+    def side_effects?
+      false
+    end
+
     def call(context)
     end
 

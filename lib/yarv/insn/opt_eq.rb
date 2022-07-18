@@ -26,6 +26,14 @@ module YARV
       other in OptEq[call_data: ^(call_data)]
     end
 
+    def reads
+      2
+    end
+
+    def writes
+      1
+    end
+
     def call(context)
       receiver, *arguments = context.stack.pop(call_data.argc + 1)
       result = context.call_method(call_data, receiver, arguments)

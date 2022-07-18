@@ -20,6 +20,18 @@ module YARV
       other in Dup
     end
 
+    def reads
+      1
+    end
+
+    def writes
+      2
+    end
+
+    def side_effects?
+      false
+    end
+
     def call(context)
       value = context.stack.pop
       context.stack.push(value)
