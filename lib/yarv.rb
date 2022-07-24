@@ -20,7 +20,7 @@ Dir[File.expand_path("yarv/insn/*.rb", __dir__)].each do |filepath|
   require_relative "yarv/insn/#{File.basename(filepath, ".rb")}"
 end
 
-# The YARV module is a Ruby runtime that evlauates YARV instructions.
+# The YARV module is a Ruby runtime that evaluates YARV instructions.
 module YARV
   # This is the main entry into the project. It accepts a Ruby string that
   # represents source code. You can optionally also pass all of the same
