@@ -24,8 +24,14 @@ filepaths.each do |filepath|
 
   # Extract the ruby code block from the comments, generate the instruction
   # sequence for it, and then inject the commented sequence into the block
-  ruby_code = formatted_comments.match(/~~~ruby\n([\S\s]*)~~~/)[1]
+  ruby_code_match = formatted_comments.match(/~~~ruby\n([\S\s]*)~~~/)
 
+  if ruby_code_match.nil?
+    raise "Missing ruby example in #{filepath} doc comment"
+  else
+    ruby_code = ruby_code_match[1]
+  end
+  
   disasm = RubyVM::InstructionSequence.new(ruby_code).disasm
   disasm.gsub!(/^/, "# ")
 

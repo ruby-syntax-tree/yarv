@@ -9,7 +9,13 @@ module YARV
   #
   # ### TracePoint
   #
-  # `dup` does not dispatch any events.
+  # `expandarray` does not dispatch any events.
+  #
+  # ### Usage
+  #
+  # ~~~ruby
+  # x, = [true, false, nil]
+  # ~~~
   #
   class ExpandArray < Instruction
     attr_reader :size, :flag
