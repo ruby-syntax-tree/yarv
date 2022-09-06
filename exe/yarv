@@ -47,7 +47,7 @@ until ARGV.empty?
       raise "Unknown argument #{arg}"
     end
   else
-    sources.push [File.read(arg), File.basename(arg), arg]
+    sources.push [File.read(arg), arg, File.expand_path(arg)]
   end
 end
 
