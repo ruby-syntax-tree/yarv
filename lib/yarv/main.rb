@@ -13,7 +13,7 @@ module YARV
 
     def require(context, filename)
       file_path =
-        context.globals[:$:].each do |path|
+        context.globals[:$:].find do |path|
           filename += ".rb" unless filename.end_with?(".rb")
 
           file_path = File.join(path, filename)
