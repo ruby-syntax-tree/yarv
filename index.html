@@ -97,6 +97,7 @@
 <a href="#setlocalwc0">setlocal_wc_0</a>
 <a href="#setlocalwc1">setlocal_wc_1</a>
 <a href="#setn">setn</a>
+<a href="#splatarray">splatarray</a>
 <a href="#swap">swap</a>
 <a href="#topn">topn</a>
 <a href="#toregexp">toregexp</a>
@@ -2027,17 +2028,45 @@ top of the stack as determined by the index given as its only argument.</p>
 <span class="c1"># 0012 leave</span>
 </code></pre></div></div>
 
-<h2 id="swap">swap</h2>
+<h2 id="splatarray">splatarray</h2>
 
 <h3 id="summary-72">Summary</h3>
 
-<p><code>swap</code> swaps the top two elements in the stack.</p>
+<p><code>splatarray</code> calls to_a on an array to splat.</p>
+
+<p>It coerces the array object at the top of the stack into Array by calling
+<code>to_a</code>. It pushes a duplicate of the array if there is a flag, and the original
+array, if there isn’t one.</p>
 
 <h3 id="tracepoint-72">TracePoint</h3>
 
-<p><code>swap</code> does not dispatch any events.</p>
+<p><code>splayarray</code> does not dispatch any events.</p>
 
 <h3 id="usage-72">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,8)&gt; (catch: FALSE)</span>
+<span class="c1"># local table (size: 1, argc: 0 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
+<span class="c1"># [ 1] x@0</span>
+<span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
+<span class="c1"># 0002 splatarray                             true</span>
+<span class="c1"># 0004 dup</span>
+<span class="c1"># 0005 setlocal_WC_0                          x@0</span>
+<span class="c1"># 0007 leave</span>
+</code></pre></div></div>
+
+<h2 id="swap">swap</h2>
+
+<h3 id="summary-73">Summary</h3>
+
+<p><code>swap</code> swaps the top two elements in the stack.</p>
+
+<h3 id="tracepoint-73">TracePoint</h3>
+
+<p><code>swap</code> does not dispatch any events.</p>
+
+<h3 id="usage-73">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!!</span><span class="k">defined?</span><span class="p">([[]])</span>
 
@@ -2061,16 +2090,16 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <h2 id="topn">topn</h2>
 
-<h3 id="summary-73">Summary</h3>
+<h3 id="summary-74">Summary</h3>
 
 <p><code>topn</code> has one argument: <code>n</code>. It gets the nth element from the top of the
 stack and pushes it on the stack.</p>
 
-<h3 id="tracepoint-73">TracePoint</h3>
+<h3 id="tracepoint-74">TracePoint</h3>
 
 <p><code>topn</code> does not dispatch any events.</p>
 
-<h3 id="usage-73">Usage</h3>
+<h3 id="usage-74">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="mi">3</span>
 <span class="k">when</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span>
@@ -2110,18 +2139,18 @@ stack and pushes it on the stack.</p>
 
 <h2 id="toregexp">toregexp</h2>
 
-<h3 id="summary-74">Summary</h3>
+<h3 id="summary-75">Summary</h3>
 
 <p><code>toregexp</code> is generated when string interpolation is used inside a regex
 literal <code>//</code>. It pops a defined number of values from the stack, combines
 them into a single string and coerces that string into a <code>Regexp</code> object,
 which it pushes back onto the stack</p>
 
-<h3 id="tracepoint-74">TracePoint</h3>
+<h3 id="tracepoint-75">TracePoint</h3>
 
 <p><code>toregexp</code> cannot dispatch any TracePoint events.</p>
 
-<h3 id="usage-74">Usage</h3>
+<h3 id="usage-75">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"/</span><span class="si">#{</span><span class="kp">true</span><span class="si">}</span><span class="s2">/"</span>
 
