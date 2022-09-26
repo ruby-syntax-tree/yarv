@@ -326,7 +326,7 @@ module YARV
           in :setspecial, key
             compiled << UnimplementedInstruction.new("setspecial", key)
           in :splatarray, flag
-            compiled << UnimplementedInstruction.new("splatarray", flag)
+            compiled << SplatArray.new(flag)
           in [:swap]
             compiled << Swap.new
           in :throw, type
