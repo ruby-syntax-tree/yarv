@@ -26,7 +26,7 @@ module YARV
   # # 0001 getlocal_WC_0                          i@0
   # # 0003 opt_send_without_block                 <calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE>
   # # 0005 leave                                  [Br]
-  # # ~~~
+  # ~~~
   #
   class Send < Instruction
     attr_reader :call_data, :block_iseq
