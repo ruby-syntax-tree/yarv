@@ -1882,22 +1882,34 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 <span class="c1"># 0001 getlocal_WC_0                          i@0</span>
 <span class="c1"># 0003 opt_send_without_block                 &lt;calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
 <span class="c1"># 0005 leave                                  [Br]</span>
-<span class="c1"># ~~~</span>
 
-<span class="c1">## setglobal</span>
+<span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,23)&gt; (catch: FALSE)</span>
+<span class="c1"># 0000 putstring                              "hello"                   (   1)[Li]</span>
+<span class="c1"># 0002 send                                   &lt;calldata!mid:tap, argc:0&gt;, block in &lt;compiled&gt;</span>
+<span class="c1"># 0005 leave</span>
+<span class="c1"># </span>
+<span class="c1"># == disasm: #&lt;ISeq:block in &lt;compiled&gt;@&lt;compiled&gt;:1 (1,12)-(1,23)&gt; (catch: FALSE)</span>
+<span class="c1"># local table (size: 1, argc: 1 [opts: 0, rest: -1, post: 0, block: -1, kw: -1@-1, kwrest: -1])</span>
+<span class="c1"># [ 1] i@0&lt;Arg&gt;</span>
+<span class="c1"># 0000 putself                                                          (   1)[LiBc]</span>
+<span class="c1"># 0001 getlocal_WC_0                          i@0</span>
+<span class="c1"># 0003 opt_send_without_block                 &lt;calldata!mid:p, argc:1, FCALL|ARGS_SIMPLE&gt;</span>
+<span class="c1"># 0005 leave                                  [Br]</span>
+</code></pre></div></div>
 
-<span class="c1">### Summary</span>
+<h2 id="setglobal">setglobal</h2>
 
-<span class="sb">`setglobal`</span> <span class="n">sets</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="n">a</span> <span class="n">global</span> <span class="n">variable</span><span class="o">.</span>
+<h3 id="summary-68">Summary</h3>
 
-<span class="c1">### TracePoint</span>
+<p><code>setglobal</code> sets the value of a global variable.</p>
 
-<span class="sb">`setglobal`</span> <span class="n">does</span> <span class="n">not</span> <span class="n">dispatch</span> <span class="n">any</span> <span class="n">events</span><span class="o">.</span>
+<h3 id="tracepoint-68">TracePoint</h3>
 
-<span class="c1">### Usage</span>
+<p><code>setglobal</code> does not dispatch any events.</p>
 
-<span class="o">~~~</span><span class="n">ruby</span>
-<span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
+<h3 id="usage-68">Usage</h3>
+
+<div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="vg">$global</span> <span class="o">=</span> <span class="mi">5</span>
 
 <span class="c1"># == disasm: #&lt;ISeq:&lt;compiled&gt;@&lt;compiled&gt;:1 (1,0)-(1,11)&gt; (catch: FALSE)</span>
 <span class="c1"># 0000 putobject                              5                         (   1)[Li]</span>
@@ -1908,18 +1920,18 @@ unification optimization. It is the equivalent to <code>putobject 1</code>.</p>
 
 <h2 id="setlocal">setlocal</h2>
 
-<h3 id="summary-68">Summary</h3>
+<h3 id="summary-69">Summary</h3>
 
 <p><code>setlocal</code> sets the value of a local variable on a frame determined by the
 level and index arguments. The level is the number of frames back to
 look and the index is the index in the local table. It pops the value it is
 setting off the stack.</p>
 
-<h3 id="tracepoint-68">TracePoint</h3>
+<h3 id="tracepoint-69">TracePoint</h3>
 
 <p><code>setlocal</code> does not dispatch any events.</p>
 
-<h3 id="usage-68">Usage</h3>
+<h3 id="usage-69">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="n">tap</span> <span class="p">{</span> <span class="n">tap</span> <span class="p">{</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">}</span> <span class="p">}</span>
@@ -1947,17 +1959,17 @@ setting off the stack.</p>
 
 <h2 id="setlocalwc0">setlocal_wc_0</h2>
 
-<h3 id="summary-69">Summary</h3>
+<h3 id="summary-70">Summary</h3>
 
 <p><code>setlocal_WC_0</code> is a specialized version of the <code>setlocal</code> instruction. It
 sets the value of a local variable on the current frame to the value at the
 top of the stack as determined by the index given as its only argument.</p>
 
-<h3 id="tracepoint-69">TracePoint</h3>
+<h3 id="tracepoint-70">TracePoint</h3>
 
 <p><code>setlocal_WC_0</code> does not dispatch any events.</p>
 
-<h3 id="usage-69">Usage</h3>
+<h3 id="usage-70">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 
@@ -1972,17 +1984,17 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <h2 id="setlocalwc1">setlocal_wc_1</h2>
 
-<h3 id="summary-70">Summary</h3>
+<h3 id="summary-71">Summary</h3>
 
 <p><code>setlocal_WC_1</code> is a specialized version of the <code>setlocal</code> instruction. It
 sets the value of a local variable on the parent frame to the value at the
 top of the stack as determined by the index given as its only argument.</p>
 
-<h3 id="tracepoint-70">TracePoint</h3>
+<h3 id="tracepoint-71">TracePoint</h3>
 
 <p><code>setlocal_WC_1</code> does not dispatch any events.</p>
 
-<h3 id="usage-70">Usage</h3>
+<h3 id="usage-71">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="mi">5</span>
 <span class="nb">self</span><span class="p">.</span><span class="nf">then</span> <span class="p">{</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">10</span> <span class="p">}</span>
@@ -2005,15 +2017,15 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <h2 id="setn">setn</h2>
 
-<h3 id="summary-71">Summary</h3>
+<h3 id="summary-72">Summary</h3>
 
 <p><code>setn</code> is an instruction for set Nth stack entry to stack top</p>
 
-<h3 id="tracepoint-71">TracePoint</h3>
+<h3 id="tracepoint-72">TracePoint</h3>
 
 <p># <code>setn</code> does not dispatch any events.</p>
 
-<h3 id="usage-71">Usage</h3>
+<h3 id="usage-72">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{}[</span><span class="ss">:key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'val'</span>
 
@@ -2030,7 +2042,7 @@ top of the stack as determined by the index given as its only argument.</p>
 
 <h2 id="splatarray">splatarray</h2>
 
-<h3 id="summary-72">Summary</h3>
+<h3 id="summary-73">Summary</h3>
 
 <p><code>splatarray</code> calls to_a on an array to splat.</p>
 
@@ -2038,11 +2050,11 @@ top of the stack as determined by the index given as its only argument.</p>
 <code>to_a</code>. It pushes a duplicate of the array if there is a flag, and the original
 array, if there isn’t one.</p>
 
-<h3 id="tracepoint-72">TracePoint</h3>
+<h3 id="tracepoint-73">TracePoint</h3>
 
 <p><code>splayarray</code> does not dispatch any events.</p>
 
-<h3 id="usage-72">Usage</h3>
+<h3 id="usage-73">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">x</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
 
@@ -2058,15 +2070,15 @@ array, if there isn’t one.</p>
 
 <h2 id="swap">swap</h2>
 
-<h3 id="summary-73">Summary</h3>
+<h3 id="summary-74">Summary</h3>
 
 <p><code>swap</code> swaps the top two elements in the stack.</p>
 
-<h3 id="tracepoint-73">TracePoint</h3>
+<h3 id="tracepoint-74">TracePoint</h3>
 
 <p><code>swap</code> does not dispatch any events.</p>
 
-<h3 id="usage-73">Usage</h3>
+<h3 id="usage-74">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">!!</span><span class="k">defined?</span><span class="p">([[]])</span>
 
@@ -2090,16 +2102,16 @@ array, if there isn’t one.</p>
 
 <h2 id="topn">topn</h2>
 
-<h3 id="summary-74">Summary</h3>
+<h3 id="summary-75">Summary</h3>
 
 <p><code>topn</code> has one argument: <code>n</code>. It gets the nth element from the top of the
 stack and pushes it on the stack.</p>
 
-<h3 id="tracepoint-74">TracePoint</h3>
+<h3 id="tracepoint-75">TracePoint</h3>
 
 <p><code>topn</code> does not dispatch any events.</p>
 
-<h3 id="usage-74">Usage</h3>
+<h3 id="usage-75">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="mi">3</span>
 <span class="k">when</span> <span class="mi">1</span><span class="o">..</span><span class="mi">5</span>
@@ -2139,18 +2151,18 @@ stack and pushes it on the stack.</p>
 
 <h2 id="toregexp">toregexp</h2>
 
-<h3 id="summary-75">Summary</h3>
+<h3 id="summary-76">Summary</h3>
 
 <p><code>toregexp</code> is generated when string interpolation is used inside a regex
 literal <code>//</code>. It pops a defined number of values from the stack, combines
 them into a single string and coerces that string into a <code>Regexp</code> object,
 which it pushes back onto the stack</p>
 
-<h3 id="tracepoint-75">TracePoint</h3>
+<h3 id="tracepoint-76">TracePoint</h3>
 
 <p><code>toregexp</code> cannot dispatch any TracePoint events.</p>
 
-<h3 id="usage-75">Usage</h3>
+<h3 id="usage-76">Usage</h3>
 
 <div class="language-ruby highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s2">"/</span><span class="si">#{</span><span class="kp">true</span><span class="si">}</span><span class="s2">/"</span>
 
