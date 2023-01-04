@@ -8,8 +8,8 @@ Rake::TestTask.new(:test) do |t|
   t.test_files = FileList["test/**/*_test.rb"]
 end
 
-SOURCE_FILES = %w[Gemfile Rakefile lib/**/*.rb test/**/*.rb]
-SyntaxTree::Rake::CheckTask.new(:"stree:check", SOURCE_FILES)
-SyntaxTree::Rake::WriteTask.new(:"stree:write", SOURCE_FILES)
+source_files = FileList[%w[Gemfile Rakefile lib/**/*.rb test/**/*.rb]]
+SyntaxTree::Rake::CheckTask.new(:"stree:check", source_files)
+SyntaxTree::Rake::WriteTask.new(:"stree:write", source_files)
 
-task(default: %w[test stree:check])
+task default: :test

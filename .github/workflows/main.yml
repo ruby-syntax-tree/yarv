@@ -17,10 +17,9 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
-          ruby-version: '3.1'
+          ruby-version: '3.2'
 
-      - name: Check format
-        run: bundle exec rake stree:check
-
-      - name: Test
-        run: bundle exec rake test
+      - name: Lint and test
+        run: |
+          bundle exec rake stree:check
+          bundle exec rake test

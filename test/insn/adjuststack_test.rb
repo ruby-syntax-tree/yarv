@@ -11,8 +11,8 @@ module YARV
         x[0]
       RUBY
 
-      YARV.compile(source).insns =>
-        [DupArray,
+      YARV.compile(source).insns => [
+        DupArray,
         SetLocalWC0,
         GetLocalWC0,
         PutObjectInt2Fix0,
@@ -29,7 +29,8 @@ module YARV
         GetLocalWC0,
         PutObjectInt2Fix0,
         OptAref,
-        Leave]
+        Leave
+      ]
     end
   end
 end

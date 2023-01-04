@@ -1,5 +1,7 @@
 # YARV
 
+[![Build Status](https://github.com/kddnewton/yarv/workflows/Main/badge.svg)](https://github.com/kddnewton/yarv/actions)
+
 This project's aim is to provide an educational window into how CRuby's virtual machine works under the hood.
 
 CRuby uses a stack-based virtual machine named YARV. You can see the bytecode that will be executed by running `RubyVM::InstructionSequence.compile(source).disasm` or by running `ruby --dump=insns -e source`. At last count, there were `202` instructions, though that number gets significantly smaller if you factor out tracepoint and specialized instructions. Most instructions look similar to their machine code counterparts.

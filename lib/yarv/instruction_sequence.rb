@@ -69,42 +69,42 @@ module YARV
             # skip for now
           in Symbol
             compiled.labels[insn] = compiled.insns.length
-          in :adjuststack, size
+          in [:adjuststack, size]
             compiled << AdjustStack.new(size)
           in [:anytostring]
             compiled << AnyToString.new
-          in :branchif, value
+          in [:branchif, value]
             compiled << BranchIf.new(value)
-          in :branchnil, value
+          in [:branchnil, value]
             compiled << BranchNil.new(value)
-          in :branchunless, value
+          in [:branchunless, value]
             compiled << BranchUnless.new(value)
-          in :checkkeyword, bits_index, index
+          in [:checkkeyword, bits_index, index]
             compiled << UnimplementedInstruction.new(
               "checkkeyword",
               bits_index,
               index
             )
-          in :checkmatch, type
+          in [:checkmatch, type]
             compiled << UnimplementedInstruction.new("checkmatch", type)
-          in :checktype, type
+          in [:checktype, type]
             compiled << UnimplementedInstruction.new("checktype", type)
           in [:concatarray]
             compiled << ConcatArray.new
-          in :concatstrings, num
+          in [:concatstrings, num]
             compiled << ConcatStrings.new(num)
-          in :defineclass, name, iseq, flags
+          in [:defineclass, name, iseq, flags]
             compiled << UnimplementedInstruction.new(
               "defineclass",
               name,
               compile(selfo, iseq, compiled),
               flags
             )
-          in :defined, type, object, value
+          in [:defined, type, object, value]
             compiled << Defined.new(type, object, value)
-          in :definemethod, name, iseq
+          in [:definemethod, name, iseq]
             compiled << DefineMethod.new(name, compile(selfo, iseq, compiled))
-          in :definesmethod, name, iseq
+          in [:definesmethod, name, iseq]
             compiled << UnimplementedInstruction.new(
               "definesmethod",
               name,
@@ -112,165 +112,170 @@ module YARV
             )
           in [:dup]
             compiled << Dup.new
-          in :duparray, array
+          in [:duparray, array]
             compiled << DupArray.new(array)
-          in :duphash, hash
+          in [:duphash, hash]
             compiled << DupHash.new(hash)
-          in :dupn, offset
+          in [:dupn, offset]
             compiled << DupN.new(offset)
-          in :expandarray, size, flag
+          in [:expandarray, size, flag]
             compiled << ExpandArray.new(size, flag)
-          in :getblockparam, index, level
+          in [:getblockparam, index, level]
             compiled << UnimplementedInstruction.new(
               "getblockparam",
               index,
               level
             )
-          in :getblockparamproxy, index, level
+          in [:getblockparamproxy, index, level]
             compiled << UnimplementedInstruction.new(
               "getblockparamproxy",
               index,
               level
             )
-          in :getclassvariable, name, cache
+          in [:getclassvariable, name, cache]
             compiled << UnimplementedInstruction.new(
               "getclassvariable",
               name,
               cache
             )
-          in :getconstant, name
+          in [:getconstant, name]
             compiled << GetConstant.new(name)
-          in :getglobal, value
+          in [:getglobal, value]
             compiled << GetGlobal.new(value)
-          in :getinstancevariable, name, cache
+          in [:getinstancevariable, name, cache]
             compiled << UnimplementedInstruction.new(
               "getinstancevariable",
               name,
               cache
             )
-          in :getlocal, offset, level
+          in [:getlocal, offset, level]
             current = compiled
             level.times { current = current.parent }
 
             index = current.local_index(offset)
             compiled << GetLocal.new(current.locals[index], index, level)
-          in :getlocal_WC_0, offset
+          in [:getlocal_WC_0, offset]
             index = compiled.local_index(offset)
             compiled << GetLocalWC0.new(compiled.locals[index], index)
-          in :getlocal_WC_1, offset
+          in [:getlocal_WC_1, offset]
             index = parent.local_index(offset)
             compiled << GetLocalWC1.new(parent.locals[index], index)
-          in :getspecial, key, type
+          in [:getspecial, key, type]
             compiled << UnimplementedInstruction.new("getspecial", key, type)
           in [:intern]
             compiled << Intern.new
-          in :invokeblock, { mid: nil, orig_argc:, flag: }
+          in [:invokeblock, { mid: nil, orig_argc:, flag: }]
             compiled << InvokeBlock.new(CallData.new(nil, orig_argc, flag))
-          in :invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq
+          in [:invokesuper, { mid: nil, orig_argc:, flag: }, block_iseq]
             block_iseq = compile(selfo, block_iseq, compiled) if block_iseq
             compiled << UnimplementedInstruction.new(
               "invokesuper",
               CallData.new(nil, orig_argc, flag),
               block_iseq
             )
-          in :jump, value
+          in [:jump, value]
             compiled << Jump.new(value)
           in [:leave]
             compiled << Leave.new
-          in :newarray, size
+          in [:newarray, size]
             compiled << NewArray.new(size)
-          in :newhash, size
+          in [:newhash, size]
             compiled << NewHash.new(size)
-          in :newarraykwsplat, size
+          in [:newarraykwsplat, size]
             compiled << UnimplementedInstruction.new("newarraykwsplat", size)
-          in :newrange, exclude_end
+          in [:newrange, exclude_end]
             compiled << NewRange.new(exclude_end)
           in [:nop]
             compiled << Nop.new
-          in :objtostring, { mid: :to_s, orig_argc: 0, flag: }
+          in [:objtostring, { mid: :to_s, orig_argc: 0, flag: }]
             compiled << ObjToString.new(CallData.new(:to_s, 0, flag))
-          in :once, iseq, cache
+          in [:once, iseq, cache]
             compiled << UnimplementedInstruction.new(
               "once",
               compile(selfo, iseq, compiled),
               cache
             )
-          in :opt_and, { mid: :&, orig_argc: 1, flag: }
+          in [:opt_and, { mid: :&, orig_argc: 1, flag: }]
             compiled << OptAnd.new(CallData.new(:&, 1, flag))
-          in :opt_aref, { mid: :[], orig_argc: 1, flag: }
+          in [:opt_aref, { mid: :[], orig_argc: 1, flag: }]
             compiled << OptAref.new(CallData.new(:[], 1, flag))
-          in :opt_aset, { mid: :[]=, orig_argc: 2, flag: }
+          in [:opt_aset, { mid: :[]=, orig_argc: 2, flag: }]
             compiled << OptAset.new(CallData.new(:[]=, 2, flag))
-          in :opt_aset_with, key, { mid: :[]=, orig_argc: 2, flag: }
+          in [:opt_aset_with, key, { mid: :[]=, orig_argc: 2, flag: }]
             compiled << OptAsetWith.new(key, CallData.new(:[]=, 2, flag))
-          in :opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }
+          in [:opt_aref_with, key, { mid: :[], orig_argc: 1, flag: }]
             compiled << OptArefWith.new(key, CallData.new(:[], 1, flag))
-          in :opt_case_dispatch, cdhash, offset
+          in [:opt_case_dispatch, cdhash, offset]
             compiled << OptCaseDispatch.new(cdhash, offset)
-          in :opt_div, { mid: :/, orig_argc: 1, flag: }
+          in [:opt_div, { mid: :/, orig_argc: 1, flag: }]
             compiled << OptDiv.new(CallData.new(:/, 1, flag))
-          in :opt_empty_p, { mid: :empty?, orig_argc: 0, flag: }
+          in [:opt_empty_p, { mid: :empty?, orig_argc: 0, flag: }]
             compiled << OptEmptyP.new(CallData.new(:empty?, 0, flag))
-          in :opt_eq, { mid: :==, orig_argc: 1, flag: }
+          in [:opt_eq, { mid: :==, orig_argc: 1, flag: }]
             compiled << OptEq.new(CallData.new(:==, 1, flag))
-          in :opt_neq, eq_cd, neq_cd
+          in [:opt_getconstant_path, names]
+            compiled << UnimplementedInstruction.new(
+              "opt_getconstant_path",
+              names
+            )
+          in [:opt_neq, eq_cd, neq_cd]
             compiled << OptNeq.new(
               CallData.new(:==, 1, eq_cd.fetch(:flag)),
               CallData.new(:!=, 1, neq_cd.fetch(:flag))
             )
-          in :opt_ge, { mid: :>=, orig_argc: 1, flag: }
+          in [:opt_ge, { mid: :>=, orig_argc: 1, flag: }]
             compiled << OptGe.new(CallData.new(:>=, 1, flag))
-          in :opt_gt, { mid: :>, orig_argc: 1, flag: }
+          in [:opt_gt, { mid: :>, orig_argc: 1, flag: }]
             compiled << OptGt.new(CallData.new(:>, 1, flag))
-          in :opt_le, { mid: :<=, orig_argc: 1, flag: }
+          in [:opt_le, { mid: :<=, orig_argc: 1, flag: }]
             compiled << OptLe.new(CallData.new(:<=, 1, flag))
-          in :opt_lt, { mid: :<, orig_argc: 1, flag: }
+          in [:opt_lt, { mid: :<, orig_argc: 1, flag: }]
             compiled << OptLt.new(CallData.new(:<, 1, flag))
-          in :opt_ltlt, { mid: :<<, orig_argc: 1, flag: }
+          in [:opt_ltlt, { mid: :<<, orig_argc: 1, flag: }]
             compiled << OptLtLt.new(CallData.new(:<<, 1, flag))
-          in :opt_nil_p, { mid: :nil?, orig_argc: 0, flag: }
+          in [:opt_nil_p, { mid: :nil?, orig_argc: 0, flag: }]
             compiled << OptNilP.new(CallData.new(:nil?, 0, flag))
-          in :opt_getinlinecache, label, cache
+          in [:opt_getinlinecache, label, cache]
             compiled << OptGetInlineCache.new(label, cache)
-          in :opt_length, { mid: :length, orig_argc: 0, flag: }
+          in [:opt_length, { mid: :length, orig_argc: 0, flag: }]
             compiled << OptLength.new(CallData.new(:length, 0, flag))
-          in :opt_minus, { mid: :-, orig_argc: 1, flag: }
+          in [:opt_minus, { mid: :-, orig_argc: 1, flag: }]
             compiled << OptMinus.new(CallData.new(:-, 1, flag))
-          in :opt_mod, { mid: :%, orig_argc: 1, flag: }
+          in [:opt_mod, { mid: :%, orig_argc: 1, flag: }]
             compiled << OptMod.new(CallData.new(:%, 1, flag))
-          in :opt_mult, { mid: :*, orig_argc: 1, flag: }
+          in [:opt_mult, { mid: :*, orig_argc: 1, flag: }]
             compiled << OptMult.new(CallData.new(:*, 1, flag))
-          in :opt_newarray_max, size
+          in [:opt_newarray_max, size]
             compiled << OptNewArrayMax.new(size)
-          in :opt_newarray_min, size
+          in [:opt_newarray_min, size]
             compiled << OptNewArrayMin.new(size)
-          in :opt_not, { mid: :!, orig_argc: 0, flag: }
+          in [:opt_not, { mid: :!, orig_argc: 0, flag: }]
             compiled << OptNot.new(CallData.new(:!, 0, flag))
-          in :opt_or, { mid: :|, orig_argc: 1, flag: }
+          in [:opt_or, { mid: :|, orig_argc: 1, flag: }]
             compiled << OptOr.new(CallData.new(:|, 1, flag))
-          in :opt_plus, { mid: :+, orig_argc: 1, flag: }
+          in [:opt_plus, { mid: :+, orig_argc: 1, flag: }]
             compiled << OptPlus.new(CallData.new(:+, 1, flag))
-          in :opt_regexpmatch2, { mid: :=~, orig_argc: 1, flag: }
+          in [:opt_regexpmatch2, { mid: :=~, orig_argc: 1, flag: }]
             compiled << OptRegexpMatch2.new(CallData.new(:=~, 1, flag))
-          in :opt_send_without_block, { mid:, orig_argc:, flag: }
+          in [:opt_send_without_block, { mid:, orig_argc:, flag: }]
             compiled << OptSendWithoutBlock.new(
               CallData.new(mid, orig_argc, flag)
             )
-          in :opt_setinlinecache, cache
+          in [:opt_setinlinecache, cache]
             compiled << OptSetInlineCache.new(cache)
-          in :opt_size, { mid: :size, orig_argc: 0, flag: }
+          in [:opt_size, { mid: :size, orig_argc: 0, flag: }]
             compiled << OptSize.new(CallData.new(:size, 0, flag))
-          in :opt_str_freeze, value, { mid: :freeze, orig_argc: 0, flag: }
+          in [:opt_str_freeze, value, { mid: :freeze, orig_argc: 0, flag: }]
             compiled << OptStrFreeze.new(value, CallData.new(:freeze, 0, flag))
-          in :opt_str_uminus, value, { mid: :-@, orig_argc: 0, flag: }
+          in [:opt_str_uminus, value, { mid: :-@, orig_argc: 0, flag: }]
             compiled << OptStrUMinus.new(value, CallData.new(:-@, 0, flag))
-          in :opt_succ, { mid: :succ, orig_argc: 0, flag: }
+          in [:opt_succ, { mid: :succ, orig_argc: 0, flag: }]
             compiled << OptSucc.new(CallData.new(:succ, 0, flag))
           in [:pop]
             compiled << Pop.new
           in [:putnil]
             compiled << PutNil.new
-          in :putobject, object
+          in [:putobject, object]
             compiled << PutObject.new(object)
           in [:putobject_INT2FIX_0_]
             compiled << PutObjectInt2Fix0.new
@@ -278,62 +283,62 @@ module YARV
             compiled << PutObjectInt2Fix1.new
           in [:putself]
             compiled << PutSelf.new(selfo)
-          in :putspecialobject, type
+          in [:putspecialobject, type]
             compiled << UnimplementedInstruction.new("putspecialobject", type)
-          in :putstring, string
+          in [:putstring, string]
             compiled << PutString.new(string)
-          in :send, { mid:, orig_argc:, flag: }, block_iseq
+          in [:send, { mid:, orig_argc:, flag: }, block_iseq]
             block_iseq =
               compile(selfo, block_iseq, compiled) unless block_iseq.nil?
 
             compiled << Send.new(CallData.new(mid, orig_argc, flag), block_iseq)
-          in :setblockparam, index, level
+          in [:setblockparam, index, level]
             compiled << UnimplementedInstruction.new(
               "setblockparam",
               index,
               level
             )
-          in :setclassvariable, name, cache
+          in [:setclassvariable, name, cache]
             compiled << UnimplementedInstruction.new(
               "setclassvariable",
               name,
               cache
             )
-          in :setconstant, name
+          in [:setconstant, name]
             compiled << UnimplementedInstruction.new("setconstant", name)
-          in :setglobal, name
+          in [:setglobal, name]
             compiled << SetGlobal.new(name)
-          in :setinstancevariable, name, cache
+          in [:setinstancevariable, name, cache]
             compiled << UnimplementedInstruction.new(
               "setinstancevariable",
               name,
               cache
             )
-          in :setlocal, offset, level
+          in [:setlocal, offset, level]
             current = compiled
             level.times { current = current.parent }
 
             index = current.local_index(offset)
             compiled << SetLocal.new(current.locals[index], index, level)
-          in :setlocal_WC_0, offset
+          in [:setlocal_WC_0, offset]
             index = compiled.local_index(offset)
             compiled << SetLocalWC0.new(compiled.locals[index], index)
-          in :setlocal_WC_1, offset
+          in [:setlocal_WC_1, offset]
             index = parent.local_index(offset)
             compiled << SetLocalWC1.new(parent.locals[index], index)
-          in :setn, index
+          in [:setn, index]
             compiled << SetN.new(index)
-          in :setspecial, key
+          in [:setspecial, key]
             compiled << UnimplementedInstruction.new("setspecial", key)
-          in :splatarray, flag
+          in [:splatarray, flag]
             compiled << SplatArray.new(flag)
           in [:swap]
             compiled << Swap.new
-          in :throw, type
+          in [:throw, type]
             compiled << UnimplementedInstruction.new("throw", type)
-          in :topn, n
+          in [:topn, n]
             compiled << TopN.new(n)
-          in :toregexp, opts, cnt
+          in [:toregexp, opts, cnt]
             compiled << ToRegexp.new(opts, cnt)
           end
         end
