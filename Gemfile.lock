@@ -8,7 +8,7 @@ GEM
     rake (13.0.6)
     rexml (3.2.5)
     rouge (4.1.0)
-    syntax_tree (6.0.0)
+    syntax_tree (6.0.1)
       prettier_print (>= 1.2.0)
     test-unit (3.5.7)
       power_assert
