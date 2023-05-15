@@ -10,7 +10,7 @@ GEM
     rouge (4.1.0)
     syntax_tree (6.1.1)
       prettier_print (>= 1.2.0)
-    test-unit (3.5.7)
+    test-unit (3.5.8)
       power_assert
 
 PLATFORMS
